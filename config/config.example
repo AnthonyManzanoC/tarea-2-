@@ -1,0 +1,12 @@
+# Ejemplo de configuración (NO real)
+APP_NAME=CoronelExpress
+ENV=development
+LOG_LEVEL=info
+
+DB_PROVIDER=SqlServer
+DB_HOST=localhost
+DB_NAME=CoronelExpressDb
+DB_USER=usuario_ejemplo
+DB_PASSWORD=clave_ejemplo
+
+# Nota: este archivo es demostrativo para control de configuración.
