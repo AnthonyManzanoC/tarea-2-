@@ -19,3 +19,4 @@ Aplicación web (ASP.NET Core MVC) orientada a gestión de productos, pedidos y 
 - Existen SRS v1 y SDD v1 en /docs.
 - Existe config.example en /config.
 - Existe un tag v1.0 y Release v1.0 como línea base.
+- REQ-007: El sistema debe permitir actualizar el motivo de un turno/pedido existente.
