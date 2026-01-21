@@ -1,0 +1,697 @@
+﻿@model CoronelExpress.Models.Order
+@using System.Globalization
+@{
+    ViewData["Title"] = "Factura Generada con Éxito";
+
+    // Cálculos para el desglose aplicando descuento (si existe)
+    decimal subtotal = 0;
+    decimal totalIva = 0;
+    foreach (var item in Model.OrderDetails)
+    {
+        decimal originalPrice = (item.Product != null) ? item.Product.Price : item.UnitPrice;
+        decimal discountPercentage = (item.Product != null && item.Product.IsOnOffer) ? item.Product.DiscountPercentage : 0;
+        decimal effectivePrice = (discountPercentage > 0) ? originalPrice * (1 - discountPercentage / 100m) : originalPrice;
+        decimal lineSubTotal = effectivePrice * item.Quantity;
+        subtotal += lineSubTotal;
+
+        // Sumar IVA sólo si NO es canasta básica
+        if (item.Product != null && !item.Product.IsBasicBasket)
+        {
+            totalIva += lineSubTotal * 0.15m;
+        }
+    }
+    decimal finalTotal = subtotal + totalIva;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Factura Generada con Éxito</title>
+    <!-- Fuente futurista -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Íconos FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            /* Paleta corporativa con acentos en azul */
+            --header-bg: linear-gradient(135deg, #ffffff, #f0f0f0);
+            --primary-color: #007bff;
+            --accent-color: #00aaff;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            --font-main: 'Orbitron', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ================= PRELOADER AVANZADO ================= */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+            #preloader.hidden {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-text {
+            font-family: var(--font-main);
+            font-size: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* ================= FONDO ANIMADO ================= */
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, #f7f7f7, #ffffff);
+            background-size: 400% 400%;
+            animation: bgAnimate 15s ease infinite;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @@keyframes bgAnimate {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* ================= CONTENEDOR PRINCIPAL ================= */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+
+        /* ================= CONTENEDOR 3D ================= */
+        .invoice-container {
+            perspective: 1500px;
+            width: 90%;
+            max-width: 1000px;
+            transition: transform 0.5s ease;
+            animation: containerEnter 1s ease-out;
+            position: relative;
+        }
+
+        @@keyframes containerEnter {
+            from {
+                opacity: 0;
+                transform: translateY(20px) rotateX(10deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0);
+            }
+        }
+
+        /* ================= TARJETA DE FACTURA ================= */
+        .invoice {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            transform: translateZ(0);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .invoice:hover {
+                transform: translateZ(40px) scale(1.02) rotateX(2deg) rotateY(2deg);
+                box-shadow: 0 12px 24px rgba(0, 123, 255, 0.1);
+            }
+
+        /* ================= LOGO GIRATORIO ================= */
+        .company-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            animation: logoRotate 4s linear infinite;
+        }
+
+            .company-logo img {
+                width: 100%;
+                border-radius: 50%;
+                box-shadow: 0 0 10px rgba(0,123,255,0.3);
+            }
+
+        @@keyframes logoRotate {
+            from {
+                transform: rotateY(0deg);
+            }
+
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+
+        /* ================= ÍCONOS FLOTANTES 3D ================= */
+        .floating-icon,
+        .floating-icon2 {
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            font-size: 4rem;
+            opacity: 0.8;
+            animation: floatRocket 4s infinite ease-in-out, pulseRocket 2s infinite alternate, colorCycle 6s infinite linear, spin3d 4s linear infinite;
+        }
+
+        .floating-icon2 {
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            font-size: 3rem;
+            opacity: 0.75;
+            animation: dynamicSpin 6s infinite linear, colorCycleStar 8s infinite linear;
+        }
+
+        @@keyframes floatRocket {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(20deg);
+            }
+        }
+
+        @@keyframes pulseRocket {
+            0% {
+                text-shadow: 0 0 5px var(--accent-color);
+            }
+
+            100% {
+                text-shadow: 0 0 20px var(--accent-color);
+            }
+        }
+
+        @@keyframes colorCycle {
+            0% {
+                color: #ff6f91;
+                text-shadow: 0 0 10px #ff6f91;
+            }
+
+            25% {
+                color: #ff9671;
+                text-shadow: 0 0 10px #ff9671;
+            }
+
+            50% {
+                color: #ffc75f;
+                text-shadow: 0 0 10px #ffc75f;
+            }
+
+            75% {
+                color: #f9f871;
+                text-shadow: 0 0 10px #f9f871;
+            }
+
+            100% {
+                color: #ff6f91;
+                text-shadow: 0 0 10px #ff6f91;
+            }
+        }
+
+        @@keyframes spin3d {
+            0% {
+                transform: rotate3d(1, 1, 0, 0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate3d(1, 1, 0, 180deg) scale(1.2);
+            }
+
+            100% {
+                transform: rotate3d(1, 1, 0, 360deg) scale(1);
+            }
+        }
+
+        @@keyframes dynamicSpin {
+            0% {
+                transform: rotate3d(0, 1, 1, 0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate3d(0, 1, 1, 180deg) scale(1.3);
+            }
+
+            100% {
+                transform: rotate3d(0, 1, 1, 360deg) scale(1);
+            }
+        }
+
+        @@keyframes colorCycleStar {
+            0% {
+                color: #ff9671;
+            }
+
+            25% {
+                color: #ffc75f;
+            }
+
+            50% {
+                color: #f9f871;
+            }
+
+            75% {
+                color: #c2f970;
+            }
+
+            100% {
+                color: #ff9671;
+            }
+        }
+
+        /* ================= ENCABEZADO FACTURA ================= */
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: headerEnter 1.5s ease-out;
+        }
+
+        @@keyframes headerEnter {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .invoice-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 5px var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .success-message {
+            font-size: 1rem;
+            margin: 10px 0;
+            color: var(--accent-color);
+            text-shadow: 0 0 2px var(--accent-color);
+            animation: pulseText 2s infinite alternate;
+        }
+
+        @@keyframes pulseText {
+            from {
+                text-shadow: 0 0 5px var(--accent-color);
+            }
+
+            to {
+                text-shadow: 0 0 20px var(--accent-color);
+            }
+        }
+
+        .field-label i {
+            margin-right: 0.3rem;
+            animation: bounceIcon 3s infinite;
+        }
+
+        @@keyframes bounceIcon {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .field-label strong {
+            color: var(--primary-color);
+        }
+
+        /* ================= SECCIONES DE INFO ================= */
+        .client-info, .invoice-details, .total-section {
+            margin-bottom: 30px;
+            animation: sectionEnter 1s ease-out;
+        }
+
+        @@keyframes sectionEnter {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 3px var(--primary-color);
+        }
+
+        .invoice-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice-details th, .invoice-details td {
+            padding: 12px;
+            border-bottom: 1px solid var(--primary-color);
+            text-align: center;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .invoice-details th {
+            background: rgba(0, 123, 255, 0.1);
+        }
+
+        .invoice-details tr:hover {
+            background: rgba(0, 123, 255, 0.1);
+            transform: scale(1.01);
+        }
+
+        /* ================= DISTINTIVOS OFERTA & BÁSICA ================= */
+        .badge-offer {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 3px 6px;
+            background: #ff4d4f;
+            color: #fff;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+            animation: badgePulse 2s infinite alternate;
+        }
+
+        .badge-basic {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 3px 6px;
+            background: #ffc107;
+            color: #000;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+            animation: badgePulse 2s infinite alternate;
+        }
+
+        .badge-offer-basic {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 3px 6px;
+            background: linear-gradient(45deg, #ff4d4f, #ffc107);
+            color: #fff;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+            animation: badgePulse 2s infinite alternate;
+        }
+
+        @@keyframes badgePulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 5px rgba(255, 77, 79, 0.3);
+            }
+
+            100% {
+                transform: scale(1.1);
+                box-shadow: 0 0 10px rgba(255, 77, 79, 0.6);
+            }
+        }
+
+        .total-section {
+            text-align: right;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-shadow: 0 0 3px var(--accent-color);
+        }
+
+        /* ================= BOTÓN HOME ================= */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 220px;
+            margin: 20px auto 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.1);
+        }
+
+            .btn-back:hover {
+                transform: scale(1.1) rotate(2deg);
+                box-shadow: 0 0 20px rgba(0, 123, 255, 0.2);
+            }
+
+            .btn-back::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 0;
+                height: 0;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                transition: width 0.5s ease, height 0.5s ease;
+            }
+
+            .btn-back:hover::after {
+                width: 200%;
+                height: 200%;
+            }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader"></div>
+        <div class="loader-text">Finalizando factura...</div>
+    </div>
+
+    <div class="main-content">
+        <div class="invoice-container">
+            <div class="invoice">
+                <!-- Logo corporativo 3D giratorio -->
+                <div class="company-logo">
+                    <img src="/images/logo.png" alt="Logo Empresa" />
+                </div>
+
+                <!-- Íconos flotantes 3D -->
+                <i class="fa-solid fa-rocket floating-icon"></i>
+                <i class="fa-solid fa-star floating-icon2"></i>
+
+                <!-- Cabecera de la Factura -->
+                <div class="invoice-header">
+                    <h2 class="invoice-title">
+                        <i class="fa-solid fa-file-invoice field-label"></i> Factura
+                    </h2>
+                    <div class="success-message">
+                        <i class="fa-solid fa-check-circle field-label"></i>
+                        <strong>Transacción exitosa:</strong> ¡Su compra se realizó con éxito!
+                    </div>
+                    <p class="field-label">
+                        <i class="fa-solid fa-hashtag"></i>
+                        <strong>Número:</strong> @Model.OrderNumber
+                    </p>
+                    <p class="field-label">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <strong>Fecha:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+                </div>
+
+                <!-- Datos del Cliente -->
+                <div class="client-info">
+                    <div class="section-title">
+                        <i class="fa-solid fa-user"></i> Datos del Cliente
+                    </div>
+                    <p class="field-label">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <strong>Nombre:</strong> @Model.Customer.FullName
+                    </p>
+                    <p class="field-label">
+                        <i class="fa-solid fa-envelope"></i>
+                        <strong>Email:</strong> @Model.Customer.Email
+                    </p>
+                    <p class="field-label">
+                        <i class="fa-solid fa-phone"></i>
+                        <strong>Teléfono:</strong> @Model.Customer.Phone
+                    </p>
+                    <p class="field-label">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <strong>Dirección:</strong> @Model.Customer.Address
+                    </p>
+                </div>
+
+                <!-- Detalles del Pedido -->
+                <div class="invoice-details">
+                    <div class="section-title">
+                        <i class="fa-solid fa-box"></i> Detalles del Pedido
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th style="text-align: right;">Precio Unitario</th>
+                                <th style="text-align: right;">V.Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderDetails)
+                            {
+                                var originalPrice = (item.Product != null) ? item.Product.Price : item.UnitPrice;
+                                var discountPercentage = (item.Product != null && item.Product.IsOnOffer) ? item.Product.DiscountPercentage : 0;
+                                var effectivePrice = (discountPercentage > 0) ? originalPrice * (1 - discountPercentage / 100m) : originalPrice;
+                                var lineTotal = effectivePrice * item.Quantity;
+
+                                bool isOffer = (item.Product != null && item.Product.IsOnOffer);
+                                bool isBasic = (item.Product != null && item.Product.IsBasicBasket);
+
+                                string productName = item.Product?.Name ?? "Producto sin nombre";
+
+                                // Distintivo minimalista
+                                string badgeHtml = "";
+                                if (isOffer && isBasic)
+                                {
+                                    badgeHtml = "<span class='badge-offer-basic'>Oferta + Canasta</span>";
+                                }
+                                else if (isOffer)
+                                {
+                                    badgeHtml = "<span class='badge-offer'>Oferta</span>";
+                                }
+                                else if (isBasic)
+                                {
+                                    badgeHtml = "<span class='badge-basic'>Canasta</span>";
+                                }
+
+                                <tr>
+                                    <td>
+                                        @Html.Raw(productName + badgeHtml)
+                                    </td>
+                                    <td>@item.Quantity</td>
+                                    <td style="text-align: right;">
+                                        @if (discountPercentage > 0)
+                                        {
+                                            <span style="text-decoration: line-through;">
+                                                @originalPrice.ToString("C", CultureInfo.CurrentCulture)
+                                            </span>
+                                            <br />
+                                            <span>
+                                                @effectivePrice.ToString("C", CultureInfo.CurrentCulture)
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @effectivePrice.ToString("C", CultureInfo.CurrentCulture)
+                                        }
+                                    </td>
+                                    <td style="text-align: right;">
+                                        @lineTotal.ToString("C", CultureInfo.CurrentCulture)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Desglose del Pago -->
+                <div class="total-section">
+                    <p>Subtotal: @subtotal.ToString("C", CultureInfo.CurrentCulture)</p>
+                    <p>IVA (15%): @totalIva.ToString("C", CultureInfo.CurrentCulture)</p>
+                    <p>Total: @finalTotal.ToString("C", CultureInfo.CurrentCulture)</p>
+                </div>
+
+                <!-- Botón para volver al Home -->
+                <a class="btn-back" asp-controller="Home" asp-action="Index">
+                    <i class="fa-solid fa-house"></i> Volver al Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+            }, 500); // medio segundo de gracia
+        });
+    </script>
+</body>
+</html>

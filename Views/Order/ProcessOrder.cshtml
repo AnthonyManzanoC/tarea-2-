@@ -1,0 +1,177 @@
+﻿@model CoronelExpress.Models.Order
+@{
+    ViewData["Title"] = "Procesar Pedido";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<!-- Incluir librerías externas para estilos y animaciones -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+
+<style>
+    /* Fondo azul con transición suave */
+    body {
+        background: linear-gradient(135deg, #e0e7ff, #6366f1);
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #ffffff; /* Texto blanco para mejor legibilidad */
+    }
+
+    /* Contenedor principal */
+    .container {
+        margin: 5rem auto;
+        max-width: 700px;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        color: #1e293b; /* Texto oscuro dentro del contenedor */
+    }
+
+    /* Encabezado elegante */
+    .header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+        .header h2 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+    .header-icons i {
+        font-size: 2.5rem;
+        margin: 0 0.5rem;
+        color: #6366f1;
+        animation: rotateIcon 5s infinite linear;
+    }
+
+    @@keyframes rotateIcon {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    /* Información del pedido */
+    .order-info {
+        margin-bottom: 1.5rem;
+    }
+
+        .order-info p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+    /* Formulario */
+    .form-label {
+        font-weight: 500;
+    }
+
+    .form-control {
+        border: 1px solid #cbd5e0;
+        border-radius: 0.5rem;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 5px rgba(99, 102, 241, 0.8);
+            border-color: #6366f1;
+        }
+
+    /* Botón */
+    .btn-primary {
+        background: #6366f1;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 0.5rem;
+        color: #ffffff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(99, 102, 241, 0.8);
+        }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        color: #ffffff;
+    }
+
+        .footer i {
+            color: #ffffff;
+            margin-left: 0.25rem;
+        }
+</style>
+
+<div class="container animate__animated animate__fadeIn">
+    <!-- Encabezado -->
+    <div class="header">
+        <div class="header-icons">
+            <i class="fas fa-shipping-fast"></i>
+            <i class="fas fa-box-open"></i>
+            <i class="fas fa-truck"></i>
+        </div>
+        <h2>Procesar Pedido</h2>
+        <p>Pedido #: <strong>@Model.OrderNumber</strong></p>
+    </div>
+
+    <!-- Información del pedido -->
+    <div class="order-info">
+        <p><strong>Cliente:</strong> @Model.Customer.FullName</p>
+        <p><strong>Email:</strong> @Model.InvoiceEmail</p>
+        <p><strong>Estatus actual:</strong> @Model.Status</p>
+    </div>
+
+    <!-- Formulario -->
+    <form asp-action="ProcessOrder" method="post">
+        <input type="hidden" name="orderId" value="@Model.Id" />
+        <div class="mb-3">
+            <label for="processCode" class="form-label">Código de seguimiento (6 dígitos)</label>
+            <input type="text" class="form-control" id="processCode" name="processCode"
+                   value="@Model.ProcessCode" placeholder="Si se deja en blanco, se generará uno" maxlength="6" />
+        </div>
+        <button type="submit" class="btn btn-primary">
+            Actualizar y Notificar
+        </button>
+        
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success animated fadeInUp">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger animated fadeInUp">@TempData["Error"]</div>
+        }
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='/Admin/Dashboard'">
+            Salir
+        </button>
+
+    </form>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Don Julio Super © 2025 <i class="fas fa-heart"></i></p>
+    </div>
+</div>

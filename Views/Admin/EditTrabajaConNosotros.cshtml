@@ -1,0 +1,191 @@
+﻿@model CoronelExpress.Models.TrabajaConNosotros
+
+@{
+    ViewData["Title"] = "Editar Trabaja Con Nosotros";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-9ndCyUaH7+4hbja7Fjg2WJpnqlN33i6Ne/HxqCfaK4gUyWAGZlYkl7/vE8lf+h3nD5p+STY/1IWUJhl8sklDQA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p1Cm1E2A+7kYc24vQp2Y7o3wL+7e4Fj6MxPCYILkWx2Z9hLidHz1rv8jgK8zYUVTuy6/4bYvZD0vB9bSm7GULw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    /* Fondo degradado con animación de entrada */
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeInBackground 2s ease-in-out;
+        margin: 0;
+    }
+
+    @@keyframes fadeInBackground {
+        from
+
+    {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+    }
+
+    /* Card Glassmorphism avanzada con animación */
+    .card-glass {
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 2rem;
+        max-width: 600px;
+        width: 100%;
+        animation: slideUp 1s ease-out;
+    }
+
+    @@keyframes slideUp {
+        from
+
+    {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    }
+
+    h2 {
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @@keyframes glow {
+        from
+
+    {
+        text-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+    }
+
+    to {
+        text-shadow: 0 0 20px rgba(13, 110, 253, 1);
+    }
+
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.7);
+        border: none;
+        border-radius: 5px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 8px rgba(13, 110, 253, 0.6);
+            transform: scale(1.02);
+        }
+
+    /* Botones refinados con animaciones */
+    .btn-primary {
+        background-color: #0d6efd;
+        border: none;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            transform: scale(1.05);
+        }
+
+    .btn-secondary {
+        background-color: transparent;
+        border: 2px solid #6c757d;
+        color: #6c757d;
+        transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #6c757d;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+    /* Animación en íconos */
+    .fa-arrow-left, .fa-save {
+        animation: iconPulse 2s infinite;
+    }
+
+    @@keyframes iconPulse {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    }
+</style>
+
+<div class="container">
+    <div class="card card-glass">
+        <h2>Editar Trabaja Con Nosotros</h2>
+        <form asp-action="EditTrabajaConNosotros" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label asp-for="Nombre" class="form-label"></label>
+                <input asp-for="Nombre" class="form-control" placeholder="Ingresa el nombre" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" placeholder="Ingresa el correo electrónico" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Mensaje" class="form-label"></label>
+                <textarea asp-for="Mensaje" class="form-control" rows="5" placeholder="Escribe tu mensaje"></textarea>
+                <span asp-validation-for="Mensaje" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="HojaVidaPath" class="form-label">Ruta de Hoja de Vida (opcional)</label>
+                <input asp-for="HojaVidaPath" class="form-control" placeholder="Ingresa la ruta o URL del CV" />
+                <span asp-validation-for="HojaVidaPath" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a asp-action="ManageTrabajaConNosotros" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-save"></i> Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

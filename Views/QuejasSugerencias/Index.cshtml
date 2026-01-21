@@ -1,0 +1,376 @@
+﻿@model CoronelExpress.Models.QuejaSugerenciaMessage
+@{
+    ViewData["Title"] = "Quejas y Sugerencias";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de contar con un Layout que complemente este diseño.
+}
+<!-- Incluimos FontAwesome para los íconos inteligentes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-somehash" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    /* Preloader avanzado */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease;
+    }
+
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #007bff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    /* Estilos globales avanzados */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f7f8fa, #e9ebee);
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+    /* Contenedor principal con animaciones de última generación */
+    .contact-container {
+        max-width: 600px;
+        margin: 80px auto;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        overflow: hidden;
+        animation: scaleUp 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+        position: relative;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .contact-container:hover {
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+
+    @@keyframes scaleUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+    
+    
+    /* Título con efecto y transición de entrada */
+    h2 {
+        text-align: center;
+        font-size: 2.8em;
+        margin-bottom: 30px;
+        color: #007bff;
+        opacity: 0;
+        animation: fadeInDown 1s ease-out forwards;
+        pulseTitle 2s infinite 1s;
+    }
+
+    @@keyframes fadeInDown {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+        @@keyframes pulseTitle {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+    }
+    /* Animaciones avanzadas para cada grupo del formulario */
+    .form-group {
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    @@keyframes fadeInUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .form-group:nth-child(1) {
+        animation-delay: 0.6s;
+    }
+
+    .form-group:nth-child(2) {
+        animation-delay: 0.8s;
+    }
+
+    .form-group:nth-child(3) {
+        animation-delay: 1s;
+    }
+
+    .form-group:nth-child(4) {
+        animation-delay: 1.2s;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+    /* Íconos inteligentes en etiquetas con animaciones intuitivas */
+    .form-group label .icon, .form-group label i {
+        margin-right: 10px;
+        color: #007bff;
+        transition: transform 0.5s ease;
+    }
+
+        .form-group label .icon:hover, .form-group label i:hover {
+            animation: rotate360 0.8s linear infinite;
+        }
+
+    @@keyframes rotate360 {
+        from
+
+    {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    input.form-control, textarea.form-control {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        font-size: 1em;
+    }
+
+        input.form-control:focus, textarea.form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+            outline: none;
+        }
+    /* Alertas sofisticadas */
+    .alert {
+        padding: 15px;
+        border-radius: 6px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    @@keyframes fadeIn {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .alert-success {
+        background: #e6f9e9;
+        color: #2e7d32;
+    }
+
+    .alert-danger {
+        background: #fdecea;
+        color: #c62828;
+    }
+    /* Botones con efectos neón y transiciones avanzadas */
+    .btn-neon, .btn-exit {
+        display: inline-block;
+        padding: 12px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        margin-top: 20px;
+    }
+
+    .btn-neon {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+        .btn-neon:hover {
+            background-color: #0056b3;
+            box-shadow: 0 0 25px rgba(0, 123, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        .btn-neon i {
+            transition: transform 0.3s ease;
+        }
+
+            .btn-neon i:hover {
+                animation: pulse 1s infinite;
+            }
+
+    @@keyframes pulse {
+        0%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+    }
+
+    .btn-exit {
+        background-color: #f44336;
+        color: #fff;
+        float: right;
+    }
+
+        .btn-exit:hover {
+            background-color: #d32f2f;
+            box-shadow: 0 0 25px rgba(244, 67, 54, 0.6);
+            transform: scale(1.05);
+        }
+
+    /* Diseño responsive avanzado */
+    @@media (max-width: 768px) {
+        .contact-container
+
+    {
+        margin: 30px;
+        padding: 30px;
+    }
+
+    .btn-exit {
+        float: none;
+        width: 100%;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    }
+</style>
+
+<!-- Preloader avanzado -->
+<div id="preloader">
+    <div class="spinner"></div>
+</div>
+
+<div class="contact-container">
+    <h2><i class="fa-solid fa-comment-dots"></i> Quejas y Sugerencias</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <i class="fa-solid fa-check"></i> @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fa-solid fa-exclamation-triangle"></i> @TempData["Error"]
+        </div>
+    }
+
+    <form asp-action="Index" method="post">
+        <div class="form-group">
+            <label for="Nombre"><i class="fa-solid fa-user icon"></i>Nombre</label>
+            <input type="text" class="form-control" name="Nombre" required />
+        </div>
+        <div class="form-group">
+            <label for="Email"><i class="fa-solid fa-envelope icon"></i>Correo Electrónico</label>
+            <input type="email" class="form-control" name="Email" required />
+        </div>
+        <div class="form-group">
+            <label for="Asunto"><i class="fa-solid fa-info-circle icon"></i>Asunto</label>
+            <input type="text" class="form-control" name="Asunto" required />
+        </div>
+        <div class="form-group">
+            <label for="Mensaje"><i class="fa-solid fa-comment icon"></i>Mensaje</label>
+            <textarea class="form-control" name="Mensaje" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn-neon"><i class="fa-solid fa-paper-plane"></i> Enviar</button>
+        <a asp-controller="Home" asp-action="Index" class="btn-exit"><i class="fa-solid fa-door-open"></i> Salir</a>
+    </form>
+</div>
+
+<script>
+    // Eliminamos el preloader cuando la página se carga completamente
+    window.addEventListener('load', function() {
+        var preloader = document.getElementById('preloader');
+        preloader.style.opacity = '0';
+        setTimeout(function(){
+            preloader.style.display = 'none';
+        }, 500);
+    });
+</script>

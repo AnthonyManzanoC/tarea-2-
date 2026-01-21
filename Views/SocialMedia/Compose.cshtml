@@ -1,0 +1,346 @@
+﻿@{
+    ViewData["Title"] = "Abrir Redes Sociales";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    :root {
+        --primary-color: #25d366;
+        --secondary-color: #1877f2;
+        --danger-color: #e1306c;
+        --info-color: #0088cc;
+        --bg-overlay: rgba(255, 255, 255, 0.15);
+        --shadow-color: rgba(0, 0, 0, 0.5);
+        --gradient-text: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--danger-color));
+    }
+
+    /* Fondo ultra avanzado con múltiples keyframes: cambio de posición, brillo y color */
+    body {
+        font-family: 'Inter', sans-serif;
+        color: #fff;
+        background: linear-gradient(45deg, #0d0d0d, #1a1a1a, #262626);
+        background-size: 300% 300%;
+        overflow: hidden;
+        position: relative;
+        animation: bgColorShift 30s ease infinite, bgGlow 5s ease-in-out infinite;
+    }
+
+    @@keyframes bgColorShift {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    25% {
+        background-position: 50% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    75% {
+        background-position: 50% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    @@keyframes bgGlow {
+        0%, 100%
+
+    {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.1);
+    }
+
+    }
+
+    /* Contenedor ultra elegante con animaciones avanzadas: entrada 3D y flotación rítmica */
+    .dashboard-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px var(--shadow-color);
+        border: 1px solid rgba(255,255,255,0.3);
+        max-width: 800px;
+        margin: auto;
+        transform-style: preserve-3d;
+        animation: containerElegant 2s cubic-bezier(0.22, 1, 0.36, 1) forwards, containerFloatAdvanced 4s ease-in-out infinite;
+        transform: perspective(1000px) translateZ(0);
+    }
+
+    @@keyframes containerElegant {
+        0%
+
+    {
+        opacity: 0;
+        transform: perspective(1000px) translateY(40px) rotateX(10deg) scale(0.95);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: perspective(1000px) translateY(-5px) rotateX(-3deg) scale(1.03);
+    }
+
+    100% {
+        opacity: 1;
+        transform: perspective(1000px) translateY(0) rotateX(0deg) scale(1);
+    }
+
+    }
+
+    @@keyframes containerFloatAdvanced {
+        0%
+
+    {
+        transform: translateY(0px);
+    }
+
+    25% {
+        transform: translateY(-10px);
+    }
+
+    50% {
+        transform: translateY(0px);
+    }
+
+    75% {
+        transform: translateY(10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+
+    }
+
+    /* Título ultra avanzado con efecto shimmer, glitch y pulso */
+    h2 {
+        font-weight: 600;
+        text-align: center;
+        font-size: 2.8rem;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+        background: var(--gradient-text);
+        background-size: 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textShimmer 3s ease-in-out infinite, textGlitch 4s infinite;
+        position: relative;
+    }
+
+    @@keyframes textShimmer {
+        0%
+
+    {
+        background-position: 0%;
+    }
+
+    50% {
+        background-position: 100%;
+    }
+
+    100% {
+        background-position: 0%;
+    }
+
+    }
+
+    @@keyframes textGlitch {
+        0%, 20%, 40%, 60%, 80%, 100%
+
+    {
+        clip-path: inset(0 0 0 0);
+        transform: translate(0);
+    }
+
+    10% {
+        clip-path: inset(10% 0 85% 0);
+        transform: translate(-2px, -2px);
+    }
+
+    30% {
+        clip-path: inset(20% 0 65% 0);
+        transform: translate(2px, 2px);
+    }
+
+    50% {
+        clip-path: inset(30% 0 35% 0);
+        transform: translate(-2px, 0);
+    }
+
+    70% {
+        clip-path: inset(20% 0 65% 0);
+        transform: translate(2px, -2px);
+    }
+
+    90% {
+        clip-path: inset(10% 0 85% 0);
+        transform: translate(-2px, 2px);
+    }
+
+    }
+
+    /* Botón ultra refinado con animaciones avanzadas y efecto pulsante, glowy y rotatorio */
+    .btn-animated {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px 36px;
+        margin: 10px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        background: var(--bg-overlay);
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        animation: buttonEntryAdvanced 1s ease-out forwards, buttonPulseAdvanced 4s ease-in-out infinite;
+    }
+
+    @@keyframes buttonEntryAdvanced {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    }
+
+    @@keyframes buttonPulseAdvanced {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.05) rotate(1deg);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(-1deg);
+    }
+
+    75% {
+        transform: scale(1.05) rotate(1deg);
+    }
+
+    }
+
+    .btn-animated:hover {
+        transform: scale(1.15) rotate(-3deg);
+        box-shadow: 0 10px 25px var(--shadow-color);
+    }
+
+    /* Iconos con animaciones avanzadas: rotación, escala y efecto glitch */
+    .btn-animated i {
+        margin-right: 10px;
+        animation: iconRotateAdvanced 2.5s linear infinite, iconGlitchAdvanced 3s infinite;
+    }
+
+    @@keyframes iconRotateAdvanced {
+        0%
+
+    {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(90deg) scale(1.1);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(0.9);
+    }
+
+    75% {
+        transform: rotate(270deg) scale(1.05);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+
+    }
+
+    @@keyframes iconGlitchAdvanced {
+        0%
+
+    {
+        transform: translate(0);
+    }
+
+    20% {
+        transform: translate(-2px, 2px);
+    }
+
+    40% {
+        transform: translate(2px, -2px);
+    }
+
+    60% {
+        transform: translate(-2px, -2px);
+    }
+
+    80% {
+        transform: translate(2px, 2px);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+
+    }
+
+    /* Espaciado responsivo en columnas */
+    .row > [class*='col-'] {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="dashboard-container">
+        <h2>Abrir Redes Sociales</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <a asp-action="Telegram" class="btn btn-animated w-100" style="border: 2px solid var(--info-color);">
+                    <i class="fab fa-telegram-plane"></i> Abrir Telegram
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a asp-action="Instagram" class="btn btn-animated w-100" style="border: 2px solid var(--danger-color);">
+                    <i class="fab fa-instagram"></i> Abrir Instagram
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a asp-action="Facebook" class="btn btn-animated w-100" style="border: 2px solid var(--secondary-color);">
+                    <i class="fab fa-facebook"></i> Abrir Facebook
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

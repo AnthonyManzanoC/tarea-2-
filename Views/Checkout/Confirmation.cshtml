@@ -1,0 +1,676 @@
+﻿@model CoronelExpress.Models.Order
+@{
+    ViewData["Title"] = "Confirmación de Pedido";
+
+    // Calcular el desglose de la orden
+    decimal subtotal = 0;
+    decimal totalIva = 0;
+    foreach (var detail in Model.OrderDetails)
+    {
+        decimal lineTotal = detail.UnitPrice * detail.Quantity;
+        subtotal += lineTotal;
+        // Si el producto no es de la canasta básica, se aplica IVA
+        if (detail.Product != null && !detail.Product.IsBasicBasket)
+        {
+            totalIva += lineTotal * 0.15m;
+        }
+    }
+    decimal finalTotal = subtotal + totalIva;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* ================= PRELOADER AVANZADO ================= */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+            #preloader.hidden {
+                opacity: 0;
+                visibility: hidden;
+            }
+
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-text {
+            font-family: var(--font-main);
+            font-size: 1rem;
+            color: var(--primary-color);
+        }
+        /* =====================================
+                       Keyframes Ultra Avanzados e Inteligentes
+                   ===================================== */
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes pulse {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.03);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        @@keyframes gradientShift {
+            0%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+
+        }
+
+        @@keyframes float {
+            0%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes rotateIn {
+            from
+
+        {
+            opacity: 0;
+            transform: rotate(-360deg);
+        }
+
+        to {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        }
+
+        @@keyframes slideInLeft {
+            from
+
+        {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        }
+
+        @@keyframes zoomIn {
+            from
+
+        {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        }
+
+        @@keyframes glowPulse {
+            0%
+
+        {
+            box-shadow: 0 0 5px rgba(0,229,255,0.5);
+        }
+
+        50% {
+            box-shadow: 0 0 15px rgba(0,229,255,1);
+        }
+
+        100% {
+            box-shadow: 0 0 5px rgba(0,229,255,0.5);
+        }
+
+        }
+
+        @@keyframes iconIntelli {
+            0%
+
+        {
+            transform: scale(1) rotate(0deg);
+        }
+
+        50% {
+            transform: scale(1.2) rotate(180deg);
+        }
+
+        100% {
+            transform: scale(1) rotate(360deg);
+        }
+
+        }
+
+        @@keyframes spinCycle {
+            from
+
+        {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        @@keyframes bounce {
+            0%, 20%, 50%, 80%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        40% {
+            transform: translateY(-30px);
+        }
+
+        60% {
+            transform: translateY(-15px);
+        }
+
+        }
+
+        @@keyframes cardHover {
+            from
+
+        {
+            transform: scale(1);
+        }
+
+        to {
+            transform: scale(1.03);
+        }
+
+        }
+
+        @@keyframes neonGlow {
+            from
+
+        {
+            box-shadow: 0 0 5px #fff, 0 0 10px #00e5ff;
+        }
+
+        to {
+            box-shadow: 0 0 20px #fff, 0 0 30px #00e5ff;
+        }
+
+        }
+
+        @@keyframes ripple {
+            0%
+
+        {
+            opacity: 0.4;
+            transform: scale(0);
+        }
+
+        100% {
+            opacity: 0;
+            transform: scale(4);
+        }
+
+        }
+
+        @@keyframes flip3d {
+            from
+
+        {
+            transform: perspective(400px) rotateY(0deg);
+        }
+
+        to {
+            transform: perspective(400px) rotateY(360deg);
+        }
+
+        }
+        /* Intelligent Entrance */
+        @@keyframes intelligentEntrance {
+            0%
+
+        {
+            opacity: 0;
+            transform: scale(0.8) rotate(-10deg);
+        }
+
+        50% {
+            opacity: 0.6;
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        }
+        /* Keyframes adicionales */
+        @@keyframes swing {
+            20%
+
+        {
+            transform: rotate(15deg);
+        }
+
+        40% {
+            transform: rotate(-10deg);
+        }
+
+        60% {
+            transform: rotate(5deg);
+        }
+
+        80% {
+            transform: rotate(-5deg);
+        }
+
+        100% {
+            transform: rotate(0deg);
+        }
+
+        }
+
+        @@keyframes wobble {
+            0%
+
+        {
+            transform: translateX(0%);
+        }
+
+        15% {
+            transform: translateX(-25%) rotate(-5deg);
+        }
+
+        30% {
+            transform: translateX(20%) rotate(3deg);
+        }
+
+        45% {
+            transform: translateX(-15%) rotate(-3deg);
+        }
+
+        60% {
+            transform: translateX(10%) rotate(2deg);
+        }
+
+        75% {
+            transform: translateX(-5%) rotate(-1deg);
+        }
+
+        100% {
+            transform: translateX(0%);
+        }
+
+        }
+
+        @@keyframes shimmer {
+            0%
+
+        {
+            background-position: -200px 0;
+        }
+
+        100% {
+            background-position: 200px 0;
+        }
+
+        }
+
+        @@keyframes intelligentRotation {
+            0%
+
+        {
+            opacity: 0;
+            transform: rotateY(-360deg) scale(0.8);
+        }
+
+        50% {
+            opacity: 0.8;
+            transform: rotateY(180deg) scale(1.05);
+        }
+
+        100% {
+            opacity: 1;
+            transform: rotateY(360deg) scale(1);
+        }
+
+        }
+
+        /* =====================================
+                     Estilos Globales Minimalistas & Futuristas
+                   ===================================== */
+        body {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffffff, #f3f9ff);
+            color: #333;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .order-container {
+            animation: intelligentEntrance 1.2s ease-out forwards, fadeIn 0.8s ease-out;
+            padding: 30px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 650px;
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: transform 0.4s ease;
+            animation: pulse 1.5s infinite ease-in-out, float 3s ease-in-out infinite, zoomIn 0.8s ease-out;
+        }
+
+            .order-card:hover {
+                transform: scale(1.03);
+            }
+
+        .order-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #333, #777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            /* Rotación y swing para un efecto de alta gama */
+            animation: intelligentRotation 4s ease-in-out infinite, swing 6s ease-in-out infinite;
+        }
+
+        .icon-3d {
+            font-size: 1.8rem;
+            display: inline-block;
+            animation: pulse 1.5s infinite, float 3s ease-in-out infinite, rotateIn 10s linear infinite;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .order-info {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .order-number {
+            font-size: 1.6rem;
+            font-weight: bold;
+            background: rgba(0,0,0,0.03);
+            padding: 12px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .order-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .order-table th,
+            .order-table td {
+                padding: 14px;
+                text-align: center;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+            }
+
+            .order-table th {
+                background: rgba(0,0,0,0.03);
+                text-transform: uppercase;
+            }
+
+        .order-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-futuristic {
+            background: linear-gradient(135deg, #ffffff, #ddd);
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 22px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-futuristic:hover {
+                transform: scale(1.1);
+                animation: spinCycle 1s linear, neonGlow 1s linear;
+                box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+            }
+
+            .btn-futuristic::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,255,255,0.2);
+                transform: skewX(-20deg);
+                transition: left 0.5s ease;
+                animation: ripple 1s linear;
+            }
+
+            .btn-futuristic:hover::after {
+                left: 100%;
+            }
+        /* Efecto en iconos */
+        .order-title .icon-3d,
+        .order-number .icon-3d,
+        .order-info i,
+        .order-actions .icon-3d {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+            .order-title .icon-3d:hover,
+            .order-number .icon-3d:hover,
+            .order-info i:hover,
+            .order-actions .icon-3d:hover {
+                animation: iconIntelli 1.5s ease-in-out;
+                color: #ff00c1;
+            }
+        /* Responsividad */
+        @@media (max-width: 768px) {
+            .order-card
+
+        {
+            width: 95%;
+        }
+
+        .order-actions {
+            flex-direction: column;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader"></div>
+        <div class="loader-text">Procesando orden...</div>
+    </div>
+    <div class="order-container">
+        <div class="order-card">
+            <h2 class="order-title">
+                <i class="icon-3d fas fa-rocket"></i> Su experiencia de compra ha alcanzado el pináculo de la excelencia
+            </h2>
+            <p class="order-info">Hemos procesado su pedido con precisión y eficiencia.</p>
+            <p class="order-number">
+                <i class="icon-3d fas fa-receipt"></i> Orden N°: @Model.OrderNumber
+            </p>
+            <h3>
+                <i class="icon-3d fas fa-list"></i> Detalles del Pedido
+            </h3>
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>V.Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detail in Model.OrderDetails)
+                    {
+                        var lineTotal = detail.UnitPrice * detail.Quantity;
+                        <tr>
+                            <td>
+                                @detail.Product.Name
+                                @{
+                                    // Lógica combinada: Puede ser Básica, Oferta o ambas condiciones
+                                    bool isBasic = detail.Product?.IsBasicBasket ?? false;
+                                    bool isOnOffer = detail.Product?.IsOnOffer ?? false;
+                                    decimal discount = detail.Product?.DiscountPercentage ?? 0;
+                                    string message = "";
+                                    if (isBasic && isOnOffer)
+                                    {
+                                        message = $"(Canasta Básica, IVA Exento, Oferta: {discount}% Desc.)";
+                                    }
+                                    else if (isBasic)
+                                    {
+                                        message = "(Canasta Básica, IVA Exento)";
+                                    }
+                                    else if (isOnOffer)
+                                    {
+                                        message = $"(Oferta: {discount}% Desc.)";
+                                    }
+                                }
+                                @if (!string.IsNullOrEmpty(message))
+                                {
+                                    <span style="font-size:0.85rem; color:#008000;"> @message</span>
+                                }
+                            </td>
+                            <td>@detail.Quantity</td>
+                            <td>@detail.UnitPrice.ToString("C", System.Globalization.CultureInfo.CurrentCulture)</td>
+                            <td>@lineTotal.ToString("C", System.Globalization.CultureInfo.CurrentCulture)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div style="margin-top:20px; text-align:right;">
+                <p>Subtotal: @subtotal.ToString("C", System.Globalization.CultureInfo.CurrentCulture)</p>
+                <p>IVA (15%): @totalIva.ToString("C", System.Globalization.CultureInfo.CurrentCulture)</p>
+                <h4>Total: @finalTotal.ToString("C", System.Globalization.CultureInfo.CurrentCulture)</h4>
+            </div>
+            <div class="order-actions">
+               
+                <button class="btn-futuristic" onclick="location.href='@Url.Action("Invoice", "Checkout", new { orderId = Model.Id })'">
+                    <i class="icon-3d fas fa-file-invoice"></i> Facturar
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    // Preloader
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+        }, 500); // medio segundo de gracia
+    });
+</script>

@@ -1,0 +1,217 @@
+﻿@model CoronelExpress.Models.Category
+@{
+    ViewData["Title"] = "Nueva Categoría";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    :root {
+        --primary-color: #ffbb00; /* Amarillo dorado */
+        --secondary-color: #ffffff;
+        --bg-color: #0d0d0d;
+        --container-bg: rgba(255, 255, 255, 0.08);
+        --border-color: rgba(255, 255, 255, 0.2);
+        --shadow-color: rgba(0, 0, 0, 0.7);
+        --text-gradient: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        animation: bgShift 20s ease infinite;
+    }
+
+    @@keyframes bgShift {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    .form-container {
+        background: var(--container-bg);
+        backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 40px;
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 15px 30px var(--shadow-color);
+        animation: fadeInUp 1.5s ease-out forwards;
+    }
+
+    @@keyframes fadeInUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        background: var(--text-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textShimmer 3s ease-in-out infinite;
+    }
+
+    @@keyframes textShimmer {
+        0%
+
+    {
+        background-position: 0%;
+    }
+
+    50% {
+        background-position: 100%;
+    }
+
+    100% {
+        background-position: 0%;
+    }
+
+    }
+
+    .form-label {
+        font-size: 1.2rem;
+        color: var(--primary-color);
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        padding: 10px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+    .btn-animated {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 14px;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: var(--primary-color);
+        color: #111;
+        border: none;
+        cursor: pointer;
+        animation: buttonPulse 4s infinite ease-in-out;
+    }
+
+    @@keyframes buttonPulse {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    }
+
+    .btn-animated:hover {
+        transform: scale(1.1);
+        box-shadow: 0 10px 25px var(--shadow-color);
+    }
+
+    .btn-secondary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: #111;
+        }
+
+    .icon-rotate {
+        display: inline-block;
+        animation: rotateIcon 3s linear infinite;
+    }
+
+    @@keyframes rotateIcon {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+</style>
+
+<div class="form-container">
+    <h2><i class="fas fa-box-open icon-rotate"></i> Nueva Categoría</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="mb-4">
+            <label class="form-label"><i class="fas fa-tag"></i> Nombre de la Categoría</label>
+            <input asp-for="Name" class="form-control" placeholder="Ingrese el nombre..." />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-animated">
+            <i class="fas fa-save"></i> Guardar Categoría
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary mt-3">
+            <i class="fas fa-arrow-left"></i> Volver al Listado
+        </a>
+    </form>
+</div>

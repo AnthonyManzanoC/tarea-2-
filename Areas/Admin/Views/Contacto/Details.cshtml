@@ -1,0 +1,156 @@
+﻿@model CoronelExpress.Models.ContactoMessage
+
+@{
+    ViewData["Title"] = "Detalles de Contacto";
+}
+
+<div class="contact-container">
+    <h2>Detalles del Mensaje de Contacto</h2>
+    <div class="contact-card">
+        <div class="contact-info">
+            <p><strong>Nombre:</strong> @Model.Nombre</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Asunto:</strong> @Model.Asunto</p>
+            <div class="message-highlight">
+                <p class="message-label">Mensaje:</p>
+                <blockquote class="contact-message">
+                    @Model.Mensaje
+                </blockquote>
+            </div>
+            <p><strong>Fecha:</strong> @Model.Fecha.ToString("g")</p>
+        </div>
+        <div class="contact-actions">
+            <!-- Botón de retorno avanzado -->
+            <button type="button" class="btn btn-return" onclick="window.location.href='/Admin/Dashboard'">
+                <i class="fas fa-arrow-left me-2"></i> Volver al Dashboard
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Base */
+    body {
+        background: #f4f7f9;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .contact-container {
+        max-width: 650px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+
+        .contact-container h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+        }
+    /* Tarjeta de contacto */
+    .contact-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        animation: fadeIn 1s ease;
+    }
+
+    .contact-info p {
+        font-size: 1rem;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+        .contact-info p strong {
+            color: #2c3e50;
+        }
+    /* Sección que resalta el mensaje */
+    .message-highlight {
+        background: #e8f0fe;
+        border-left: 4px solid #2c3e50;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+        animation: pulseHighlight 2s ease-in-out infinite alternate;
+    }
+
+    .message-label {
+        margin: 0 0 10px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .contact-message {
+        font-size: 1rem;
+        color: #333;
+        margin: 0;
+        line-height: 1.6;
+    }
+    /* Botón de acción */
+    .contact-actions {
+        text-align: center;
+        margin-top: 25px;
+    }
+
+    .btn.btn-secondary {
+        background: #2c3e50;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-size: 1rem;
+        color: #ffffff;
+        text-decoration: none;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+        .btn.btn-secondary:hover {
+            background: #34495e;
+            transform: scale(1.05);
+        }
+    /* Animaciones */
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes fadeInDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+    @@keyframes pulseHighlight {
+        0%
+
+    {
+        box-shadow: 0 0 8px rgba(44, 62, 80, 0.3);
+    }
+
+    100% {
+        box-shadow: 0 0 15px rgba(44, 62, 80, 0.6);
+    }
+
+    }
+</style>

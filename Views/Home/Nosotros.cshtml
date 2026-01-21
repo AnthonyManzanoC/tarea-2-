@@ -1,0 +1,2738 @@
+﻿@{
+    ViewData["Title"] = "Nosotros";
+	Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosotros - Comercial Don Julio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <!-- GSAP y ScrollTrigger para animaciones avanzadas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        /* Variables globales y fondo dinámico minimalista */
+        :root {
+            --bg-gradient-start: #1e3c72;
+            --bg-gradient-end: #2a5298;
+            --primary-color: #fff;
+            --accent-color: #ff7f50;
+            --highlight-color: #ff6347;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            animation: gradientShift 25s ease infinite;
+            color: var(--primary-color);
+            overflow-x: hidden;
+            perspective: 1200px;
+            margin: 0;
+        }
+        /* Animación de gradiente */
+        @@keyframes gradientShift {
+            0%
+
+        {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+        50% {
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+        }
+
+        100% {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+        /* Carrusel corporativo */
+        .brand-carousel .carousel-item {
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: slideImpact 1s ease-out forwards;
+        }
+
+        @@keyframes slideImpact {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(50px) rotateX(10deg) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg) scale(1);
+        }
+
+        }
+
+        .brand-carousel .carousel-item::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            animation: overlayPulse 4s ease-in-out infinite alternate;
+        }
+
+        @@keyframes overlayPulse {
+            from
+
+        {
+            opacity: 0.4;
+        }
+
+        to {
+            opacity: 0.6;
+        }
+
+        }
+
+        .brand-carousel .carousel-caption {
+            bottom: 40%;
+            z-index: 2;
+            text-shadow: 0 2px 8px var(--shadow-color);
+            animation: captionEntrance 1s ease-out forwards;
+        }
+
+        @@keyframes captionEntrance {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        }
+
+        .brand-carousel .carousel-caption h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .brand-carousel .carousel-caption p {
+            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+        /* Header corporativo minimalista */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(-30px);
+            animation: headerFadeIn 1s ease-out forwards;
+        }
+
+        @@keyframes headerFadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        header h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        /* Timeline inteligente */
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+            padding-left: 40px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 20px;
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+            .timeline-item::before {
+                content: "";
+                position: absolute;
+                left: -30px;
+                top: 0;
+                width: 20px;
+                height: 20px;
+                background: var(--highlight-color);
+                border: 3px solid var(--accent-color);
+                border-radius: 50%;
+                box-shadow: 0 2px 8px var(--shadow-color);
+                transition: transform 0.3s ease;
+            }
+
+            .timeline-item:hover::before {
+                transform: scale(1.3);
+            }
+
+            .timeline-item h3 {
+                font-size: 1.5rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .timeline-item span {
+                font-size: 0.9rem;
+                opacity: 0.7;
+            }
+
+            .timeline-item p {
+                margin-top: 0.5rem;
+                font-size: 1rem;
+                line-height: 1.4;
+            }
+        /* Sección narrativa avanzada */
+        .narrative {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+            .narrative h2 {
+                font-size: 2.5rem;
+                text-transform: uppercase;
+                margin-bottom: 1rem;
+                color: var(--accent-color);
+            }
+
+            .narrative p {
+                font-size: 1.2rem;
+                line-height: 1.6;
+                text-align: justify;
+            }
+        /* Sección corporativa: Experiencia */
+        .corporate {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+            .corporate h2 {
+                font-size: 2.5rem;
+                text-transform: uppercase;
+                text-align: center;
+                margin-bottom: 2rem;
+                color: var(--highlight-color);
+            }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1 1 300px;
+            max-width: 300px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 8px 20px var(--shadow-color);
+            }
+
+            .card h3 {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            .card p {
+                font-size: 1rem;
+                line-height: 1.4;
+            }
+        /* Botón "Descubre más" */
+        .btn-more {
+            display: inline-block;
+            margin: 3rem auto 0;
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));
+            color: var(--primary-color);
+            text-transform: uppercase;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: btnPulse 2s infinite alternate;
+        }
+
+        @@keyframes btnPulse {
+            from
+
+        {
+            transform: scale(1);
+        }
+
+        to {
+            transform: scale(1.05);
+        }
+
+        }
+
+        .btn-more:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+        /* Modal corporativo */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: rgba(34,34,34,0.95);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.5);
+            box-shadow: 0 8px 30px var(--shadow-color);
+            animation: modalIn 0.8s ease-out forwards;
+        }
+
+        @@keyframes modalIn {
+            from
+
+        {
+            opacity: 0;
+            transform: scale(0.5) rotate(-15deg);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: var(--accent-color);
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #222;
+        }
+        /* 30 keyframes adicionales para efectos únicos */
+        @@keyframes fadeInSlow {
+            from
+
+        {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes fadeOutFast {
+            from
+
+        {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes slideInUp {
+            from
+
+        {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes slideInDown {
+            from
+
+        {
+            transform: translateY(-100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes slideOutLeft {
+            from
+
+        {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-100%);
+        }
+
+        }
+
+        @@keyframes slideOutRight {
+            from
+
+        {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(100%);
+        }
+
+        }
+
+        @@keyframes rotateIn90 {
+            from
+
+        {
+            transform: rotate(-90deg);
+        }
+
+        to {
+            transform: rotate(0deg);
+        }
+
+        }
+
+        @@keyframes rotateOut90 {
+            from
+
+        {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(90deg);
+        }
+
+        }
+
+        @@keyframes bounceInUp {
+            0%
+
+        {
+            transform: translateY(100%);
+        }
+
+        60% {
+            transform: translateY(-20%);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes bounceOutDown {
+            0%
+
+        {
+            transform: translateY(0);
+        }
+
+        60% {
+            transform: translateY(20%);
+        }
+
+        100% {
+            transform: translateY(100%);
+        }
+
+        }
+        @@keyframes zoomInQuick {
+            from
+
+        {
+            transform: scale(0.5);
+        }
+
+        to {
+            transform: scale(1);
+        }
+
+        }
+
+        @@keyframes zoomOutQuick {
+            from
+
+        {
+            transform: scale(1);
+        }
+
+        to {
+            transform: scale(0.5);
+        }
+
+        }
+        @@keyframes flipInX {
+            from
+
+        {
+            transform: perspective(400px) rotateX(90deg);
+            opacity: 0;
+        }
+
+        to {
+            transform: perspective(400px) rotateX(0deg);
+            opacity: 1;
+        }
+
+        }
+        @@keyframes flipOutX {
+            from
+
+        {
+            transform: perspective(400px) rotateX(0deg);
+            opacity: 1;
+        }
+
+        to {
+            transform: perspective(400px) rotateX(90deg);
+            opacity: 0;
+        }
+
+        }
+        @@keyframes flipInY {
+            from
+
+        {
+            transform: perspective(400px) rotateY(90deg);
+            opacity: 0;
+        }
+
+        to {
+            transform: perspective(400px) rotateY(0deg);
+            opacity: 1;
+        }
+
+        }
+        @@keyframes flipOutY {
+            from
+
+        {
+            transform: perspective(400px) rotateY(0deg);
+            opacity: 1;
+        }
+
+        to {
+            transform: perspective(400px) rotateY(90deg);
+            opacity: 0;
+        }
+
+        }
+        @@keyframes shadowPulse {
+            from
+
+        {
+            box-shadow: 0 0 5px var(--shadow-color);
+        }
+
+        to {
+            box-shadow: 0 0 20px var(--shadow-color);
+        }
+
+        }
+
+        @@keyframes colorCycle {
+            0%
+
+        {
+            filter: hue-rotate(0deg);
+        }
+
+        100% {
+            filter: hue-rotate(360deg);
+        }
+
+        }
+
+        @@keyframes wobble {
+            0%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        25% {
+            transform: rotate(5deg);
+        }
+
+        50% {
+            transform: rotate(0deg);
+        }
+
+        75% {
+            transform: rotate(-5deg);
+        }
+
+        100% {
+            transform: rotate(0deg);
+        }
+
+        }
+
+        @@keyframes swing {
+            20%
+
+        {
+            transform: rotate3d(0, 0, 1, 15deg);
+        }
+
+        40% {
+            transform: rotate3d(0, 0, 1, -10deg);
+        }
+
+        60% {
+            transform: rotate3d(0, 0, 1, 5deg);
+        }
+
+        80% {
+            transform: rotate3d(0, 0, 1, -5deg);
+        }
+
+        100% {
+            transform: rotate3d(0, 0, 1, 0deg);
+        }
+
+        }
+
+        @@keyframes pulseFast {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        @@keyframes jiggle {
+            0%
+
+        {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        50% {
+            transform: translateX(5px);
+        }
+
+        75% {
+            transform: translateX(-5px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+
+        }
+
+        @@keyframes drift {
+            from
+
+        {
+            transform: translateX(-50px);
+        }
+
+        to {
+            transform: translateX(50px);
+        }
+
+        }
+
+        @@keyframes rise {
+            from
+
+        {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes fall {
+            from
+
+        {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes shimmer {
+            0%
+
+        {
+            background-position: -500px 0;
+        }
+
+        100% {
+            background-position: 500px 0;
+        }
+
+        }
+
+        @@keyframes glitch {
+            0%
+
+        {
+            clip-path: inset(0 0 0 0);
+        }
+
+        50% {
+            clip-path: inset(10% 0 20% 0);
+        }
+
+        100% {
+            clip-path: inset(0 0 0 0);
+        }
+
+        }
+
+        @@keyframes driftRotate {
+            from
+
+        {
+            transform: translateX(-30px) rotate(-5deg);
+        }
+
+        to {
+            transform: translateX(30px) rotate(5deg);
+        }
+
+        }
+
+        @@keyframes scalePulse {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        @@keyframes orbit {
+            from
+
+        {
+            transform: rotate(0deg) translateX(0);
+        }
+
+        to {
+            transform: rotate(360deg) translateX(0);
+        }
+
+        }
+
+        @@keyframes slideZoomIn {
+            from
+
+        {
+            transform: translateX(-100%) scale(0.5);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes slideZoomOut {
+            from
+
+        {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateX(100%) scale(0.5);
+            opacity: 0;
+        }
+
+        }
+        /* Sección corporativa: Experiencia – ahora con carrusel interno para visión/misión */
+        .corporate {
+            margin: 4rem 0;
+            padding: 2rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+            .corporate h2 {
+                font-size: 2.5rem;
+                text-transform: uppercase;
+                text-align: center;
+                margin-bottom: 2rem;
+                color: var(--highlight-color);
+            }
+
+        .experience-carousel .carousel-item {
+            padding: 1rem;
+            text-align: center;
+        }
+
+            .experience-carousel .carousel-item h3 {
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .experience-carousel .carousel-item p {
+                font-size: 1rem;
+                line-height: 1.4;
+            }
+        /* Botón "Descubre más" */
+        .btn-more {
+            display: inline-block;
+            margin: 3rem auto 0;
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));
+            color: var(--primary-color);
+            text-transform: uppercase;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: btnPulse 2s infinite alternate;
+        }
+
+        @@keyframes btnPulse {
+            from
+
+        {
+            transform: scale(1);
+        }
+
+        to {
+            transform: scale(1.05);
+        }
+
+        }
+
+        .btn-more:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+        /* Modal corporativo para visión/misión */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal-content {
+            background: rgba(34,34,34,0.95);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.5);
+            box-shadow: 0 8px 30px var(--shadow-color);
+            animation: modalIn 0.8s ease-out forwards;
+        }
+
+        @@keyframes modalIn {
+            from
+
+        {
+            opacity: 0;
+            transform: scale(0.5) rotate(-15deg);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: var(--accent-color);
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #222;
+        }
+        /* Carrusel histórico final */
+        .history-carousel .carousel-item {
+            padding: 1rem;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+            .history-carousel .carousel-item h3 {
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .history-carousel .carousel-item span {
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+
+            .history-carousel .carousel-item p {
+                font-size: 1rem;
+                line-height: 1.4;
+            }
+       
+        /* Botones "Ver Detalle" */
+        .btn-ver-detalle {
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+            .btn-ver-detalle:hover {
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            }
+
+       
+        /* Botón "Descubre más" */
+        #btn-more {
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Estilos avanzados para las Cards */
+        .cards .card {
+            background: #fff;
+            border: none;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .cards .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+
+        .cards .card-body {
+            padding: 1.5rem;
+            color: #333;
+        }
+
+        .cards .card-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #003366;
+        }
+
+        .cards .card-text {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* Sección: Logo Inteligente */
+        #logo-inteligente {
+            text-align: center;
+            padding: 2rem;
+        }
+
+            #logo-inteligente img {
+                max-width: 200px;
+                transition: transform 0.5s ease;
+            }
+
+                #logo-inteligente img:hover {
+                    transform: rotate(360deg) scale(1.1);
+                }
+
+        /* Sección: Galería Interactiva (modificada para ser oscura y corporativa) */
+        #galeria-interactiva {
+            padding: 2rem;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+            #galeria-interactiva h2 {
+                color: #fff;
+            }
+
+            #galeria-interactiva .gallery-item {
+                position: relative;
+                overflow: hidden;
+                margin-bottom: 1rem;
+            }
+
+                #galeria-interactiva .gallery-item img {
+                    width: 100%;
+                    transition: transform 0.5s ease;
+                }
+
+                #galeria-interactiva .gallery-item:hover img {
+                    transform: scale(1.1);
+                }
+
+            #galeria-interactiva .gallery-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.6);
+                opacity: 0;
+                transition: opacity 0.5s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                color: #fff;
+            }
+
+            #galeria-interactiva .gallery-item:hover .gallery-overlay {
+                opacity: 1;
+            }
+
+        /* Sección: Mapas de Ubicación */
+        #ubicacion {
+            padding: 2rem;
+            text-align: center;
+        }
+
+            #ubicacion iframe {
+                width: 100%;
+                height: 400px;
+                border: 0;
+            }
+
+       
+
+        /* Sección: Frases Inspiradoras */
+        #frases-inspiradoras {
+            padding: 2rem;
+            background: #003366;
+            color: #fff;
+            text-align: center;
+        }
+
+            #frases-inspiradoras blockquote {
+                font-size: 1.5rem;
+                font-style: italic;
+            }
+
+        /* Efecto de partículas de estrellas (refinado y elegante) */
+        #starParticles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Modal con video de fondo - Pro Level */
+        .modal-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9); /* Fondo oscuro */
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            backdrop-filter: blur(6px);
+        }
+
+            .modal-video video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+            }
+
+            .modal-video .modal-content {
+                position: relative;
+                z-index: 1;
+                max-width: 800px;
+                width: 90%;
+                padding: 2rem;
+                background: rgba(0, 0, 0, 0.7);
+                border-radius: 10px;
+                box-shadow: 0 6px 18px rgba(0,0,0,0.8);
+                text-align: center;
+                color: #fff;
+                font-family: 'Helvetica Neue', sans-serif;
+            }
+
+                .modal-video .modal-content h2 {
+                    font-size: 2.5rem;
+                    margin-bottom: 1rem;
+                    font-weight: bold;
+                }
+
+                .modal-video .modal-content p {
+                    font-size: 1.2rem;
+                    line-height: 1.6;
+                    margin-bottom: 0;
+                }
+
+            .modal-video .modal-close {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: #fff;
+                font-size: 2rem;
+                padding: 0.3rem 0.6rem;
+                border-radius: 50%;
+                cursor: pointer;
+                transition: background 0.3s, transform 0.3s;
+                z-index: 2;
+            }
+
+                .modal-video .modal-close:hover {
+                    background: rgba(255, 255, 255, 0.5);
+                    transform: scale(1.1);
+                }
+
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1050;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: #1c1c1c;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            color: #fff;
+            font-family: 'Helvetica Neue', sans-serif;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+        }
+
+            .modal-content h2 {
+                margin-top: 0;
+                font-size: 2rem;
+                font-weight: bold;
+            }
+
+            .modal-content p {
+                font-size: 1.1rem;
+                line-height: 1.6;
+                margin: 1rem 0;
+            }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+            .modal-close:hover {
+                color: #f00;
+            }
+        /* Keyframes para animaciones inteligentes de cards */
+        @@keyframes cardPulse {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        .card-inteligente:hover {
+            animation: cardPulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas para efecto de partículas de estrellas -->
+    <canvas id="starParticles"></canvas>
+
+    <!-- Sección: Logo Inteligente -->
+    <section id="logo-inteligente">
+        <img src="/Images/logo.png" alt="Logo Comercial Don Julio">
+    </section>
+
+    <!-- Carrusel Corporativo Principal -->
+    <div id="brandCarousel" class="carousel slide brand-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="background-image: url('/Images/12302.PNG');">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Innovación sin Límites</h2>
+                    <p>Transformamos cada idea en un hito de excelencia.</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('/Images/02133.PNG');">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Calidad que Inspira</h2>
+                    <p>Don Julio: donde la tradición se une a la vanguardia.</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('/Images/nuevo22.PNG');">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Legado y Futuro</h2>
+                    <p>Nuestra historia se escribe con pasión e innovación.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#brandCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#brandCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+
+    <div class="container my-4">
+        <!-- Encabezado Principal -->
+        <header class="text-center">
+            <h1>Comercial Don Julio</h1>
+            <p>Pioneros en innovación y pasión desde 1963</p>
+        </header>
+
+        <!-- Sección Narrativa -->
+        <section class="narrative my-5" id="narrative">
+            <h2>La Leyenda de Don Julio</h2>
+            <p>
+                Desde sus orígenes en el vibrante corazón de Montalvo, Comercial Don Julio ha forjado un camino de excelencia y resiliencia. Inspirados por la pasión y el compromiso, cada paso se transforma en una obra de arte: desafíos convertidos en oportunidades, innovación y tradición entrelazadas para esculpir un legado imborrable. Aquí, cada proyecto narra la historia de un espíritu invencible, siempre listo para reinventarse.
+            </p>
+        </section>
+
+        <!-- Timeline -->
+        <section class="timeline my-5" id="timeline">
+            <div class="timeline-item" id="item1">
+                <h3>1963</h3>
+                <span>Fundación</span>
+                <p>Nace Comercial Don Julio, dando inicio a una era de innovación y liderazgo en Montalvo.</p>
+            </div>
+            <div class="timeline-item" id="item2">
+                <h3>1975</h3>
+                <span>Crecimiento</span>
+                <p>Consolidamos nuestra presencia y nos convertimos en sinónimo de calidad y confianza.</p>
+            </div>
+            <div class="timeline-item" id="item3">
+                <h3>1990</h3>
+                <span>Revolución Tecnológica</span>
+                <p>Implementamos tecnologías de vanguardia que redefinieron la experiencia del cliente.</p>
+            </div>
+            <div class="timeline-item" id="item4">
+                <h3>2000</h3>
+                <span>Expansión Mayorista</span>
+                <p>Abrimos nuevos horizontes, llevando nuestra excelencia a un mercado en constante evolución.</p>
+            </div>
+            <div class="timeline-item" id="item5">
+                <h3>2008</h3>
+                <span>Transformación</span>
+                <p>Innovamos en tiempos de cambio, adaptándonos con resiliencia y visión futurista.</p>
+            </div>
+            <div class="timeline-item" id="item6">
+                <h3>2017</h3>
+                <span>Competencia Intensa</span>
+                <p>Enfrentamos desafíos en un mercado competitivo, emergiendo con fuerza renovada.</p>
+            </div>
+            <div class="timeline-item" id="item7">
+                <h3>2022</h3>
+                <span>Renovación</span>
+                <p>A través de la adversidad, nos reinventamos para seguir marcando tendencia.</p>
+            </div>
+            <div class="timeline-item" id="item8">
+                <h3>2025</h3>
+                <span>Resurgimiento</span>
+                <p>El renacer de los invencibles: un futuro brillante y desafiante que redefine el mercado.</p>
+            </div>
+        </section>
+
+        <!-- Carrusel de Valores Corporativos -->
+        <section class="corporate my-5" id="corporate-carousel">
+            <h2 class="text-center">Valores Corporativos</h2>
+            <div id="experienceCarousel" class="carousel slide experience-carousel" data-bs-ride="carousel" data-bs-interval="6000">
+                <div class="carousel-inner">
+                    <div class="carousel-item active text-center">
+                        <h3>Visión</h3>
+                        <p>
+                            Ser líderes en innovación, creando soluciones que trascienden el tiempo y marcan la pauta del sector, impulsando el progreso y la excelencia.
+                        </p>
+                        <button class="btn btn-primary btn-ver-detalle" data-modal="vision">Ver Detalle</button>
+                    </div>
+                    <div class="carousel-item text-center">
+                        <h3>Misión</h3>
+                        <p>
+                            Transformar cada desafío en una oportunidad, combinando tradición y modernidad para ofrecer productos y servicios de calidad incomparable.
+                        </p>
+                        <button class="btn btn-primary btn-ver-detalle" data-modal="mission">Ver Detalle</button>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#experienceCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#experienceCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Sección de Cards con Valores (mejoradas con keyframes) -->
+        <section class="corporate-cards my-5" id="corporate-cards">
+            <h2 class="text-center">Experiencia Corporativa</h2>
+            <div class="cards d-flex justify-content-around flex-wrap">
+                <div class="card card-inteligente m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h3 class="card-title">Innovación</h3>
+                        <p class="card-text">Soluciones disruptivas que transforman la industria y elevan el estándar de calidad.</p>
+                    </div>
+                </div>
+                <div class="card card-inteligente m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h3 class="card-title">Liderazgo</h3>
+                        <p class="card-text">Estrategia y visión que nos posicionan como referentes en el mercado.</p>
+                    </div>
+                </div>
+                <div class="card card-inteligente m-2" style="width: 18rem;">
+                    <div class="card-body">
+                        <h3 class="card-title">Excelencia</h3>
+                        <p class="card-text">Compromiso constante con la perfección y la mejora continua en cada proyecto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección: Galería Interactiva (oscura y corporativa) -->
+        <section id="galeria-interactiva" class="my-5">
+            <h2 class="text-center">Galería Interactiva</h2>
+            <div class="row">
+                <div class="col-md-4 gallery-item">
+                    <img src="/Images/galeria1.jpg" alt="Galería 1">
+                    <div class="gallery-overlay">Ver Imagen</div>
+                </div>
+                <div class="col-md-4 gallery-item">
+                    <img src="/Images/galeria2.jpg" alt="Galería 2">
+                    <div class="gallery-overlay">Ver Imagen</div>
+                </div>
+                <div class="col-md-4 gallery-item">
+                    <img src="/Images/galeria3.jpg" alt="Galería 3">
+                    <div class="gallery-overlay">Ver Imagen</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estilos avanzados con animaciones -->
+        <!-- Incluye Font Awesome para los íconos (opcional) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+        <!-- Estilos avanzados con animaciones e interactividad -->
+        <style>
+            /* Animaciones para elementos al hacer scroll */
+            @@keyframes fadeInDown {
+                from
+
+            {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            }
+
+            @@keyframes fadeInUp {
+                from
+
+            {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            }
+
+            @@keyframes fadeIn {
+                from
+
+            {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+
+            }
+
+            /* Clase base para animar al hacer scroll */
+            .animate-on-scroll {
+                opacity: 0;
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+
+                /* Cuando el elemento esté en vista, se activan las animaciones */
+                .animate-on-scroll.in-view {
+                    opacity: 1;
+                }
+
+            .section-title.in-view {
+                animation: fadeInDown 1s ease-out forwards;
+            }
+
+            .map-container.in-view {
+                animation: fadeInUp 1s ease-out forwards;
+            }
+
+            .address-box.in-view {
+                animation: fadeIn 1s ease-out forwards;
+            }
+
+            /* Contenedor del mapa */
+            .map-container {
+                position: relative;
+                overflow: hidden;
+                padding-top: 56.25%; /* Relación 16:9 */
+                border-radius: 12px;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            }
+
+                .map-container iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                    border-radius: 12px;
+                }
+
+            /* Bloque de dirección elegante */
+            .address-box {
+                margin-top: 30px;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-left: 5px solid #007bff;
+                border-radius: 5px;
+            }
+
+                .address-box h3 {
+                    margin-top: 0;
+                    font-size: 1.5rem;
+                    color: #333;
+                }
+
+                .address-box p {
+                    margin: 0.25rem 0;
+                    font-size: 1rem;
+                    color: #555;
+                }
+        </style>
+
+        <!-- Sección: Mapas de Ubicación y Cómo Llegar -->
+        <section id="ubicacion" class="my-5">
+            <div class="container">
+                <h2 class="text-center mb-4 section-title animate-on-scroll">Ubicación &amp; Cómo Llegar</h2>
+                <!-- Contenedor responsivo y animado para el mapa -->
+                <div class="map-container animate-on-scroll">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d5969.5618960856145!2d-79.28873408719866!3d-1.7882392224258188!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sec!4v1742440816992!5m2!1ses!2sec"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <p class="mt-3 text-center animate-on-scroll">Encuentra la ruta más rápida para visitarnos.</p>
+                <!-- Bloque elegante de dirección -->
+                <div class="address-box animate-on-scroll">
+                    <h3><i class="fas fa-map-marker-alt"></i> Dirección</h3>
+                    <p>Montalvo, Los Ríos, Ecuador</p>
+                    <p>Av. 25 de Abril, Por Delante : entre Calle Venezuela y Calle 27 de mayo</p>
+                    <p>Av. Babahoyo, y Por Atras : Calle García Moreno</p>
+                    <p>Código Postal: EC120350</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Script para activar animaciones al hacer scroll -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              const animateElements = document.querySelectorAll('.animate-on-scroll');
+
+              const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                  if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                  }
+                });
+              }, { threshold: 0.2 });
+
+              animateElements.forEach(el => observer.observe(el));
+            });
+        </script>
+
+
+
+
+
+
+        <section id="testimonios" class="my-5">
+            <h2 class="section-title">Testimonios</h2>
+            <div class="testimonios-container">
+                <div id="testimonios-grid" class="testimonios-grid">
+                    <!-- Los testimonios se generan dinámicamente -->
+                </div>
+                <button id="agregar-testimonio" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                        <path d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zM8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0z" />
+                    </svg>
+                    + Agregar Testimonio
+                </button>
+            </div>
+
+            <!-- Modal para agregar testimonio -->
+            <div id="modal-testimonio" class="modal">
+                <div class="modal-content">
+                    <h3 class="modal-title">Agrega tu Testimonio</h3>
+                    <textarea id="nuevo-testimonio" placeholder="Escribe tu testimonio..."></textarea>
+                    <input id="nombre-testimonio" type="text" placeholder="Tu nombre">
+                    <div class="modal-buttons">
+                        <button id="guardar-testimonio" class="btn btn-success">Guardar</button>
+                        <button id="cerrar-modal" class="btn btn-danger">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <style>
+            /* Diseño corporativo oscuro, minimalista y 3D – exclusivo para esta sección */
+            #testimonios,
+            #testimonios input,
+            #testimonios textarea,
+            #testimonios button {
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+            }
+
+            #testimonios {
+                background: #121212;
+                color: #e0e0e0;
+                padding: 2rem 1rem;
+            }
+
+                #testimonios h2.section-title {
+                    text-align: center;
+                    color: #ffffff;
+                    margin-bottom: 1.5rem;
+                    font-size: 2.4rem;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    border-bottom: 2px solid #007bff;
+                    padding-bottom: 0.5rem;
+                }
+
+                #testimonios .testimonios-container {
+                    background: #1e1e1e;
+                    padding: 2rem;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+                }
+                /* Grid 3D: muestra 4 tarjetas en simultáneo con perspectiva */
+                #testimonios .testimonios-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                    max-width: 1200px;
+                    width: 100%;
+                    margin-bottom: 2rem;
+                    perspective: 1000px;
+                }
+                /* Tarjeta testimonial con efecto 3D estilo "cartelera electrónica" */
+                #testimonios .testimonial {
+                    background: #262626;
+                    color: #e0e0e0;
+                    padding: 1.5rem;
+                    border-radius: 8px;
+                    border: 1px solid #333;
+                    position: relative;
+                    transform-style: preserve-3d;
+                    animation: cardFlip 0.8s forwards;
+                    box-shadow: 0 8px 16px rgba(0,123,255,0.5);
+                }
+
+                    #testimonios .testimonial p {
+                        margin: 0.5rem 0;
+                        line-height: 1.4;
+                    }
+
+                    #testimonios .testimonial .fecha {
+                        font-size: 0.8rem;
+                        color: #bbbbbb;
+                        margin-top: 0.5rem;
+                    }
+                /* Botón para eliminar con efecto 3D (rotación y escalado) */
+                #testimonios .btn-delete {
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    background: transparent;
+                    border: none;
+                    color: #ff4d4d;
+                    font-size: 1.4rem;
+                    cursor: pointer;
+                    transition: transform 0.3s ease, opacity 0.3s ease;
+                }
+
+                    #testimonios .btn-delete:hover {
+                        transform: scale(1.2) rotate(10deg);
+                        opacity: 0.8;
+                    }
+            /* Keyframes avanzados para animación 3D de las tarjetas */
+            @@keyframes cardFlip {
+                0%
+
+            {
+                transform: rotateY(90deg) translateZ(-50px) scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                transform: rotateY(-10deg) translateZ(20px) scale(1.02);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: rotateY(0deg) translateZ(0) scale(1);
+                opacity: 1;
+            }
+
+            }
+
+            @@keyframes popUp {
+                0%
+
+            {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            60% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            }
+            /* Botones minimalistas con efecto 3D y uso de iconos */
+            #testimonios .btn {
+                padding: 0.6rem 1.4rem;
+                border: none;
+                cursor: pointer;
+                font-size: 1rem;
+                border-radius: 4px;
+                transition: background 0.3s ease, transform 0.3s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            #testimonios .btn-primary {
+                background: #007bff;
+                color: #fff;
+            }
+
+                #testimonios .btn-primary:hover {
+                    background: #0056b3;
+                    transform: scale(1.05) translateY(-2px);
+                }
+
+            #testimonios .btn-success {
+                background: #28a745;
+                color: #fff;
+            }
+
+                #testimonios .btn-success:hover {
+                    background: #1e7e34;
+                    transform: scale(1.05) translateY(-2px);
+                }
+
+            #testimonios .btn-danger {
+                background: #dc3545;
+                color: #fff;
+            }
+
+                #testimonios .btn-danger:hover {
+                    background: #c82333;
+                    transform: scale(1.05) translateY(-2px);
+                }
+            /* Modal digital avanzado */
+            #testimonios .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.85);
+                justify-content: center;
+                align-items: center;
+                z-index: 2000;
+                animation: popUp 0.5s;
+            }
+
+            #testimonios .modal-content {
+                background: #1e1e1e;
+                padding: 2rem;
+                border-radius: 8px;
+                text-align: center;
+                max-width: 450px;
+                width: 90%;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+            }
+
+            #testimonios .modal-title {
+                margin-bottom: 1rem;
+                color: #fff;
+                font-size: 1.5rem;
+                font-weight: 600;
+            }
+
+            #testimonios textarea,
+            #testimonios input {
+                width: 100%;
+                margin-bottom: 1rem;
+                padding: 10px;
+                border: 1px solid #333;
+                border-radius: 4px;
+                font-size: 1rem;
+                color: #e0e0e0;
+                background: #262626;
+            }
+
+                #testimonios textarea::placeholder,
+                #testimonios input::placeholder {
+                    color: #777;
+                }
+
+            #testimonios .modal-buttons {
+                display: flex;
+                justify-content: space-between;
+            }
+        </style>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              const grid = document.getElementById("testimonios-grid");
+              const btnAgregar = document.getElementById("agregar-testimonio");
+              const modal = document.getElementById("modal-testimonio");
+              const btnGuardar = document.getElementById("guardar-testimonio");
+              const btnCerrar = document.getElementById("cerrar-modal");
+              const txtTestimonio = document.getElementById("nuevo-testimonio");
+              const inputNombre = document.getElementById("nombre-testimonio");
+
+              // Lista de palabras prohibidas
+              const palabrasProhibidas = ["hate", "odio", "desprecio", "exterminio", "muerte"];
+              const contienePalabrasProhibidas = texto =>
+                palabrasProhibidas.some(p => texto.toLowerCase().includes(p));
+
+              // Testimonios predeterminados
+              const defaultTestimonios = [
+                {
+                  texto: "La innovación y el servicio de Comercial Don Julio superaron todas mis expectativas. Una experiencia única.",
+                  autor: "- Cliente Satisfecho",
+                  fecha: new Date().toLocaleString(),
+                  default: true
+                },
+                {
+                  texto: "Cada interacción es una muestra de excelencia. Realmente, redefinieron lo que significa calidad.",
+                  autor: "- Usuario Feliz",
+                  fecha: new Date().toLocaleString(),
+                  default: true
+                },
+                {
+                  texto: "La creatividad y el enfoque futurista me dejaron asombrado. ¡Altamente recomendado!",
+                  autor: "- Innovador Anónimo",
+                  fecha: new Date().toLocaleString(),
+                  default: true
+                },
+                {
+                  texto: "Un servicio excepcional que siempre cumple con las expectativas.",
+                  autor: "- Ejecutivo Corporativo",
+                  fecha: new Date().toLocaleString(),
+                  default: true
+                },
+                {
+                  texto: "Productos de alta calidad respaldados por un equipo increíble.",
+                  autor: "- Empresario Visionario",
+                  fecha: new Date().toLocaleString(),
+                  default: true
+                }
+              ];
+
+              // Cargar testimonios desde localStorage o inicializar
+              let testimonios = [];
+              if (localStorage.getItem("testimonios")) {
+                testimonios = JSON.parse(localStorage.getItem("testimonios"));
+                // Si se borraron los testimonios predeterminados, se reinsertan
+                const tienePredeterminados = testimonios.some(t => t.default);
+                if (!tienePredeterminados) {
+                  testimonios = defaultTestimonios.concat(testimonios);
+                  localStorage.setItem("testimonios", JSON.stringify(testimonios));
+                }
+              } else {
+                testimonios = defaultTestimonios;
+                localStorage.setItem("testimonios", JSON.stringify(testimonios));
+              }
+
+              // Renderizar inicialmente SOLO 4 testimonios (o menos)
+              const renderTestimonios = () => {
+                grid.innerHTML = "";
+                const count = Math.min(4, testimonios.length);
+                for (let i = 0; i < count; i++) {
+                  const div = document.createElement("div");
+                  div.classList.add("testimonial");
+                  div.setAttribute("data-index", i);
+                  div.innerHTML = `
+                    ${!testimonios[i].default ? `<button class="btn-delete" data-index="${i}" title="Eliminar Testimonio">&times;</button>` : ''}
+                    <p>"${testimonios[i].texto}"</p>
+                    <p><strong>${testimonios[i].autor}</strong></p>
+                    ${!testimonios[i].default ? `<p class="fecha">${testimonios[i].fecha}</p>` : ''}
+                  `;
+                  grid.appendChild(div);
+                }
+              };
+              renderTestimonios();
+
+              // Función para obtener los índices de tarjetas actualmente visibles
+              const getVisibleIndices = () => {
+                const visible = [];
+                grid.querySelectorAll('.testimonial').forEach(card => {
+                  const idx = card.getAttribute('data-index');
+                  if (idx !== null) {
+                    visible.push(parseInt(idx, 10));
+                  }
+                });
+                return visible;
+              };
+
+              // Rotación inteligente: cada 5s se retira la tarjeta más antigua y se añade una nueva que NO se repita entre las visibles
+              let currentIndex = 4; // Comenzamos con el siguiente índice
+              const rotarTestimonios = () => {
+                if (testimonios.length <= 4) return; // Si hay 4 o menos, no rotamos
+                const visibleIndices = getVisibleIndices();
+                let candidateIndex = currentIndex;
+                let attempts = 0;
+                // Evitar repetir testimonios que ya se muestran
+                while (visibleIndices.includes(candidateIndex) && attempts < testimonios.length) {
+                  candidateIndex = (candidateIndex + 1) % testimonios.length;
+                  attempts++;
+                }
+                const newCard = document.createElement("div");
+                newCard.classList.add("testimonial");
+                newCard.setAttribute("data-index", candidateIndex);
+                newCard.innerHTML = `
+                  ${!testimonios[candidateIndex].default ? `<button class="btn-delete" data-index="${candidateIndex}" title="Eliminar Testimonio">&times;</button>` : ''}
+                  <p>"${testimonios[candidateIndex].texto}"</p>
+                  <p><strong>${testimonios[candidateIndex].autor}</strong></p>
+                  ${!testimonios[candidateIndex].default ? `<p class="fecha">${testimonios[candidateIndex].fecha}</p>` : ''}
+                `;
+                if (grid.children.length >= 4) {
+                  grid.removeChild(grid.firstElementChild);
+                }
+                grid.appendChild(newCard);
+                currentIndex = (candidateIndex + 1) % testimonios.length;
+              };
+              setInterval(rotarTestimonios, 5000);
+
+              // Funciones para abrir y cerrar modal
+              const abrirModal = () => { modal.style.display = "flex"; };
+              const cerrarModal = () => {
+                modal.style.display = "none";
+                txtTestimonio.value = "";
+                inputNombre.value = "";
+              };
+              btnAgregar.addEventListener("click", abrirModal);
+              btnCerrar.addEventListener("click", cerrarModal);
+              window.addEventListener("click", (e) => { if (e.target === modal) cerrarModal(); });
+
+              // Guardar nuevo testimonio con validación
+              btnGuardar.addEventListener("click", () => {
+                const nuevoTexto = txtTestimonio.value.trim();
+                const nuevoNombre = inputNombre.value.trim();
+                if (nuevoTexto && nuevoNombre) {
+                  if (contienePalabrasProhibidas(nuevoTexto)) {
+                    alert("El testimonio contiene palabras no permitidas. Por favor, modifica tu comentario.");
+                    return;
+                  }
+                  const nuevoTestimonio = {
+                    texto: nuevoTexto,
+                    autor: `- ${nuevoNombre}`,
+                    fecha: new Date().toLocaleString(),
+                    default: false
+                  };
+                  testimonios.push(nuevoTestimonio);
+                  localStorage.setItem("testimonios", JSON.stringify(testimonios));
+                  renderTestimonios();
+                  cerrarModal();
+                } else {
+                  alert("Por favor, completa ambos campos.");
+                }
+              });
+
+              // Delegación de eventos para eliminar testimonios
+              grid.addEventListener("click", (e) => {
+                if (e.target.classList.contains("btn-delete")) {
+                  const idx = parseInt(e.target.getAttribute("data-index"), 10);
+                  // Verificar que el testimonio no sea predeterminado
+                  if (testimonios[idx].default) {
+                    alert("No se puede eliminar un testimonio predeterminado.");
+                    return;
+                  }
+                  if (confirm("¿Estás seguro de eliminar este testimonio?")) {
+                    testimonios = testimonios.filter((_, i) => i !== idx);
+                    localStorage.setItem("testimonios", JSON.stringify(testimonios));
+                    renderTestimonios();
+                  }
+                }
+              });
+            });
+        </script>
+
+
+
+        <!-- Carrusel Histórico Final -->
+        <section class="history my-5" id="history">
+            <h2 class="text-center mb-4">Nuestra Historia</h2>
+            <div id="historyCarousel" class="carousel slide history-carousel" data-bs-ride="carousel" data-bs-interval="4000">
+                <div class="carousel-inner text-center">
+                    <div class="carousel-item active">
+                        <h3>1963</h3>
+                        <span>Fundación</span>
+                        <p>Inicio de una era visionaria.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>1990</h3>
+                        <span>Tecnología</span>
+                        <p>Revolucionamos el mercado con innovación.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>2008</h3>
+                        <span>Transformación</span>
+                        <p>Adaptación y crecimiento en tiempos desafiantes.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>2025</h3>
+                        <span>Resurgimiento</span>
+                        <p>Un futuro prometedor y desafiante.</p>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#historyCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#historyCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="frases-inspiradoras" class="my-5">
+            <h2>Frases Inspiradoras</h2>
+            <div class="quote-container">
+                <blockquote id="quote-text"></blockquote>
+                <cite id="quote-author"></cite>
+            </div>
+            <div class="controls">
+                <button id="prev-quote">&#9664;</button>
+                <button id="next-quote">&#9654;</button>
+            </div>
+        </section>
+
+        <style>
+            /* Estilos para la sección avanzada de frases inspiradoras */
+            #frases-inspiradoras {
+                text-align: center;
+                padding: 2rem;
+                background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+                color: #fff;
+                font-family: 'Arial', sans-serif;
+            }
+
+                #frases-inspiradoras h2 {
+                    font-size: 2rem;
+                    margin-bottom: 1rem;
+                }
+
+            .quote-container {
+                max-width: 800px;
+                margin: 0 auto;
+                font-size: 1.5rem;
+                font-style: italic;
+                opacity: 0;
+                transition: opacity 0.5s ease-in-out;
+            }
+
+                .quote-container.show {
+                    opacity: 1;
+                }
+
+                .quote-container blockquote {
+                    margin: 0;
+                    padding: 0 1rem;
+                }
+
+                .quote-container cite {
+                    display: block;
+                    margin-top: 0.5rem;
+                    font-size: 1.2rem;
+                    font-style: normal;
+                }
+
+            .controls {
+                margin-top: 1rem;
+            }
+
+                .controls button {
+                    background: rgba(255,255,255,0.2);
+                    border: none;
+                    color: #fff;
+                    font-size: 1.2rem;
+                    padding: 0.5rem 1rem;
+                    margin: 0 0.5rem;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    transition: background 0.3s ease;
+                }
+
+                    .controls button:hover {
+                        background: rgba(255,255,255,0.4);
+                    }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+              // Array de citas inspiradoras
+              const quotes = [
+                {
+                  text: "La única forma de hacer un gran trabajo es amar lo que haces.",
+                  author: "Steve Jobs"
+                },
+                {
+                  text: "La innovación distingue a los líderes de los seguidores.",
+                  author: "Steve Jobs"
+                },
+                {
+                  text: "El futuro pertenece a quienes creen en la belleza de sus sueños.",
+                  author: "Eleanor Roosevelt"
+                }
+              ];
+
+              let currentQuoteIndex = 0;
+              const quoteTextEl = document.getElementById('quote-text');
+              const quoteAuthorEl = document.getElementById('quote-author');
+              const quoteContainer = document.querySelector('.quote-container');
+              const prevButton = document.getElementById('prev-quote');
+              const nextButton = document.getElementById('next-quote');
+
+              // Función para mostrar una cita con efecto fade
+              function showQuote(index) {
+                quoteContainer.classList.remove('show');
+                setTimeout(() => {
+                  quoteTextEl.textContent = quotes[index].text;
+                  quoteAuthorEl.textContent = "- " + quotes[index].author;
+                  quoteContainer.classList.add('show');
+                }, 300);
+              }
+
+              // Inicializa la primera cita
+              showQuote(currentQuoteIndex);
+
+              // Navegación manual
+              nextButton.addEventListener('click', () => {
+                currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+                showQuote(currentQuoteIndex);
+              });
+
+              prevButton.addEventListener('click', () => {
+                currentQuoteIndex = (currentQuoteIndex - 1 + quotes.length) % quotes.length;
+                showQuote(currentQuoteIndex);
+              });
+
+              // Cambio automático cada 5 segundos
+              setInterval(() => {
+                currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+                showQuote(currentQuoteIndex);
+              }, 5000);
+            });
+        </script>
+
+        <!-- Botón para abrir Modal con Video de Fondo -->
+        <div class="text-center my-4">
+            <button class="btn btn-secondary" id="btn-video">Ver Video de Fondo</button>
+
+        </div>
+
+
+        
+        <!-- Botón "Descubre más" que abre el modal corporativo -->
+        <div class="text-center my-4">
+            <button class="btn btn-secondary" id="btn-more">Descubre más</button>
+        </div>
+        <a href="/Home/Index" class="back-btn">Regresar al Inicio</a>
+
+        <!-- Modal para Visión -->
+        <!-- Modal para Visión -->
+        <div class="modal-overlay" id="visionModal">
+            <div class="modal-content">
+                <button class="modal-close" aria-label="Cerrar">&times;</button>
+                <h2>Visión</h2>
+                <p>
+                    Nuestra visión es liderar el mercado global, combinando innovación y tradición para transformar cada proyecto en un referente de calidad y excelencia.
+                </p>
+            </div>
+        </div>
+
+        <!-- Modal para Misión -->
+        <div class="modal-overlay" id="missionModal">
+            <div class="modal-content">
+                <button class="modal-close" aria-label="Cerrar">&times;</button>
+                <h2>Misión</h2>
+                <p>
+                    Nuestra misión es convertir cada reto en una oportunidad, desarrollando soluciones disruptivas que impulsen el progreso y garanticen la satisfacción de nuestros clientes.
+                </p>
+            </div>
+        </div>
+
+        <!-- Modal Corporativo -->
+        <div class="modal-overlay" id="modal-overlay">
+            <div class="modal-content">
+                <button class="modal-close" id="modal-close" aria-label="Cerrar">&times;</button>
+                <h2>El Espíritu Inquebrantable</h2>
+                <p>
+                    En Comercial Don Julio, cada desafío se convierte en una oportunidad para reinventarnos. Con pasión, innovación y visión, transformamos el mercado y dejamos un legado imborrable.
+                </p>
+            </div>
+        </div>
+
+        <!-- Modal con Video de Fondo -->
+        <div class="modal-video" id="modal-video">
+            <video autoplay muted loop>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+            <div class="modal-content">
+                <button class="modal-close" id="modal-video-close" aria-label="Cerrar">&times;</button>
+                <h2>Explora Nuestra Innovación</h2>
+                <p>Descubre cómo transformamos ideas en realidades.</p>
+            </div>
+        </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- GSAP y ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Script para efecto de partículas de estrellas refinadas -->
+        <script>
+            (() => {
+              const canvas = document.getElementById('starParticles');
+              const ctx = canvas.getContext('2d');
+
+              // Ajuste del canvas al tamaño de la ventana
+              function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+              }
+              window.addEventListener('resize', resizeCanvas);
+              resizeCanvas();
+
+              // Arrays para los distintos elementos
+              const stars = [];       // estrellas fijas y fugaces
+              const planets = [];     // planetas en movimiento
+              const satellites = [];  // satélites que orbitan planetas
+              const shootingStars = []; // estrellas fugaces adicionales
+
+              // -------------------------------
+              // INICIALIZAR ESTRELLAS (fijas y fugaces)
+              // -------------------------------
+              const numStars = 500;
+              function initStars() {
+                for (let i = 0; i < numStars; i++) {
+                  const type = Math.random();
+                  let radius, baseAlpha, twinkleSpeed, dx, dy;
+                  if (type < 0.7) { // 70% estrellas pequeñas
+                    radius = Math.random() * 0.6 + 0.2;
+                    baseAlpha = Math.random() * 0.5 + 0.5;
+                    twinkleSpeed = Math.random() * 0.01 + 0.005;
+                    dx = (Math.random() - 0.5) * 0.2;
+                    dy = (Math.random() - 0.5) * 0.2;
+                  } else if (type < 0.95) { // 25% estrellas grandes
+                    radius = Math.random() * 1.5 + 1.0;
+                    baseAlpha = Math.random() * 0.3 + 0.7;
+                    twinkleSpeed = Math.random() * 0.02 + 0.008;
+                    dx = (Math.random() - 0.5) * 0.1;
+                    dy = (Math.random() - 0.5) * 0.1;
+                  } else { // 5% estrellas fugaces (ya incluidas en shootingStars también)
+                    radius = Math.random() * 1.5 + 1.0;
+                    baseAlpha = 1;
+                    twinkleSpeed = Math.random() * 0.05 + 0.02;
+                    dx = (Math.random() - 0.5) * 2;
+                    dy = (Math.random() - 0.5) * 2;
+                  }
+                  stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius,
+                    baseAlpha,
+                    twinkleSpeed,
+                    phase: Math.random() * Math.PI * 2,
+                    dx,
+                    dy,
+                  });
+                }
+              }
+
+              // -------------------------------
+              // INICIALIZAR PLANETAS
+              // -------------------------------
+              const numPlanets = 5;
+              function initPlanets() {
+                for (let i = 0; i < numPlanets; i++) {
+                  planets.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 30 + 20, // entre 20 y 50
+                    color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+                    dx: (Math.random() - 0.5) * 0.5,
+                    dy: (Math.random() - 0.5) * 0.5,
+                  });
+                }
+              }
+
+              // -------------------------------
+              // INICIALIZAR SATÉLITES (orbita de cada planeta)
+              // -------------------------------
+              function initSatellites() {
+                planets.forEach((planet, index) => {
+                  // Cada planeta tendrá entre 1 y 3 satélites
+                  const numSats = Math.floor(Math.random() * 3) + 1;
+                  for (let j = 0; j < numSats; j++) {
+                    satellites.push({
+                      planetIndex: index,
+                      orbitRadius: planet.radius + Math.random() * 20 + 10, // distancia de órbita
+                      angle: Math.random() * Math.PI * 2,
+                      orbitSpeed: (Math.random() * 0.02 + 0.01) * (Math.random() < 0.5 ? 1 : -1),
+                      radius: Math.random() * 3 + 2, // tamaño del satélite
+                      color: 'gray'
+                    });
+                  }
+                });
+              }
+
+              // -------------------------------
+              // FUNCIONES PARA LAS ESTRELLAS FUGACES (shooting stars)
+              // -------------------------------
+              function spawnShootingStar() {
+                shootingStars.push({
+                  x: Math.random() * canvas.width,
+                  y: 0, // se inicia desde arriba
+                  dx: (Math.random() * 4) + 4, // velocidad horizontal rápida
+                  dy: (Math.random() * 2) + 2, // velocidad vertical rápida
+                  radius: Math.random() * 2 + 1,
+                  alpha: 1,
+                  decay: Math.random() * 0.01 + 0.005,
+                });
+              }
+
+              // -------------------------------
+              // FUNCIONES DE ACTUALIZACIÓN
+              // -------------------------------
+              function updateStars() {
+                stars.forEach(star => {
+                  star.x += star.dx;
+                  star.y += star.dy;
+                  // Envolvemos la posición para crear efecto infinito
+                  if (star.x < 0) star.x += canvas.width;
+                  else if (star.x > canvas.width) star.x -= canvas.width;
+                  if (star.y < 0) star.y += canvas.height;
+                  else if (star.y > canvas.height) star.y -= canvas.height;
+                  star.phase += star.twinkleSpeed;
+                });
+              }
+
+              function updatePlanets() {
+                planets.forEach(planet => {
+                  planet.x += planet.dx;
+                  planet.y += planet.dy;
+                  // Rebote en los bordes
+                  if (planet.x - planet.radius < 0 || planet.x + planet.radius > canvas.width) {
+                    planet.dx *= -1;
+                  }
+                  if (planet.y - planet.radius < 0 || planet.y + planet.radius > canvas.height) {
+                    planet.dy *= -1;
+                  }
+                });
+              }
+
+              function updateSatellites() {
+                satellites.forEach(sat => {
+                  sat.angle += sat.orbitSpeed;
+                });
+              }
+
+              function updateShootingStars() {
+                // Esporádicamente se generan nuevas shooting stars
+                if (Math.random() < 0.005) {
+                  spawnShootingStar();
+                }
+                // Actualizar las existentes y eliminarlas al desvanecerse
+                for (let i = shootingStars.length - 1; i >= 0; i--) {
+                  let s = shootingStars[i];
+                  s.x += s.dx;
+                  s.y += s.dy;
+                  s.alpha -= s.decay;
+                  if (s.alpha <= 0) {
+                    shootingStars.splice(i, 1);
+                  }
+                }
+              }
+
+              // -------------------------------
+              // FUNCIONES DE DIBUJO
+              // -------------------------------
+              function drawStars() {
+                stars.forEach(star => {
+                  let alpha = star.baseAlpha + Math.sin(star.phase) * 0.3;
+                  alpha = Math.max(0.3, Math.min(alpha, 1));
+                  const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.radius * 3);
+                  gradient.addColorStop(0, `rgba(255,255,255,${alpha})`);
+                  gradient.addColorStop(0.5, `rgba(255,255,255,${alpha * 0.5})`);
+                  gradient.addColorStop(1, 'rgba(255,255,255,0)');
+                  ctx.beginPath();
+                  ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                  ctx.fillStyle = gradient;
+                  ctx.fill();
+                });
+              }
+
+              function drawPlanets() {
+                planets.forEach(planet => {
+                  // Crea un degradado para dar un efecto de volumen
+                  const gradient = ctx.createRadialGradient(
+                    planet.x, planet.y, planet.radius * 0.3,
+                    planet.x, planet.y, planet.radius
+                  );
+                  gradient.addColorStop(0, planet.color);
+                  gradient.addColorStop(1, 'black');
+                  ctx.beginPath();
+                  ctx.arc(planet.x, planet.y, planet.radius, 0, Math.PI * 2);
+                  ctx.fillStyle = gradient;
+                  ctx.fill();
+                });
+              }
+
+              function drawSatellites() {
+                satellites.forEach(sat => {
+                  const planet = planets[sat.planetIndex];
+                  const satX = planet.x + sat.orbitRadius * Math.cos(sat.angle);
+                  const satY = planet.y + sat.orbitRadius * Math.sin(sat.angle);
+                  ctx.beginPath();
+                  ctx.arc(satX, satY, sat.radius, 0, Math.PI * 2);
+                  ctx.fillStyle = sat.color;
+                  ctx.fill();
+                });
+              }
+
+              function drawShootingStars() {
+                shootingStars.forEach(s => {
+                  ctx.beginPath();
+                  ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                  ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+                  ctx.fill();
+                });
+              }
+
+              // -------------------------------
+              // BUCLE DE ANIMACIÓN
+              // -------------------------------
+              function animate() {
+                // Efecto de desvanecimiento: se pinta un rectángulo semi-transparente en cada frame
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                updateStars();
+                updatePlanets();
+                updateSatellites();
+                updateShootingStars();
+
+                drawStars();
+                drawPlanets();
+                drawSatellites();
+                drawShootingStars();
+
+                requestAnimationFrame(animate);
+              }
+
+              // Inicializamos todos los elementos y comenzamos la animación
+              initStars();
+              initPlanets();
+              initSatellites();
+              animate();
+            })();
+        </script>
+    <script>
+        /* Función genérica robusta para animar elementos con validación, stagger y callbacks */
+        function robustAnimate(selector, fromProps, toProps, options = {}) {
+          try {
+            const elements = document.querySelectorAll(selector);
+            if (!elements.length) throw new Error(`No se encontró ningún elemento para ${selector}`);
+            elements.forEach((el, index) => {
+              gsap.fromTo(el, fromProps, {
+                ...toProps,
+                delay: (options.delay || 0) + index * (options.stagger || 0),
+                onComplete: () => {
+                  if (typeof options.callback === "function") options.callback(el);
+                }
+              });
+            });
+          } catch (error) {
+            console.error("Error en robustAnimate:", error);
+          }
+        }
+
+        /* Función especializada para animar el timeline de forma inteligente */
+        function animateTimelineItems() {
+          const items = document.querySelectorAll('.timeline-item');
+          if (!items.length) {
+            console.error("No se encontraron elementos en el timeline");
+            return;
+          }
+          items.forEach((item, i) => {
+            gsap.fromTo(item,
+              { opacity: 0, x: -50, rotation: i % 2 === 0 ? 10 : -10 },
+              {
+                opacity: 1,
+                x: 0,
+                rotation: 0,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: item,
+                  start: "top 85%",
+                  toggleActions: "play none none reverse"
+                },
+                delay: i * 0.2
+              }
+            );
+          });
+        }
+
+        /* Función que orquesta todas las animaciones de la vista */
+        function initAnimations() {
+          robustAnimate("header", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out", delay: 0.5 });
+          robustAnimate('header h1', { opacity: 0, y: -50 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" });
+          robustAnimate('header p', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" });
+          gsap.to("#narrative", {
+            scrollTrigger: { trigger: "#narrative", start: "top 80%" },
+            duration: 1.2,
+            opacity: 1,
+            y: 0,
+            ease: "power3.out"
+          });
+          gsap.to("#corporate-carousel", {
+            scrollTrigger: { trigger: "#corporate-carousel", start: "top 80%" },
+            duration: 1.2,
+            opacity: 1,
+            y: 0,
+            ease: "power3.out"
+          });
+          // Animación para el carrusel principal
+          var carousel = document.getElementById('brandCarousel');
+          carousel.addEventListener('slide.bs.carousel', function (e) {
+            gsap.fromTo(e.relatedTarget.querySelector('.carousel-caption'),
+              { opacity: 0, y: 50, scale: 0.8 },
+              { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out" }
+            );
+          });
+          animateTimelineItems();
+          robustAnimate('.card', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 1, ease: "bounce.out" });
+        }
+        document.addEventListener("DOMContentLoaded", initAnimations);
+
+            // Función para abrir el modal de cada "Ver Detalle" en el carrusel
+            document.querySelectorAll('.btn-ver-detalle').forEach(button => {
+              button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalType = button.getAttribute('data-modal');
+                if (modalType === 'vision') {
+                  const modal = document.getElementById('visionModal');
+                  modal.style.display = "flex";
+                  gsap.fromTo(modal.querySelector('.modal-content'), { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" });
+                } else if (modalType === 'mission') {
+                  const modal = document.getElementById('missionModal');
+                  modal.style.display = "flex";
+                  gsap.fromTo(modal.querySelector('.modal-content'), { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" });
+                }
+              });
+            });
+
+            // Función para abrir el modal corporativo con el botón "Descubre más" (funcionalidad original)
+            document.getElementById('btn-more').addEventListener('click', () => {
+              gsap.to(".container", {
+                duration: 1.2,
+                rotationY: "+=360",
+                ease: "power4.inOut",
+                onComplete: () => {
+                  document.getElementById('modal-overlay').style.display = "flex";
+                  gsap.fromTo(document.getElementById('modal-overlay').querySelector('.modal-content'), { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.7)" });
+                }
+              });
+            });
+
+            // Función para cerrar cualquier modal al pulsar su botón de cierre
+            document.querySelectorAll('.modal-overlay .modal-close').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                const modal = e.target.closest('.modal-overlay');
+                gsap.to(modal.querySelector('.modal-content'), { scale: 0.8, opacity: 0, duration: 0.5, ease: "power2.in", onComplete: () => {
+                  modal.style.display = "none";
+                }});
+              });
+            });
+
+        // Abrir modal de video
+        document.getElementById('btn-video').addEventListener('click', () => {
+          document.getElementById('modal-video').style.display = "flex";
+          gsap.fromTo(document.getElementById('modal-video').querySelector('.modal-content'), { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 1, ease: "power3.out" });
+        });
+
+        // Cerrar modales (para cualquier modal) al pulsar el botón de cierre
+        document.querySelectorAll('.modal-overlay .modal-close').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const modal = e.target.closest('.modal-overlay');
+            gsap.to(modal.querySelector('.modal-content'), { scale: 0.8, opacity: 0, duration: 0.5, ease: "power2.in", onComplete: () => {
+              modal.style.display = "none";
+            }});
+          });
+        });
+
+        // Cerrar modal de video
+        document.getElementById('modal-video-close').addEventListener('click', () => {
+          const modalVideo = document.getElementById('modal-video');
+          gsap.to(modalVideo.querySelector('.modal-content'), { opacity: 0, scale: 0.8, duration: 0.5, ease: "power2.in", onComplete: () => {
+              modalVideo.style.display = "none";
+          }});
+        });
+    </script>
+</body>
+</html>

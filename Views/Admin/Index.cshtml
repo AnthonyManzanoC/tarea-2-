@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dashboard de Administración";
+}
+
+<div class="container mt-4">
+    <h2>Dashboard de Administración</h2>
+    <p>Aquí se mostrarán reportes, estadísticas y herramientas administrativas.</p>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total de Productos</h5>
+                    <p class="card-text">
+                        @ViewBag.TotalProductos
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Ventas Totales</h5>
+                    <p class="card-text">
+                        @((ViewBag.VentasTotales as decimal?)?.ToString("C") ?? "$0.00")
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Órdenes Pendientes</h5>
+                    <p class="card-text">
+                        @ViewBag.OrdenesPendientes
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

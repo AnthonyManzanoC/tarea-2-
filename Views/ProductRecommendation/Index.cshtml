@@ -1,0 +1,241 @@
+﻿
+@model IEnumerable<CoronelExpress.Models.Product>
+
+@{
+    ViewBag.Title = "Recomendaciones VIP";
+}
+
+<!-- Preloader avanzado -->
+<div id="preloader">
+    <div class="loader">
+        <div class="loader-inner"></div>
+    </div>
+</div>
+
+<!-- Asegúrate de tener FontAwesome en tu proyecto -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    /* Preloader Fullscreen con degradado corporativo */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1a1a1a, #333);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease-out;
+    }
+    #preloader.fade-out {
+        opacity: 0;
+        pointer-events: none;
+    }
+    /* Loader avanzado */
+    .loader {
+        width: 80px;
+        height: 80px;
+        position: relative;
+    }
+    .loader-inner {
+        box-sizing: border-box;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 6px solid transparent;
+        border-top-color: #00c6ff;
+        border-radius: 50%;
+        animation: spin 1.2s linear infinite;
+    }
+
+    @@keyframes spin {
+        0%   { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Estilos corporativos y minimalistas */
+    body {
+        background: radial-gradient(circle, #0d0d0d, #1a1a1a);
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h2 {
+        font-size: 2.5rem;
+        margin-top: 2rem;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+    .container {
+        margin-top: 2rem;
+    }
+    /* Tarjetas de producto */
+    .card {
+        border: none;
+        background: #f9f9f9;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .card-img-top {
+        height: 250px;
+        object-fit: cover;
+    }
+    .card-body {
+        padding: 1.5rem;
+    }
+    .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .card-text {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    .price-old {
+        font-size: 1.2rem;
+        color: #888;
+    }
+    .price-new {
+        font-size: 1.8rem;
+        color: #e63946;
+        font-weight: bold;
+    }
+    /* Badge corporativo y distintivos inteligentes */
+    .badge-custom {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 5px;
+        text-transform: uppercase;
+        margin: 0 0.25rem;
+    }
+    .badge-discount {
+        background: #00c6ff;
+        color: #fff;
+    }
+    .badge-intelligent {
+        background: #ff9f1c;
+        color: #fff;
+    }
+    .badge-feature {
+        background: #6a4c93;
+        color: #fff;
+    }
+    /* Botón pro animado */
+    .btn-outline-primary {
+        border-color: #00c6ff;
+        color: #00c6ff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .btn-outline-primary:hover {
+        background-color: #00c6ff;
+        color: #fff;
+    }
+    .btn-custom-anim {
+        animation: pulse 2s infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    /* Indicadores personalizados del carrusel */
+    .carousel-indicators [data-bs-target] {
+        background-color: #00c6ff;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+    .carousel-indicators .active {
+        background-color: #ff9f1c;
+    }
+</style>
+
+<script>
+    // Remueve el preloader al cargar la página
+    window.addEventListener('load', function () {
+        var preloader = document.getElementById('preloader');
+        preloader.classList.add('fade-out');
+        setTimeout(function() {
+            preloader.style.display = 'none';
+        }, 600);
+    });
+</script>
+
+<div class="container">
+    <h2 class="text-center mb-4">
+        <i class="fa-solid fa-crown"></i> Recomendaciones Exclusivas VIP <i class="fa-solid fa-crown"></i>
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <i class="fa-solid fa-face-sad-tear"></i> No hay productos recomendados en este momento.
+        </div>
+    }
+    else
+    {
+        <div id="vipCarousel" class="carousel slide" data-bs-ride="carousel">
+            <!-- Indicadores inteligentes -->
+            <div class="carousel-indicators">
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    <button type="button" data-bs-target="#vipCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i+1)"></button>
+                }
+            </div>
+            <div class="carousel-inner">
+                @foreach (var product in Model.Select((p, index) => new { Product = p, Index = index }))
+                {
+                    // Cálculo del precio con descuento
+                    var discountedPrice = product.Product.Price * (1 - (decimal)product.Product.DiscountPercentage / 100);
+                    <div class="carousel-item @(product.Index == 0 ? "active" : "")">
+                        <div class="card mx-auto shadow-lg p-3 mb-5" style="max-width: 400px;">
+                            <img src="@product.Product.ImageUrl" class="card-img-top" alt="Imagen de @product.Product.Name">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-dark">
+                                    <i class="fa-solid fa-box-open"></i> @product.Product.Name
+                                </h5>
+                                <p class="card-text text-muted">
+                                    <i class="fa-solid fa-info-circle"></i> @product.Product.Description
+                                </p>
+                                <div class="mb-3">
+                                    <span class="price-old"><del><i class="fa-solid fa-tag"></i> @product.Product.Price.ToString("C")</del></span>
+                                    <br />
+                                    <span class="price-new"><i class="fa-solid fa-tag"></i> @discountedPrice.ToString("C")</span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="badge badge-custom badge-discount">
+                                        <i class="fa-solid fa-fire"></i> @product.Product.DiscountPercentage% OFF
+                                    </span>
+                                    <span class="badge badge-custom badge-intelligent">
+                                        <i class="fa-solid fa-brain"></i> INTELIGENTE
+                                    </span>
+                                    <span class="badge badge-custom badge-feature">
+                                        <i class="fa-solid fa-star"></i> PREMIUM
+                                    </span>
+                                </div>
+                                <a asp-controller="ProductRecommendation" asp-action="Details" asp-route-id="@product.Product.Id" class="btn btn-outline-primary shadow btn-custom-anim">
+                                    <i class="fa-solid fa-arrow-right"></i> Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#vipCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#vipCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    }
+</div>

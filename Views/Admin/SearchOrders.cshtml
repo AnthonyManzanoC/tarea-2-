@@ -1,0 +1,343 @@
+﻿@model List<Order>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Resultados de la Búsqueda</title>
+    <!-- Fuente Google para un look refinado -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* Variables de colores */
+        :root {
+            --primary-color: #5dade2;
+            --primary-hover: #3498db;
+            --danger-color: #e74c3c;
+            --danger-hover: #c0392b;
+            --bg-light: #f7f9fc;
+            --bg-white: #ffffff;
+            --text-color: #333;
+            --accent: #f1f1f1;
+        }
+        /* Reset y estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-color);
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.8em;
+            letter-spacing: 2px;
+            position: relative;
+            animation: fadeInDown 1s ease-out;
+        }
+
+            h2 .icon {
+                margin-right: 10px;
+                animation: rotateFloat 4s infinite ease-in-out;
+            }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        input[type="text"] {
+            width: 40%;
+            padding: 15px;
+            border: 2px solid var(--accent);
+            border-radius: 50px;
+            outline: none;
+            font-size: 1.1em;
+            transition: border-color 0.3s ease;
+        }
+
+            input[type="text"]:focus {
+                border-color: var(--primary-color);
+            }
+
+        button[type="submit"] {
+            padding: 15px 25px;
+            margin-left: 10px;
+            border: none;
+            background: var(--primary-color);
+            color: var(--bg-white);
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+            button[type="submit"]:hover {
+                background: var(--primary-hover);
+                transform: translateY(-2px);
+            }
+
+            button[type="submit"] .icon {
+                margin-right: 8px;
+                animation: rotateFloat 4s infinite ease-in-out;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-white);
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        thead {
+            background: var(--accent);
+        }
+
+        th, td {
+            padding: 20px;
+            text-align: left;
+        }
+
+        tr {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+            tr:hover {
+                transform: translateY(-8px) rotateX(2deg);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+        /* Botones de acción inteligentes */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-right: 5px;
+        }
+
+            .btn i {
+                margin-right: 5px;
+            }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-hover));
+            color: var(--bg-white);
+        }
+
+            .btn-primary:hover {
+                background: linear-gradient(45deg, var(--primary-hover), var(--primary-color));
+                transform: translateY(-2px);
+                box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+            }
+
+        .btn-danger {
+            background: linear-gradient(45deg, var(--danger-color), var(--danger-hover));
+            color: var(--bg-white);
+        }
+
+            .btn-danger:hover {
+                background: linear-gradient(45deg, var(--danger-hover), var(--danger-color));
+                transform: translateY(-2px);
+                box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+            }
+        /* Detalle del pedido */
+        .order-detail {
+            background: #fcfcfc;
+            border-top: 1px solid var(--accent);
+            padding: 15px;
+            font-size: 0.95em;
+            animation: fadeIn 1s ease-out;
+        }
+
+            .order-detail ul {
+                list-style: none;
+            }
+
+            .order-detail li {
+                padding: 8px 0;
+                border-bottom: 1px dashed var(--accent);
+            }
+
+                .order-detail li:last-child {
+                    border-bottom: none;
+                }
+        /* Animaciones clave */
+        @@keyframes fadeInDown {
+            0%
+
+        {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes fadeInUp {
+            0%
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes fadeIn {
+            0%
+
+        {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes rotateFloat {
+            0%
+
+        {
+            transform: rotate(0deg) translateY(0);
+        }
+
+        50% {
+            transform: rotate(180deg) translateY(-5px);
+        }
+
+        100% {
+            transform: rotate(360deg) translateY(0);
+        }
+
+        }
+        /* Diseño responsivo */
+        @@media (max-width: 768px) {
+            input [type="text"]
+
+        {
+            width: 60%;
+        }
+
+        th, td {
+            padding: 15px;
+            font-size: 0.95em;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            font-size: 0.8em;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i class="fas fa-search icon"></i>Resultados de la Búsqueda</h2>
+        <form asp-action="SearchOrders" method="get">
+            <input type="text" name="search" value="@ViewData["Search"]" placeholder="Buscar pedido..." />
+            <button type="submit"><i class="fas fa-paper-plane icon"></i>Buscar</button>
+        </form>
+        @if (Model.Any())
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th># Pedido</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>@order.OrderNumber</td>
+                            <td>@order.Customer.FullName</td>
+                            <td>@order.OrderDate.ToShortDateString()</td>
+                            <td>@order.TotalAmount.ToString("C")</td>
+                            <td>@order.Status</td>
+                            <td>
+                                @if (order.Status == "Pendiente")
+                                {
+                                    <a href="@Url.Action("ProcessOrder", "Order", new { orderId = order.Id })" class="btn btn-primary">
+                                        <i class="fas fa-edit"></i> Procesar
+                                    </a>
+                                    <form asp-action="CancelOrder" method="post" style="display:inline;">
+                                        <input type="hidden" name="orderId" value="@order.Id" />
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-times"></i> Cancelar
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                        <!-- Detalle de la orden: lista de productos -->
+                        <tr class="order-detail">
+                            <td colspan="6">
+                                <strong>Detalle del Pedido:</strong>
+                                <ul>
+                                    @foreach (var detail in order.OrderDetails)
+                                    {
+                                        <li>
+                                            <strong>@detail.Product.Name</strong> - Cantidad: @detail.Quantity - Precio Unitario: @detail.Product.Price.ToString("C")
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p style="text-align: center; font-size: 1.2em;">No se encontraron pedidos.</p>
+        }
+    </div>
+</body>
+</html>

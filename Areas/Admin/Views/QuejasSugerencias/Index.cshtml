@@ -1,0 +1,203 @@
+﻿@model IEnumerable<CoronelExpress.Models.QuejaSugerenciaMessage>
+
+@{
+    ViewData["Title"] = "Administración de Quejas y Reclamos";
+}
+
+
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #1e1e2f, #282c3f);
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1000px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 1s ease-out;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 2.2em;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: slideIn 0.8s ease-out;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    th {
+        background: rgba(0, 123, 255, 0.8);
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    tr:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transition: background 0.3s ease;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+
+        .btn i {
+            font-size: 16px;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .btn:hover i {
+            transform: rotate(360deg);
+        }
+
+    .btn-info {
+        background: #17a2b8;
+        color: white;
+    }
+
+        .btn-info:hover {
+            background: #138496;
+            transform: scale(1.05);
+        }
+
+    .btn-warning {
+        background: #ffc107;
+        color: #333;
+    }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: scale(1.05);
+        }
+
+    .btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+    .btn-exit {
+        display: block;
+        width: 120px;
+        margin: 30px auto 0;
+        text-align: center;
+        background: #6c757d;
+        color: white;
+    }
+
+        .btn-exit:hover {
+            background: #5a6268;
+            transform: scale(1.1);
+        }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="container">
+    <h2>Administración de Quejas y Reclamos</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Asunto</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var mensaje in Model)
+            {
+                <tr>
+                    <td>@mensaje.Nombre</td>
+                    <td>@mensaje.Email</td>
+                    <td>@mensaje.Asunto</td>
+                    <td>@mensaje.Fecha.ToString("g")</td>
+                    <td>
+                        <!-- Botón para ver detalles del mensaje -->
+                        <a asp-controller="QuejasSugerencias" asp-action="Details" asp-route-id="@mensaje.Id" class="btn btn-info">
+                            <i class="icon">🔍</i> Detalles
+                        </a>
+                        <!-- Botón para responder al mensaje vía SMTP -->
+                        <a asp-controller="QuejasSugerencias" asp-action="Reply" asp-route-id="@mensaje.Id" class="btn btn-warning">
+                            <i class="icon">✉️</i> Responder
+                        </a>
+                        <!-- Botón para eliminar el mensaje -->
+                        <form asp-controller="QuejasSugerencias" asp-action="Delete" asp-route-id="@mensaje.Id" method="post" style="display:inline-block" onsubmit="return confirm('¿Está seguro de eliminar este mensaje?');">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="icon">🗑️</i> Eliminar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Botón para salir al Dashboard (ajusta la ruta según tus necesidades) -->
+    <button type="button" class="btn btn-exit" onclick="window.location.href='/Admin/Dashboard'">
+        <i class="icon">🏠</i> Salir
+    </button>
+</div>

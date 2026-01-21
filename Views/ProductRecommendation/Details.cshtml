@@ -1,0 +1,227 @@
+﻿@model CoronelExpress.Models.Product
+
+@{
+    ViewBag.Title = "Detalles del Producto";
+}
+
+<!-- Preloader avanzado -->
+<div id="preloader">
+    <div class="loader">
+        <div class="loader-inner"></div>
+    </div>
+</div>
+
+<!-- Incluir FontAwesome para iconos inteligentes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    /* Preloader Fullscreen con degradado corporativo */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1a1a1a, #333);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease-out;
+    }
+
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+    /* Loader avanzado con keyframes */
+    .loader {
+        width: 80px;
+        height: 80px;
+        position: relative;
+    }
+
+    .loader-inner {
+        box-sizing: border-box;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 6px solid transparent;
+        border-top-color: #00c6ff;
+        border-radius: 50%;
+        animation: spin 1.2s linear infinite;
+    }
+
+    @@keyframes spin {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    /* Efecto Fade In para el contenido */
+    .fade-in {
+        animation: fadeInAnimation 1.5s ease forwards;
+    }
+
+    @@keyframes fadeInAnimation {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* Diseño corporativo minimalista y refinado */
+    body {
+        background: radial-gradient(circle, #0d0d0d, #1a1a1a);
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+    }
+
+    .container {
+        margin-top: 3rem;
+    }
+
+    .display-4 {
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        font-size: 2.75rem;
+    }
+
+    h2.text-danger {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .lead {
+        font-size: 1.25rem;
+    }
+    /* Imagen del producto con efectos */
+    .img-fluid {
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        transition: transform 0.3s ease;
+    }
+
+        .img-fluid:hover {
+            transform: scale(1.02);
+        }
+    /* Botones Neon y secundarios con efecto de brillo */
+    .btn-neon {
+        background: linear-gradient(45deg, #ff6ec4, #7873f5);
+        border: none;
+        color: #fff;
+        padding: 0.75rem 1.75rem;
+        font-size: 1rem;
+        border-radius: 50px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-neon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255,110,196,0.9), 0 0 20px rgba(120,115,245,0.9);
+        }
+
+    .btn-secondary {
+        background: #555;
+        border: none;
+        color: #fff;
+        padding: 0.75rem 1.75rem;
+        border-radius: 50px;
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background: #666;
+            transform: scale(1.03);
+        }
+    /* Estilos para el precio con descuento */
+    .price-old {
+        font-size: 1.2rem;
+        color: #aaa;
+    }
+
+    .price-new {
+        font-size: 1.8rem;
+        color: #e63946;
+        font-weight: bold;
+    }
+    /* Iconos y transiciones para resaltar */
+    .fa {
+        transition: transform 0.3s ease;
+    }
+
+        .fa:hover {
+            transform: scale(1.2);
+        }
+</style>
+
+<script>
+    // Remueve el preloader al cargar la página
+    window.addEventListener('load', function () {
+        var preloader = document.getElementById('preloader');
+        preloader.classList.add('fade-out');
+        setTimeout(function() {
+            preloader.style.display = 'none';
+        }, 600);
+    });
+</script>
+
+<div class="container fade-in mt-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="img-fluid rounded shadow" alt="@Model.Name" loading="lazy" />
+            }
+            else
+            {
+                <img src="/images/no-image.png" class="img-fluid rounded shadow" alt="Sin imagen" loading="lazy" />
+            }
+        </div>
+        <div class="col-md-6">
+            <h1 class="display-4 fw-bold">
+                <i class="fa-solid fa-box-open"></i> @Model.Name
+            </h1>
+            <h2 class="text-danger my-3">
+                <del class="price-old">
+                    <i class="fa-solid fa-tag"></i> @Model.Price.ToString("C")
+                </del>
+                <br />
+                @{
+                    var discount = Model.DiscountPercentage;
+                    var discountedPrice = Model.Price * (1 - (decimal)discount / 100);
+                }
+                <span class="price-new">
+                    <i class="fa-solid fa-tag"></i> @discountedPrice.ToString("C")
+                </span>
+            </h2>
+            <p class="lead text-muted">
+                <i class="fa-solid fa-info-circle"></i> @Model.Description
+            </p>
+            <div class="mt-4">
+                <a asp-controller="Cart" asp-action="Add" asp-route-id="@Model.Id" class="btn btn-neon mt-3">
+                    <i class="fa-solid fa-cart-plus"></i> Agregar al Carrito
+                </a>
+                <a href="javascript:history.back()" class="btn btn-secondary mt-3 ms-2">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

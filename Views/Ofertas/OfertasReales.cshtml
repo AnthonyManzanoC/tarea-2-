@@ -1,0 +1,671 @@
+﻿@model IEnumerable<CoronelExpress.Models.Product>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Ofertas Reales - Productos con Descuento";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Fuente Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet" />
+    <!-- GSAP y ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Swiper CSS para carrusel avanzado -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <style>
+        :root {
+            /* Colores patrióticos */
+            --primary-color: #ffcc00; /* Amarillo vibrante */
+            --secondary-color: #003399; /* Azul intenso */
+            --tertiary-color: #cc0000; /* Rojo profundo */
+            /* Texto y acentos */
+            --text-color: #B0B0B0; /* Oscuro para contraste */
+            --glow-color: rgba(66, 230, 149, 0.8);
+            --background-light: #fff;
+            --background-dark: #121212;
+        }
+        /* Ajustes globales */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-color);
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+            body.dark-mode {
+                background-color: var(--background-dark);
+                color: #e0e0e0;
+            }
+        /* Preloader Ultra avanzado */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 10px solid rgba(255,255,255,0.3);
+            border-top: 10px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        /* Botón Dark Mode Toggle */
+        #darkModeToggle {
+            position: fixed;
+            top: 130px;
+            right: 20px;
+            z-index: 1500;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--glow-color);
+            transition: transform 0.3s ease;
+        }
+
+            #darkModeToggle:hover {
+                transform: scale(1.08);
+            }
+        /* Divider futurista */
+        .divider {
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
+            margin: 20px auto;
+            width: 50%;
+        }
+        /* Botón Neon Ultra avanzado */
+        .btn-neon {
+            font-size: 1.2rem;
+            padding: 14px 28px;
+            border-radius: 50px;
+            color: #fff;
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+            box-shadow: 0 0 25px rgba(66,230,149,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .btn-neon:hover {
+                transform: scale(1.1) rotateY(3deg);
+                box-shadow: 0 0 40px var(--glow-color);
+            }
+        /* Carrusel Inteligente con Swiper */
+        .swiper {
+            width: 100%;
+            height: 320px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .swiper-slide {
+            position: relative;
+        }
+
+            .swiper-slide img {
+                width: 100%;
+                height: 320px;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+
+                .swiper-slide img:hover {
+                    transform: scale(1.1);
+                }
+
+            .swiper-slide::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, rgba(0,0,0,0.2), transparent);
+                z-index: 1;
+            }
+
+        .swiper-pagination-bullet {
+            background: var(--primary-color);
+            opacity: 0.7;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            transform: scale(1.2);
+            background: var(--accent-color);
+        }
+        /* Input de búsqueda avanzado */
+        .search-input {
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+        }
+
+            .search-input input {
+                padding: 15px;
+                border: 2px solid var(--primary-color);
+                border-radius: 30px;
+                transition: border-color 0.3s ease;
+            }
+
+                .search-input input:focus {
+                    border-color: var(--accent-color);
+                }
+        /* Grid de Productos con efectos ultra avanzados */
+        .product-item {
+            margin-bottom: 40px;
+            opacity: 0;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .card:hover {
+                transform: translateY(-10px) rotateY(3deg);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            }
+
+        .card-img-top {
+            height: 240px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+
+        .card-body {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 1rem;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff6b81;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 2;
+        }
+        /* Animación de aparición avanzada */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* NUEVOS ESTILOS PARA PRODUCTOS CON CONDICIONES ESPECIALES */
+        /* Canasta Básica (Sin IVA) */
+        .iva-free {
+            border: 2px solid var(--accent-color);
+            position: relative;
+            animation: pulseBorder 3s infinite;
+        }
+
+        @@keyframes pulseBorder {
+            0% {
+                border-color: var(--accent-color);
+            }
+
+            50% {
+                border-color: var(--primary-color);
+            }
+
+            100% {
+                border-color: var(--accent-color);
+            }
+        }
+
+        .iva-free::after {
+            content: "Sin IVA";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        /* Oferta con Descuento */
+        .on-offer {
+            border: 2px solid #ff6b81;
+            position: relative;
+            animation: shake 1.5s infinite;
+        }
+
+        @@keyframes shake {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(1deg);
+            }
+
+            50% {
+                transform: rotate(0deg);
+            }
+
+            75% {
+                transform: rotate(-1deg);
+            }
+        }
+
+        .on-offer::before {
+            content: attr(data-discount) " OFF";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff6b81;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        /* NUEVOS KEYFRAMES ADICIONALES */
+        @@keyframes flash {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-30px);
+            }
+
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @@keyframes swing {
+            20% {
+                transform: rotate3d(0, 0, 1, 15deg);
+            }
+
+            40% {
+                transform: rotate3d(0, 0, 1, -10deg);
+            }
+
+            60% {
+                transform: rotate3d(0, 0, 1, 5deg);
+            }
+
+            80% {
+                transform: rotate3d(0, 0, 1, -5deg);
+            }
+
+            100% {
+                transform: rotate3d(0, 0, 1, 0deg);
+            }
+        }
+
+        @@keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes flipInX {
+            from {
+                transform: perspective(400px) rotateX(90deg);
+                opacity: 0;
+            }
+
+            40% {
+                transform: perspective(400px) rotateX(-10deg);
+                opacity: 1;
+            }
+
+            70% {
+                transform: perspective(400px) rotateX(10deg);
+            }
+
+            100% {
+                transform: perspective(400px) rotateX(0deg);
+            }
+        }
+
+        @@keyframes flipInY {
+            from {
+                transform: perspective(400px) rotateY(90deg);
+                opacity: 0;
+            }
+
+            40% {
+                transform: perspective(400px) rotateY(-10deg);
+                opacity: 1;
+            }
+
+            70% {
+                transform: perspective(400px) rotateY(10deg);
+            }
+
+            100% {
+                transform: perspective(400px) rotateY(0deg);
+            }
+        }
+
+        @@keyframes rotateIn {
+            from {
+                transform: rotate(-200deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: rotate(0);
+                opacity: 1;
+            }
+        }
+        /* Clases para aplicar las nuevas animaciones */
+        .animate-flash {
+            animation: flash 2s ease-in-out infinite;
+        }
+
+        .animate-bounce {
+            animation: bounce 1s ease;
+        }
+
+        .animate-swing {
+            animation: swing 1.5s ease-in-out;
+        }
+
+        .animate-zoom {
+            animation: zoomIn 0.5s ease-out;
+        }
+
+        .animate-flip-x {
+            animation: flipInX 0.7s ease-out;
+        }
+
+        .animate-flip-y {
+            animation: flipInY 0.7s ease-out;
+        }
+
+        .animate-rotate {
+            animation: rotateIn 0.7s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader Ultra avanzado -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Botón Dark Mode Toggle -->
+    <button id="darkModeToggle" class="btn-neon">Dark Mode</button>
+
+    <div class="container my-5">
+        <!-- Carrusel Inteligente con Swiper -->
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img src="/images/15126.webp" alt="Oferta 1">
+                </div>
+                <div class="swiper-slide">
+                    <img src="/images/11241.PNG" alt="Oferta 2">
+                </div>
+                <div class="swiper-slide">
+                    <img src="/images/021212.webp" alt="Oferta 3">
+                </div>
+                <div class="swiper-slide">
+                    <img src="/images/1121212122.PNG" alt="Oferta 4">
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+
+        <h2 class="text-center mb-4">🛍️ Ofertas Reales</h2>
+        <div class="divider"></div>
+
+        <!-- Filtro de búsqueda avanzado -->
+        <div class="search-input mb-4">
+            <input type="text" id="searchInput" class="form-control" placeholder="Buscar producto en oferta...">
+        </div>
+
+        <!-- Contenedor de productos con animación avanzada -->
+        <div class="row" id="productsContainer">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var product in Model)
+                {
+                    // Solo se muestran productos que estén en oferta o sean de canasta básica
+                    if (product.IsOnOffer || product.IsBasicBasket)
+                    {
+                        var effectivePrice = product.Price * (product.IsOnOffer ? (1 - product.DiscountPercentage / 100m) : 1);
+                        // Concatenar clases según condición: Si es canasta básica y/o en oferta
+                        var cardClasses = "";
+                        if (product.IsBasicBasket) { cardClasses += "iva-free "; }
+                        if (product.IsOnOffer) { cardClasses += "on-offer "; }
+                        <div class="col-md-4 product-item">
+                            <div class="card h-100 shadow-sm @cardClasses.Trim()" @(product.IsOnOffer ? "data-discount='" + product.DiscountPercentage + "%'" : "")>
+                                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                {
+                                    <img src="@product.ImageUrl" class="card-img-top animate-zoom" alt="@product.Name" loading="lazy" />
+                                }
+                                else
+                                {
+                                    <img src="/images/no-image.png" class="card-img-top animate-zoom" alt="Sin imagen" loading="lazy" />
+                                }
+                                <div class="card-body">
+                                    <h5 class="card-title animate-flip-x">@product.Name</h5>
+                                    <p class="card-text">@product.Description</p>
+                                    <p class="price">
+                                        @if (product.IsOnOffer && product.DiscountPercentage > 0)
+                                        {
+                                            <span class="original-price">@product.Price.ToString("C")</span>
+                                            <br />
+                                            <span>@effectivePrice.ToString("C")</span>
+                                        }
+                                        else
+                                        {
+                                            @product.Price.ToString("C")
+                                        }
+                                    </p>
+                                    <p class="stock">📦 Stock: @product.Stock</p>
+                                    <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" class="btn btn-neon mt-3">
+                                        <i class="fa-solid fa-cart-plus"></i> Agregar al Carrito
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <p class="text-center">No hay productos en oferta o de canasta básica en este momento.</p>
+                </div>
+            }
+        </div>
+
+        <!-- Botón para volver al Home -->
+        <div class="text-center mt-4">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-neon">
+                <i class="fa-solid fa-house"></i> Volver al Inicio
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS (Bundle) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Swiper JS para carrusel avanzado -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <script>
+        // Inicialización de Swiper con efectos avanzados
+        const swiper = new Swiper('.mySwiper', {
+            loop: true,
+            speed: 1000,
+            autoplay: { delay: 5000 },
+            effect: 'coverflow',
+            coverflowEffect: {
+                rotate: 30,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+
+        // Filtro en tiempo real y animación de aparición con GSAP
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchInput = document.getElementById('searchInput');
+            const productItems = document.querySelectorAll('.product-item');
+
+            searchInput.addEventListener('keyup', function() {
+                const filter = searchInput.value.toLowerCase();
+                productItems.forEach(function(item) {
+                    const title = item.querySelector('.card-title').textContent.toLowerCase();
+                    const description = item.querySelector('.card-text').textContent.toLowerCase();
+                    if(title.includes(filter) || description.includes(filter)){
+                        item.style.display = '';
+                        gsap.to(item, {opacity: 1, duration: 0.5});
+                    } else {
+                        gsap.to(item, {opacity: 0, duration: 0.5, onComplete: ()=> item.style.display = 'none'});
+                    }
+                });
+            });
+
+            gsap.utils.toArray('.product-item').forEach(item => {
+                gsap.fromTo(item, {opacity: 0, y: 30}, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top 80%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            });
+        });
+
+        // Preloader animado con GSAP Timeline
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            tl.to("#preloader", {duration: 0.8, opacity: 0, scale: 0.9, ease: "power2.out"})
+              .set("#preloader", {display:"none"});
+        });
+
+        // Dark Mode Toggle con persistencia en localStorage
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        if(localStorage.getItem("theme") === "dark"){
+            document.body.classList.add("dark-mode");
+            darkModeToggle.textContent = "Light Mode";
+        }
+        darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            if(document.body.classList.contains("dark-mode")){
+                darkModeToggle.textContent = "Light Mode";
+                localStorage.setItem("theme", "dark");
+            } else {
+                darkModeToggle.textContent = "Dark Mode";
+                localStorage.setItem("theme", "light");
+            }
+        });
+    </script>
+</body>
+</html>

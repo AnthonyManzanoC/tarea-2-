@@ -1,0 +1,139 @@
+﻿@model IEnumerable<CoronelExpress.Controllers.BestSellingProductViewModel>
+
+@{
+    ViewData["Title"] = "Reporte de Productos Más Vendidos";
+}
+
+<style>
+    /* Fondo general y tipografía */
+    body {
+        background: #f5f5f5;
+        color: #333;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    /* Contenedor principal con fondo blanco, sombra y bordes redondeados */
+    .container {
+        background: #fff;
+        margin: 50px auto;
+        max-width: 1200px;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    /* Encabezado animado y centrado */
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: 400;
+        color: #222;
+        animation: fadeInDown 1s ease-in-out;
+    }
+    /* Botón claro, corporativo y minimalista */
+    .btn-custom {
+        display: inline-block;
+        background: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background 0.3s ease;
+        margin-bottom: 20px;
+    }
+
+        .btn-custom:hover {
+            background: #0056b3;
+        }
+    /* Estilos para la tabla */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        animation: fadeIn 1.5s ease;
+    }
+
+    thead {
+        background: #e9ecef;
+    }
+
+        thead th {
+            padding: 12px;
+            text-align: left;
+            color: #555;
+            font-weight: 600;
+        }
+
+    tbody tr {
+        border-bottom: 1px solid #dee2e6;
+        transition: background 0.3s;
+    }
+
+        tbody tr:hover {
+            background: #f1f3f5;
+        }
+
+    tbody td {
+        padding: 12px;
+    }
+    /* Animaciones con keyframes */
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes fadeInDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+</style>
+
+<div class="container">
+    <!-- Botón para ver el reporte -->
+    <a asp-controller="Report" asp-action="BestSelling" class="btn-custom">
+        Ver Productos Más Vendidos
+    </a>
+
+    <!-- Título del reporte -->
+    <h1>@ViewData["Title"]</h1>
+
+    <!-- Tabla de reporte -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID Producto</th>
+                <th>Nombre</th>
+                <th>Total Vendido</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.Name</td>
+                    <td>@item.TotalSold</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

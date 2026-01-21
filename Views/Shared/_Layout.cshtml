@@ -1,0 +1,935 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CoronelExpress</title>
+
+    <!-- Bootstrap y tus CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CoronelExpress.styles.css" asp-append-version="true" />
+
+    <!-- Fuentes e iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        :root {
+            /* Colores patrios y corporativos */
+            --primary-color: #ffcc00; /* Amarillo intenso */
+            --secondary-color: #003399; /* Azul profundo */
+            --tertiary-color: #cc0000; /* Rojo vibrante */
+            --gradient: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--tertiary-color));
+            --text-color: #B0B0B0;
+            --bg-color: #1a1a2e;
+            --accent-color: #ffcc00; /* Para resaltar elementos */
+            /* Transiciones y sombras */
+            --transition-speed: 0.3s;
+            --shadow-light: rgba(255, 204, 0, 0.5);
+            --shadow-dark: rgba(0, 0, 0, 0.7);
+            /* Tamaño del menú hamburguesa */
+            --hamburger-size: 35px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            /* Fondo sutil con textura o patrón (opcional) */
+            background-image: radial-gradient(var(--secondary-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Navbar elegante y responsiva */
+        .navbar {
+            background: var(--gradient);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Logo con animación */
+        .don-julio-logo {
+            height: 50px;
+            transition: transform var(--transition-speed) ease-in-out;
+        }
+
+            .don-julio-logo:hover {
+                transform: scale(1.1);
+            }
+
+        /* Marca de la navbar */
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: var(--text-color) !important;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        /* Enlaces de navegación */
+        .nav-link {
+            color: var(--text-color) !important;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: transform var(--transition-speed), color var(--transition-speed), background-color var(--transition-speed);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .nav-link::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 2px;
+                background-color: var(--accent-color);
+                transform: scaleX(0);
+                transform-origin: right;
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .nav-link:hover {
+                transform: scale(1.05);
+                color: var(--primary-color) !important;
+                background-color: rgba(255, 204, 0, 0.1);
+            }
+
+                .nav-link:hover::after {
+                    transform: scaleX(1);
+                    transform-origin: left;
+                }
+
+        /* Animación de entrada */
+        @@keyframes fadeInDown {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        /* Hamburguesa personalizada para mobile */
+        .navbar-toggler {
+            border: none;
+            outline: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .navbar-toggler-icon {
+            width: var(--hamburger-size);
+            height: var(--hamburger-size);
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .navbar-toggler.active .navbar-toggler-icon {
+            transform: rotate(90deg);
+        }
+
+        /* Mostrar menú en mobile con animación */
+        .navbar-collapse {
+            display: none;
+            flex-direction: column;
+            margin-top: 1rem;
+        }
+
+            .navbar-collapse.show {
+                display: flex !important;
+                animation: fadeInDown 0.5s ease-out;
+            }
+
+        /* Ejemplo de sección con fondo degradado para reforzar el diseño patriótico */
+        .section-header {
+            background: var(--gradient);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 8px var(--shadow-dark);
+            margin-bottom: 2rem;
+        }
+
+            .section-header h1 {
+                margin: 0;
+                font-size: 2.5rem;
+            }
+
+        /* Responsividad para pantallas pequeñas */
+        @@media (max-width: 768px) {
+            .navbar
+
+        {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+            padding: 0.5rem;
+        }
+
+        .section-header h1 {
+            font-size: 2rem;
+        }
+
+        }
+
+        /* Footer básico */
+        .footer {
+            background: var(--gradient);
+            padding: 60px 0;
+            color: var(--text-color);
+        }
+
+            .footer h5 {
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 20px;
+            }
+
+            .footer a {
+                color: var(--text-color);
+                text-decoration: none;
+                transition: color var(--transition-speed) ease;
+            }
+
+                .footer a:hover {
+                    color: #ffcc00;
+                }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            margin-right: 15px;
+            font-size: 1.4rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+
+        /* Footer avanzado minimalista */
+        .advanced-footer {
+            background: linear-gradient(135deg, #0D47A1, #1976D2);
+            color: var(--text-color);
+            padding: 60px 0;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+            background-blend-mode: multiply;
+        }
+
+            .advanced-footer::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" fill="white" opacity="0.05"/></svg>');
+                pointer-events: none;
+                z-index: 1;
+            }
+
+            .advanced-footer .container {
+                position: relative;
+                z-index: 2;
+            }
+
+            .advanced-footer h5 {
+                font-size: 1.6rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-bottom: 20px;
+                letter-spacing: 1px;
+                position: relative;
+            }
+
+                .advanced-footer h5::after {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    bottom: -5px;
+                    width: 50px;
+                    height: 3px;
+                    background: var(--accent-color);
+                    border-radius: 2px;
+                }
+
+            .advanced-footer a {
+                color: var(--text-color);
+                text-decoration: none;
+                transition: color var(--transition-speed), transform var(--transition-speed);
+            }
+
+                .advanced-footer a:hover {
+                    color: var(--accent-color);
+                    transform: translateY(-3px);
+                }
+
+            .advanced-footer .footer-section {
+                margin-bottom: 30px;
+                animation: slideUp 1s ease forwards;
+                opacity: 0;
+            }
+
+                .advanced-footer .footer-section:nth-child(1) {
+                    animation-delay: 0.2s;
+                }
+
+                .advanced-footer .footer-section:nth-child(2) {
+                    animation-delay: 0.4s;
+                }
+
+                .advanced-footer .footer-section:nth-child(3) {
+                    animation-delay: 0.6s;
+                }
+
+        @@keyframes slideUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .advanced-footer .newsletter .form-control {
+            border: 2px solid transparent;
+            border-radius: 50px;
+            padding: 12px 20px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+        }
+
+            .advanced-footer .newsletter .form-control:focus {
+                border-color: var(--accent-color);
+                box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+        .advanced-footer .newsletter button.btn-neon {
+            border-radius: 50px;
+            padding: 12px 35px;
+            background-color: var(--accent-color);
+            color: #0D47A1;
+            border: none;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+        }
+
+            .advanced-footer .newsletter button.btn-neon:hover {
+                background-color: #FFC107;
+                transform: scale(1.05);
+            }
+
+        .advanced-footer .social a {
+            font-size: 2rem;
+            margin-right: 15px;
+            display: inline-block;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+            .advanced-footer .social a:hover {
+                transform: scale(1.15);
+                box-shadow: 0 4px 10px rgba(255, 204, 0, 0.4);
+            }
+
+        .advanced-footer .info ul {
+            padding: 0;
+            list-style: none;
+        }
+
+            .advanced-footer .info ul li {
+                margin-bottom: 10px;
+                transition: color 0.3s;
+            }
+
+                .advanced-footer .info ul li a:hover {
+                    color: var(--accent-color);
+                    transform: translateX(5px);
+                }
+
+        .footer-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 40px 0;
+        }
+
+        .footer-bottom p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Carrusel por Categoría */
+        .carousel-item {
+            transform: perspective(1200px) rotateY(30deg);
+            transition: transform 0.8s ease, opacity 0.8s ease;
+            opacity: 0;
+            backface-visibility: hidden;
+        }
+
+            .carousel-item.active {
+                transform: perspective(1200px) rotateY(0deg);
+                opacity: 1;
+                animation: rotateIn 0.8s ease-out forwards;
+            }
+
+        @@keyframes rotateIn {
+            from
+
+        {
+            transform: perspective(1200px) rotateY(30deg);
+            opacity: 0;
+        }
+
+        to {
+            transform: perspective(1200px) rotateY(0deg);
+            opacity: 1;
+        }
+
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            transition: transform 0.3s ease;
+        }
+
+            .carousel-control-prev-icon:hover,
+            .carousel-control-next-icon:hover {
+                transform: scale(1.1) rotate(5deg);
+            }
+    </style>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("HeadScripts", required: false)
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <!-- Logo y Nombre -->
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="/Images/logo.png" alt="Don Julio" class="don-julio-logo me-2" />
+                    <span>CoronelExpress</span>
+                </a>
+
+                <!-- Botón Hamburguesa -->
+                <button class="navbar-toggler" id="navbarToggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Menú de Navegación -->
+                <div id="navbarNav" class="collapse navbar-collapse justify-content-end">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"> 🛍️ Home 🏠 </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Cart" asp-action="Index"> 🛒 Compras 🚚 </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Dashboard"> 📦 Administración 💲 </a>
+                        </li>
+                        <!-- Formulario oculto para el Logout -->
+                        <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                        </form>
+
+                        <!-- Botón que activa el modal de confirmación -->
+                        <button type="button" class="btn btn-outline-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                            <i class="fas fa-sign-out-alt me-2"></i>
+                            <span>Cerrar Sesión</span>
+                        </button>
+
+                        <!-- Modal de confirmación -->
+                        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="logoutModalLabel">Confirmar Cierre de Sesión</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Estás seguro de que deseas cerrar sesión?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-danger" onclick="document.getElementById('logoutForm').submit();">Sí, Cerrar Sesión</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <!-- Footer modificado ultra avanzado y revolucionario -->
+    <footer class="advanced-footer">
+        <div class="container">
+            <div class="row">
+                <!-- Boletín -->
+                <div class="col-md-4 footer-section newsletter">
+                    <h5>Suscríbete a nuestro boletín</h5>
+                    <form action="/Newsletter/Subscribe" method="post">
+                        <div class="mb-3">
+                            <input type="email" name="email" class="form-control email-input" placeholder="Ingresa tu correo electrónico" required />
+                        </div>
+                        <button type="submit" class="btn btn-neon">Suscribirme</button>
+                    </form>
+                    <div class="mt-3">
+                        @if (TempData["SubscriptionSuccess"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @TempData["SubscriptionSuccess"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+                        @if (TempData["SubscriptionError"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @TempData["SubscriptionError"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!-- Redes Sociales y CF -->
+                <div class="col-md-4 footer-section social">
+                    <h5>Síguenos</h5>
+                    <a href="https://twitter.com" class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://facebook.com" class="social-icon">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://instagram.com" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://youtube.com" class="social-icon">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://tiktok.com" class="social-icon">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <!-- Enlace CF -->
+                    <a href="/CF" class="social-icon">CF</a>
+                </div>
+                <!-- Información de Interés -->
+                <div class="col-md-4 footer-section info">
+                    <h5>Información de Interés</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/Nosotros">Nosotros</a></li>
+                        <li><a href="/TrabajaConNosotros">Trabaja con nosotros</a></li>
+                        <li><a href="/FacturasElectronicas">Facturas electrónicas</a></li>
+                        <li><a href="/OfertasFalsas">Ofertas</a></li>
+                        <li><a href="/EnlacesExternos">Enlaces externos</a></li>
+                        <li><a href="/Proveedores">Proveedores</a></li>
+                        <li><a href="/PreguntasFrecuentes">Preguntas frecuentes</a></li>
+                        <li><a href="@Url.Action("Condiciones", "Home")">Términos y Condiciones</a></li>
+
+                        <li><a href="/Privacidad">Políticas de Privacidad</a></li>
+                        <li><a href="/Convenio">Convenio de Afiliación y Beneficios</a></li>
+                        <li><a href="/DatosPersonales">Derechos sobre datos personales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Nuevos botones para Contacto y Quejas/Sugerencias -->
+            <div class="footer-buttons text-center mt-4">
+                <a href='@Url.Action("Index", "Contacto")' class="btn btn-contact me-2">Contacto</a>
+                <a href='@Url.Action("Index", "QuejasSugerencias")' class="btn btn-feedback">Quejas y Sugerencias</a>
+            </div>
+            <hr class="footer-divider" />
+            <div class="footer-bottom text-center">
+                <p>
+                    Don Julio Súper – Comercial Don Julio – Plataforma generada por Coronel Express. Se creó en 1963, pioneros en Montalvo, únicos e invencibles, siempre al servicio de su gente.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var navbarToggler = document.getElementById('navbarToggler');
+            var navbarNav = document.getElementById('navbarNav');
+
+            navbarToggler.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navbarNav.classList.toggle('show');
+            });
+
+            // Cierra el menú si se hace clic fuera de él
+            document.addEventListener('click', function(event) {
+                if (!navbarNav.contains(event.target) && !navbarToggler.contains(event.target)) {
+                    navbarToggler.classList.remove('active');
+                    navbarNav.classList.remove('show');
+                }
+            });
+        });
+    </script>
+
+
+    <!-- Estilos ultra avanzados para el Footer -->
+    <style>
+        .advanced-footer {
+            background: linear-gradient(135deg, #0d0d0d, #1a1a2e, #16213e);
+            background-size: 300% 300%;
+            animation: bgShift 15s ease infinite, fadeInUp 1.5s ease-out;
+            color: #e0e0e0;
+            padding: 80px 0;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+            /* Fondo animado adicional */
+            .advanced-footer::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(0,245,196,0.15), transparent 70%);
+                animation: radialPulse 20s ease infinite;
+                z-index: 0;
+            }
+
+            .advanced-footer > .container {
+                position: relative;
+                z-index: 1;
+            }
+
+        @@keyframes bgShift {
+            0%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+
+        }
+
+        @@keyframes fadeInUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes radialPulse {
+            0%
+
+        {
+            transform: scale(1);
+            opacity: 0.7;
+        }
+
+        50% {
+            transform: scale(1.3);
+            opacity: 0.3;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 0.7;
+        }
+
+        }
+
+        @@keyframes underlinePulse {
+            0%, 100%
+
+        {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scaleX(1.4);
+            opacity: 0.8;
+        }
+
+        }
+
+        @@keyframes pulseInput {
+            0%
+
+        {
+            box-shadow: 0 0 15px rgba(0,245,196,0.7);
+        }
+
+        100% {
+            box-shadow: 0 0 30px rgba(0,245,196,1);
+        }
+
+        }
+
+        @@keyframes iconFloat {
+            0%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-8px);
+        }
+
+        }
+
+        @@keyframes textGlow {
+            0%, 100%
+
+        {
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        50% {
+            text-shadow: 0 0 20px rgba(255,255,255,0.7);
+        }
+
+        }
+
+        @@keyframes btnPulse {
+            0%, 100%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        }
+
+        .advanced-footer h5 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            animation: textGlow 4s ease-in-out infinite;
+        }
+
+            .advanced-footer h5::after {
+                content: "";
+                display: block;
+                width: 60px;
+                height: 4px;
+                background: linear-gradient(45deg, #00f5c4, #00d9f5, #ff3366);
+                margin-top: 10px;
+                border-radius: 3px;
+                animation: underlinePulse 3s ease-in-out infinite;
+            }
+
+        .advanced-footer a {
+            color: #e0e0e0;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+            .advanced-footer a:hover {
+                color: #ffffff;
+                transform: translateY(-5px);
+                text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+            }
+
+        .footer-divider {
+            border-top: 1px solid #444;
+            margin: 50px 0;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        .btn-neon {
+            background: linear-gradient(45deg, #00f5c4, #00d9f5);
+            border: none;
+            color: #fff;
+            padding: 14px 30px;
+            border-radius: 50px;
+            transition: transform 0.3s ease, background 0.3s ease;
+            box-shadow: 0 0 15px rgba(0,245,196,0.7);
+            animation: btnPulse 3s infinite;
+        }
+
+            .btn-neon:hover {
+                transform: scale(1.15);
+                background: linear-gradient(45deg, #00d9f5, #00f5c4);
+                box-shadow: 0 0 20px rgba(0,245,196,0.9);
+            }
+
+        .footer-buttons .btn {
+            background: #333;
+            border: 1px solid #555;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            transition: background 0.3s ease, transform 0.3s ease;
+            margin: 5px;
+            animation: btnFloat 4s ease-in-out infinite;
+        }
+
+        @@keyframes btnFloat {
+            0%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+
+        }
+
+        .footer-buttons .btn:hover {
+            background: #444;
+            transform: translateY(-5px);
+        }
+
+        .btn-contact {
+            background: linear-gradient(45deg, #ff3366, #ff6699);
+        }
+
+            .btn-contact:hover {
+                background: linear-gradient(45deg, #ff6699, #ff3366);
+            }
+
+        .btn-feedback {
+            background: linear-gradient(45deg, #ffcc00, #ff9900);
+        }
+
+            .btn-feedback:hover {
+                background: linear-gradient(45deg, #ff9900, #ffcc00);
+            }
+
+        .social-icon {
+            display: inline-block;
+            font-size: 1.7em;
+            margin: 0 10px;
+            color: #e0e0e0;
+            transition: color 0.3s ease, transform 0.3s ease;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+            .social-icon:hover {
+                color: #ffffff;
+                transform: translateY(-5px) scale(1.1);
+            }
+
+        .footer-section.info ul li {
+            margin-bottom: 10px;
+            transition: transform 0.2s ease;
+        }
+
+            .footer-section.info ul li:hover {
+                transform: translateX(5px);
+            }
+
+        /* Estilos avanzados para el campo de email */
+        .email-input {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            padding: 14px 25px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .email-input::placeholder {
+                color: rgba(255, 255, 255, 0.8);
+                font-style: italic;
+            }
+
+            .email-input:focus {
+                border-color: #00f5c4;
+                box-shadow: 0 0 20px rgba(0,245,196,0.8);
+                outline: none;
+                animation: pulseInput 1.5s infinite alternate;
+            }
+    </style>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Styles", required: false)
+
+</body>
+</html>

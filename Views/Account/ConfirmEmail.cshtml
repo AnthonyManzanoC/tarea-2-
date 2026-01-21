@@ -1,0 +1,178 @@
+﻿@{
+    ViewData["Title"] = "Confirmación de Correo Electrónico";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<!-- Fondo de partículas -->
+<div id="particles-js"></div>
+
+<!-- Preloader -->
+<div id="preloader">
+    <div class="spinner"></div>
+</div>
+
+<!-- Contenido principal (oculto hasta cargar) -->
+<div class="container mt-5" id="main-content" style="display:none;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-futuristic">
+                <div class="card-header bg-gradient text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-envelope-open-text"></i> Confirmación de Correo
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">@ViewBag.Message</p>
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-success btn-lg">
+                            <i class="fas fa-sign-in-alt"></i> Ir a Iniciar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Configuración de ParticlesJS
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false
+                },
+                "size": {
+                    "value": 3,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out"
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    }
+                }
+            }
+        });
+
+        // Ocultar el preloader y mostrar el contenido principal al cargar la página
+        window.addEventListener("load", function(){
+            document.getElementById("preloader").style.display = "none";
+            document.getElementById("main-content").style.display = "block";
+        });
+    </script>
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        font-family: 'Roboto', sans-serif;
+        position: relative;
+        overflow: hidden;
+        color: #ffffff;
+    }
+    /* Fondo de partículas */
+    #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+    /* Preloader */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(30, 60, 114, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .spinner {
+        border: 8px solid rgba(255, 255, 255, 0.3);
+        border-top: 8px solid #ffffff;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+    /* Estilos de la tarjeta */
+    .card {
+        border: none;
+        border-radius: 15px;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+    }
+
+    .card-header {
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        background: linear-gradient(45deg, #00c6ff, #0072ff);
+    }
+    /* Botón */
+    .btn-success {
+        background: linear-gradient(45deg, #28a745, #218838);
+        border: none;
+    }
+    /* Sombra futurista */
+    .shadow-futuristic {
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+</style>

@@ -1,0 +1,244 @@
+﻿@model IEnumerable<CoronelExpress.Models.Product>
+@{
+    ViewData["Title"] = "Productos sin stock";
+}
+
+<!-- Incluir Bootstrap y FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    /* Preloader */
+    #preloader {
+        background: #ffffff;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @@keyframes spinner {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    .spinner {
+        font-size: 3rem;
+        color: #0d6efd;
+        animation: spinner 1s linear infinite;
+    }
+
+    /* Animación del contenedor principal */
+    @@keyframes containerAppear {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    }
+    /* Animación de aparición para filas de la tabla */
+    @@keyframes rowFadeIn {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    }
+    /* Efecto para encabezado */
+    @@keyframes headerPulse {
+        0%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+    }
+    /* Aparición gradual de los encabezados de tabla */
+    @@keyframes headerFadeIn {
+        0%
+
+    {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+    }
+    /* Efecto hover para botones (si los hubiera) */
+    @@keyframes btnHover {
+        0%
+
+    {
+        transform: scale(1);
+        box-shadow: none;
+    }
+
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    }
+
+    /* Fondo corporativo minimalista */
+    body {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    /* Contenedor animado */
+    .animated-container {
+        animation: containerAppear 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    /* Estilo para la tabla */
+    .table-custom {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        background-color: #ffffff;
+    }
+    /* Encabezado principal animado */
+    h2 {
+        font-weight: 300;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+        animation: headerPulse 2s infinite ease-in-out;
+    }
+    /* Encabezados de la tabla */
+    .table-custom thead th {
+        animation: headerFadeIn 1s ease-out forwards;
+    }
+    /* Aparición de cada fila con retraso incremental */
+    .table-custom tbody tr {
+        animation: rowFadeIn 0.8s ease-out forwards;
+        opacity: 0;
+    }
+
+        .table-custom tbody tr:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .table-custom tbody tr:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .table-custom tbody tr:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .table-custom tbody tr:nth-child(4) {
+            animation-delay: 0.5s;
+        }
+
+        .table-custom tbody tr:nth-child(5) {
+            animation-delay: 0.6s;
+        }
+        /* Hover en filas: solo transición de fondo para mantener legibilidad */
+        .table-custom tbody tr:hover {
+            background-color: #eef6fd;
+            transition: background-color 0.3s ease-in-out;
+        }
+    /* Estilos para alertas e íconos */
+    .alert .badge {
+        font-size: 0.9rem;
+    }
+</style>
+
+<!-- Preloader -->
+<div id="preloader">
+    <i class="fas fa-spinner spinner"></i>
+</div>
+
+<div class="container animated-container my-5" id="mainContent" style="display:none;">
+    <h2 class="text-center text-dark">
+        <i class="fas fa-box-open me-2"></i>Productos sin stock
+    </h2>
+
+    @if (ViewBag.NotificationSent != null && (bool)ViewBag.NotificationSent)
+    {
+        <div class="alert alert-warning">
+            <span class="badge bg-danger">Notificación enviada</span>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-1"></i>No hay productos sin stock.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-custom">
+            <thead class="table-dark">
+                <tr>
+                    <th><i class="fas fa-hashtag me-1"></i>ID</th>
+                    <th><i class="fas fa-boxes me-1"></i>Nombre</th>
+                    <th><i class="fas fa-align-left me-1"></i>Descripción</th>
+                    <th><i class="fas fa-dollar-sign me-1"></i>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>@item.Price</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<a asp-controller="Productos" asp-action="Index" class="btn btn-outline-dark animated-button">
+    🛍️ Ir a Bodega
+</a>
+</div>
+
+<script>
+    window.addEventListener('load', function() {
+        // Oculta el preloader y muestra el contenido principal
+        document.getElementById('preloader').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+    });
+</script>

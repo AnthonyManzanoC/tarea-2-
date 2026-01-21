@@ -1,0 +1,71 @@
+﻿@model CoronelExpress.Models.Order
+@{
+    ViewData["Title"] = "Factura Generada con Éxito";
+}
+
+<div class="container mt-5">
+    <div class="invoice border p-4 shadow-lg bg-white rounded">
+        <!-- Mensaje de Éxito -->
+        <div class="text-center mb-4">
+            <h1 class="text-success font-weight-bold">¡Factura Generada con Éxito!</h1>
+            <p class="lead">Gracias por su compra. Su transacción ha finalizado correctamente.</p>
+        </div>
+
+        <!-- Encabezado de la Factura -->
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+            <div>
+                <h2 class="text-primary">FACTURA</h2>
+                <p class="text-muted">Número: @Model.OrderNumber</p>
+                <p class="text-muted">Fecha: @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+            </div>
+            <div>
+                <img src="/images/logo_empresa.png" alt="Logo Empresa" style="max-height: 60px;">
+            </div>
+        </div>
+
+        <!-- Datos del Cliente -->
+        <div class="mb-4">
+            <h4 class="text-secondary">Datos del Cliente</h4>
+            <p><strong>Nombre:</strong> @Model.Customer.FullName</p>
+            <p><strong>Email:</strong> @Model.Customer.Email</p>
+            <p><strong>Teléfono:</strong> @Model.Customer.Phone</p>
+            <p><strong>Dirección:</strong> @Model.Customer.Address</p>
+        </div>
+
+        <!-- Detalles del Pedido -->
+        <div>
+            <h4 class="text-secondary">Detalles del Pedido</h4>
+            <table class="table table-hover border mt-3">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Producto</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-right">Precio Unitario</th>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td>@item.Product.Name</td>
+                            <td class="text-center">@item.Quantity</td>
+                            <td class="text-right">@item.UnitPrice.ToString("C")</td>
+                            <td class="text-right">@(item.Quantity * item.UnitPrice).ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Total a Pagar -->
+        <div class="text-right mt-4">
+            <h3 class="text-dark font-weight-bold">Total a Pagar: @Model.TotalAmount.ToString("C")</h3>
+        </div>
+
+        <!-- Botón para volver al Home -->
+        <div class="mt-4 text-center">
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Volver al Home</a>
+        </div>
+    </div>
+</div>

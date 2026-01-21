@@ -1,0 +1,328 @@
+﻿@model IEnumerable<CoronelExpress.Models.TrabajaConNosotros>
+@{
+    ViewData["Title"] = "Administrar Trabaja con Nosotros";
+}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+<!-- Se añade FontAwesome para iconos avanzados -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p1Cm1E2A+7kYc24vQp2Y7o3wL+7e4Fj6MxPCYILkWx2Z9hLidHz1rv8jgK8zYUVTuy6/4bYvZD0vB9bSm7GULw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    body {
+        background: #f4f7f9; /* Fondo claro */
+        color: #121212;
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 960px;
+    }
+
+    h2 {
+        font-weight: 600;
+        letter-spacing: 1px;
+        animation: pulseIn 1.5s ease forwards;
+    }
+
+    /* Animación del título */
+    @@keyframes pulseIn {
+        0%
+
+    {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+
+    /* Estilos para la cabecera de la tabla con animación */
+    .table thead th {
+        border-bottom: 2px solid #121212;
+        color: #121212;
+        opacity: 0;
+        animation: slideDown 0.8s forwards;
+    }
+
+        .table thead th i {
+            margin-right: 5px;
+            display: inline-block;
+            animation: iconBounce 2s infinite;
+        }
+
+    @@keyframes slideDown {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes iconBounce {
+        0%, 100%
+
+    {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-5px) rotate(180deg);
+    }
+
+    }
+
+    .table tbody td {
+        border-top: 1px solid rgba(18, 18, 18, 0.1);
+        color: #121212;
+    }
+
+    /* Animación progresiva para cada fila */
+    .table tbody tr {
+        opacity: 0;
+        animation: fadeInSlideUp 0.5s forwards;
+    }
+
+    @@keyframes fadeInSlideUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* Input de búsqueda con efecto inteligente */
+    #searchEmail {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        color: #121212;
+        border-radius: 30px;
+        padding: 10px 20px;
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+        #searchEmail:focus {
+            box-shadow: 0 0 15px rgba(18, 18, 18, 0.3);
+            transform: scale(1.02);
+        }
+
+    /* Botones de acción y notificar con animaciones y efectos de rotación */
+    .btn-action, .btn-notificar {
+        transition: all 0.3s ease;
+        border-radius: 50px;
+    }
+
+        .btn-action:hover, .btn-notificar:hover {
+            transform: scale(1.1) rotate(3deg);
+        }
+
+        .btn-notificar i {
+            display: inline-block;
+            animation: rotateIcon 2s linear infinite;
+        }
+
+    @@keyframes rotateIcon {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    /* Modal modernizado */
+    .modal-content {
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(18, 18, 18, 0.2);
+    }
+
+    .modal-header, .modal-footer {
+        border: none;
+    }
+
+    .modal-title {
+        font-weight: 600;
+    }
+    /* Animación de rotación para iconos dentro del botón */
+    .btn-custom i {
+        display: inline-block;
+        animation: rotateIcon 2s linear infinite;
+    }
+
+    @@keyframes rotateIcon {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+</style>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Administrar Trabaja con Nosotros</h2>
+
+    <!-- Buscador en tiempo real -->
+    <div class="row mb-4">
+        <div class="col-md-6 offset-md-3">
+            <input id="searchEmail" type="text" class="form-control" placeholder="Buscar por email...">
+        </div>
+    </div>
+
+    <table class="table table-hover table-borderless">
+        <thead class="thead-dark">
+            <tr>
+                <th><i class="fa-solid fa-user"></i> Nombre</th>
+                <th><i class="fa-solid fa-envelope"></i> Email</th>
+                <th><i class="fa-solid fa-comment"></i> Mensaje</th>
+                <th><i class="fa-solid fa-file"></i> Hoja de Vida</th>
+                <th class="text-center"><i class="fa-solid fa-cogs"></i> Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="trabajaTable">
+            @foreach (var item in Model)
+            {
+                <tr style="animation-delay:@(Model.ToList().IndexOf(item) * 0.1)s">
+                    <td>@item.Nombre</td>
+                    <td class="email">@item.Email</td>
+                    <td>@item.Mensaje</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.HojaVidaPath))
+                        {
+                            <a href="@Url.Content(item.HojaVidaPath)" target="_blank" class="btn btn-sm btn-info btn-action">
+                                <i class="fa-solid fa-eye"></i> Ver CV
+                            </a>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <!-- Enlace para editar -->
+                        <a asp-action="EditTrabajaConNosotros" asp-route-id="@item.Id" class="btn btn-warning btn-sm btn-action">
+                            <i class="fa-solid fa-edit"></i>
+                        </a>
+
+                        <!-- Formulario para eliminar -->
+                        <form asp-action="DeleteTrabajaConNosotros" asp-route-id="@item.Id" method="post" style="display:inline;" onsubmit="return confirm('¿Está seguro de eliminar este registro?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-sm btn-action">
+                                <i class="fa-solid fa-trash-alt"></i>
+                            </button>
+                        </form>
+
+                        <!-- Botón para notificar -->
+                        <button type="button" class="btn btn-primary btn-sm btn-notificar"
+                                data-toggle="modal" data-target="#smtpModal"
+                                data-id="@item.Id"
+                                data-email="@(string.IsNullOrEmpty(item.Email) ? "SinEmail" : item.Email)">
+                            <i class="fa-solid fa-bell"></i> Notificar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+<!-- Modal para SMTP -->
+<div class="modal fade" id="smtpModal" tabindex="-1" role="dialog" aria-labelledby="smtpModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-controller="TrabajaConNosotros" asp-action="SendSmtp" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="smtpModalLabel">Enviar Notificación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="trabajadorId" name="Id" />
+                    <label>Email del destinatario:</label>
+                    <input type="text" id="destinatarioEmail" name="Email" class="form-control" readonly required />
+                    <div class="form-group mt-3">
+                        <label>Mensaje a enviar</label>
+                        <select name="MensajeEstado" class="form-control" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="Evaluación">Se está evaluando su solicitud.</option>
+                            <option value="Aprobado">¡Felicidades! Su solicitud ha sido aprobada.</option>
+                            <option value="Contacto">Pronto nos contactaremos para agendar una entrevista.</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mensaje de la entrevista (opcional)</label>
+                        <textarea name="MensajeEntrevista" class="form-control" rows="3" placeholder="Agregue un mensaje personalizado..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar SMTP</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="text-center mt-5">
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-custom">
+        <i class="fa-solid fa-house"></i> Volver al Dashboard
+    </a>
+</div>
+
+<!-- Scripts necesarios -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Buscador en tiempo real
+        $("#searchEmail").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#trabajaTable tr").filter(function () {
+                $(this).toggle($(this).find('.email').text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+
+        // Mostrar mensajes de éxito o error desde TempData
+        var successMessage = '@TempData["SmtpSuccess"]';
+        var errorMessage = '@TempData["SmtpError"]';
+        if (successMessage) { alert(successMessage); }
+        if (errorMessage) { alert(errorMessage); }
+
+        // Capturar datos al hacer click en el botón Notificar
+        $(".btn-notificar").click(function () {
+            var id = $(this).attr("data-id");
+            var email = $(this).attr("data-email");
+
+            if (!email || email === "SinEmail") {
+                alert("Este usuario no tiene un email registrado.");
+                return;
+            }
+            $("#trabajadorId").val(id);
+            $("#destinatarioEmail").val(email);
+        });
+    });
+</script>

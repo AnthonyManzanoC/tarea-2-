@@ -1,0 +1,308 @@
+﻿@{
+    ViewData["Title"] = "Promoción - Gira y Gana";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    var token = ViewBag.Token as string;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>¡Gira y Gana!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --primary-color: #1a1a1a;
+            --accent-color: #ff7f50;
+            --secondary-accent: #ff6347;
+            --text-color: #333;
+            --button-bg: linear-gradient(90deg, var(--accent-color), var(--secondary-accent));
+            --wheel-border: 4px solid var(--accent-color);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            perspective: 1500px;
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #000);
+            color: #fff;
+            padding: 1rem;
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        /* Animación flotante sutil */
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @@keyframes float {
+            0%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+
+        }
+
+        #wheel-container {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: var(--wheel-border);
+            margin-top: 6rem;
+            background: radial-gradient(circle, #fff, #eaeaea);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            #wheel-container:hover {
+                transform: scale(1.02);
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            }
+
+            /* Brillo sutil en la ruleta */
+            #wheel-container::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, rgba(255,255,255,0.2), transparent);
+                mix-blend-mode: overlay;
+                pointer-events: none;
+            }
+
+        #wheel {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+        }
+
+        .segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 0;
+            overflow: hidden;
+        }
+
+            .segment img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 0 0 100% 0;
+                transition: transform 0.3s ease, filter 0.3s ease;
+            }
+
+            .segment:hover img {
+                transform: scale(1.1);
+                filter: brightness(1.3);
+            }
+
+        .arrow {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid var(--accent-color);
+            filter: drop-shadow(0 0 10px var(--accent-color));
+        }
+
+        .btn {
+            margin-top: 1.8rem;
+            padding: 0.9rem 2.2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #fff;
+            background: var(--button-bg);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+            .btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+                background: linear-gradient(90deg, #ff6347, var(--accent-color));
+            }
+
+        #result {
+            margin-top: 1.2rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeInResult 1s forwards;
+        }
+
+        @@keyframes fadeInResult {
+            to
+
+        {
+            opacity: 1;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <header>¡Gira y Gana!</header>
+    <div id="wheel-container" class="floating">
+        <div class="arrow"></div>
+        <div id="wheel"></div>
+    </div>
+    @if (ViewData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger">@ViewData["MensajeError"]</div>
+    }
+    <button class="btn" id="spin-button">GIRAR</button>
+    <div id="result"></div>
+    <button class="btn" id="finalize-btn" style="display:none;">FINALIZAR</button>
+
+    <script>
+        // Token recibido desde el servidor
+        let sessionToken = '@token';
+        const defaultOffers = [
+            { Name: "Cupón 50%", ImageUrl: "https://via.placeholder.com/160/EA580C/FFFFFF?text=50%25" },
+            { Name: "Producto Gratis", ImageUrl: "https://via.placeholder.com/160/3B82F6/FFFFFF?text=GRATIS" },
+            { Name: "10% Cashback", ImageUrl: "https://via.placeholder.com/160/22C55E/FFFFFF?text=10%25+Cashback" },
+            { Name: "Envío Gratis", ImageUrl: "https://via.placeholder.com/160/6366F1/FFFFFF?text=Envío+Gratis" }
+        ];
+        let offers = [...defaultOffers];
+        let segmentAngle = 360 / offers.length;
+        let isSpinning = false;
+        let winningOffer = null;
+        const wheel = document.getElementById('wheel');
+        const spinButton = document.getElementById('spin-button');
+        const resultDiv = document.getElementById('result');
+        const finalizeButton = document.getElementById('finalize-btn');
+
+        function createWheel(offersArray) {
+            wheel.innerHTML = '';
+            for (let i = 0; i < offersArray.length; i++) {
+                const segment = document.createElement('div');
+                segment.className = 'segment';
+                segment.style.transform = `rotate(${i * segmentAngle}deg) skewY(${90 - segmentAngle}deg)`;
+                const img = document.createElement('img');
+                img.src = offersArray[i].ImageUrl;
+                img.alt = offersArray[i].Name;
+                segment.appendChild(img);
+                wheel.appendChild(segment);
+            }
+        }
+
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+            resultDiv.textContent = '';
+            finalizeButton.style.display = 'none';
+            const extraSpins = 360 * 3;
+            const randomDegree = Math.floor(Math.random() * 360);
+            const finalDegree = extraSpins + randomDegree;
+            gsap.to(wheel, {
+                duration: 4,
+                rotationY: finalDegree,
+                ease: 'power4.out',
+                onComplete: () => {
+                    const normalizedDegree = finalDegree % 360;
+                    let winningIndex = Math.floor((360 - normalizedDegree + (segmentAngle / 2)) % 360 / segmentAngle);
+                    winningOffer = offers[winningIndex];
+                    resultDiv.textContent = `¡Ganaste: ${winningOffer.Name}!`;
+                    isSpinning = false;
+                    finalizeButton.style.display = 'inline-block';
+                }
+            });
+        }
+
+        function finalizePromotion() {
+            if (!winningOffer) {
+                alert("Primero debes girar la ruleta y ganar un premio.");
+                return;
+            }
+            fetch('/Promotion/Finalizar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: sessionToken, prize: winningOffer.Name })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("¡Promoción finalizada y correo enviado!");
+                window.location.href = '/';
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<div style="color: red;">❌ Error: ${error.error || "No se pudo procesar la promoción."}</div>`;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createWheel(offers);
+            spinButton.addEventListener('click', spinWheel);
+            finalizeButton.addEventListener('click', finalizePromotion);
+        });
+    </script>
+</body>
+</html>

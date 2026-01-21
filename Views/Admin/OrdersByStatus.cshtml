@@ -1,0 +1,426 @@
+﻿@model IEnumerable<CoronelExpress.Models.Order>
+@{
+    var status = (string)ViewContext.RouteData.Values["status"] ?? "";
+    ViewData["Title"] = $"Órdenes {status}";
+}
+
+<!-- Preloader Premium -->
+<div id="preloader">
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+    <div class="preloader-text">Cargando...</div>
+</div>
+
+<!-- Estilos de Bootstrap y FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* Preloader Premium con animaciones compuestas */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #0f0c29;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+    }
+
+    .spinner-container {
+        animation: rotateContainer 1.5s linear infinite;
+    }
+
+    .spinner {
+        width: 80px;
+        height: 80px;
+        border: 10px solid rgba(255,255,255,0.2);
+        border-top: 10px solid #fff;
+        border-radius: 50%;
+        animation: pulseSpinner 1s ease-in-out infinite alternate;
+    }
+
+    .preloader-text {
+        margin-top: 20px;
+        font-size: 1.2em;
+        color: #fff;
+        animation: textFade 2s ease-in-out infinite;
+    }
+
+    @@keyframes rotateContainer {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    @@keyframes pulseSpinner {
+        0%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+    }
+
+    @@keyframes textFade {
+        0%, 100%
+
+    {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    }
+
+    /* Fondo animado con gradiente dinámico */
+    body {
+        background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #0f0c29);
+        background-size: 400% 400%;
+        animation: gradientAnimation 15s ease infinite;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+        perspective: 1000px;
+    }
+
+    @@keyframes gradientAnimation {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    /* Contenedor principal avanzado */
+    .dashboard-container {
+        padding: 40px;
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        margin: 50px auto;
+        max-width: 900px;
+        transition: transform 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        animation: containerRise 1s ease-out;
+    }
+
+    @@keyframes containerRise {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .dashboard-container:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Título con entrada inteligente y efecto de resplandor */
+    h2 {
+        margin-bottom: 3cm; /* Espacio de 3cm respecto a la tabla */
+        font-size: 2.3em;
+        letter-spacing: 2px;
+        animation: intelligentEntrance 1s ease-out, textGlow 2s infinite alternate;
+    }
+
+    @@keyframes intelligentEntrance {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-100px) scale(0.8);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: translateY(-50px) scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    }
+
+    @@keyframes textGlow {
+        from
+
+    {
+        text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    to {
+        text-shadow: 0 0 20px rgba(255,255,255,1);
+    }
+
+    }
+
+    /* Tabla con animaciones avanzadas */
+    .table {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .table:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .table tbody tr {
+            animation: slideIn 0.5s ease-out;
+        }
+
+    @@keyframes slideIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    }
+
+    /* Botón avanzado: posicionado 3cm más abajo */
+    .btn-return {
+        margin-top: 3cm;
+        padding: 12px 24px;
+        background: linear-gradient(45deg, #1565c0, #1e88e5);
+        border: none;
+        border-radius: 50px;
+        color: #fff;
+        font-size: 1.1em;
+        transition: transform 0.3s ease, background 0.3s ease;
+        cursor: pointer;
+    }
+
+        .btn-return:hover {
+            background: linear-gradient(45deg, #1e88e5, #42a5f5);
+            transform: scale(1.07);
+        }
+
+    /* Iconos flotantes con animaciones múltiples */
+    .floating-icon {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0.1;
+        animation: floatIcon 6s infinite alternate, rotate3d 6s infinite linear, pulse 3s infinite;
+    }
+
+    .icon-top {
+        top: -30px;
+        right: -30px;
+    }
+
+    .icon-bottom {
+        bottom: -30px;
+        left: -30px;
+    }
+
+    @@keyframes floatIcon {
+        from
+
+    {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(15px);
+    }
+
+    }
+
+    @@keyframes rotate3d {
+        from
+
+    {
+        transform: rotate3d(1, 1, 0, 0deg);
+    }
+
+    to {
+        transform: rotate3d(1, 1, 0, 360deg);
+    }
+
+    }
+
+    @@keyframes pulse {
+        0%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+    }
+
+    /* Alertas con efecto de aparición */
+    .alert {
+        animation: fadeIn 1s ease;
+    }
+
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+    }
+
+    /* Estilos de la lista */
+    ul.list-unstyled li {
+        margin-bottom: 5px;
+        font-size: 1em;
+        transition: transform 0.3s ease;
+    }
+
+        ul.list-unstyled li:hover {
+            transform: translateX(5px);
+        }
+
+    /* Iconos en las filas con animación de giro */
+    .row-icon {
+        margin-right: 5px;
+        animation: spin 2s infinite linear;
+    }
+
+    @@keyframes spin {
+        from
+
+    {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+    }
+</style>
+
+<div class="dashboard-container">
+    <i class="fas fa-rocket floating-icon icon-top"></i>
+    <i class="fas fa-star floating-icon icon-bottom"></i>
+
+    <h2>@ViewData["Title"]</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <p>No hay órdenes en estado "@status".</p>
+        </div>
+    }
+    else
+    {
+        <table class="table table-dark table-hover">
+            <thead class="table-light text-dark">
+                <tr>
+                    <th>Número de Orden</th>
+                    <th>Detalle del Pedido</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>
+                            <i class="fas fa-box-open row-icon"></i> @order.OrderNumber
+                        </td>
+                        <td>
+                            <ul class="list-unstyled">
+                                @foreach (var detail in order.OrderDetails)
+                                {
+                                    <li>
+                                        <i class="fas fa-check-circle row-icon"></i>
+                                        @detail.Product.Name - Cantidad: @detail.Quantity - Precio: @detail.UnitPrice.ToString("C")
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <!-- Botón de retorno avanzado -->
+    <button type="button" class="btn btn-return" onclick="window.location.href='/Admin/Dashboard'">
+        <i class="fas fa-arrow-left me-2"></i> Volver al Dashboard
+    </button>
+</div>
+
+<script>
+    window.addEventListener("load", function() {
+        var preloader = document.getElementById("preloader");
+        preloader.style.opacity = "0";
+        setTimeout(function() {
+            preloader.style.display = "none";
+        }, 500);
+    });
+</script>

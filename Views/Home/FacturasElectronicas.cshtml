@@ -1,0 +1,206 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Facturas Electrónicas";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Facturas Electrónicas - Don Julio Súper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #1e3c72, #2a5298);
+            --primary-color: #90caf9;
+            --accent-color: #ff7f50;
+            --highlight-color: #ff6347;
+            --shadow-color: rgba(0,0,0,0.4);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.55);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px var(--shadow-color);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .lead {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-container {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .form-group label {
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+            }
+
+            .form-group input {
+                padding: 0.8rem;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                outline: none;
+                background: rgba(255,255,255,0.9);
+                color: #333;
+            }
+
+        /* Se unifican los estilos de los botones */
+        .btn-search,
+        .btn-register {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            align-self: center;
+        }
+
+            .btn-search:hover,
+            .btn-register:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 20px var(--shadow-color);
+            }
+
+        .invoice-result {
+            margin-top: 2rem;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            padding: 1.5rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+            .invoice-result h3 {
+                margin-bottom: 1rem;
+                font-size: 1.8rem;
+            }
+
+            .invoice-result p {
+                font-size: 1rem;
+                line-height: 1.4;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Facturas Electrónicas</h1>
+        <p class="lead">
+            Implementamos un sistema de facturación electrónica ágil y transparente. En Don Julio Súper cada transacción es segura y eficiente, garantizando un servicio moderno y confiable.
+        </p>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="invoiceNumber">Número de Factura</label>
+                <input type="text" id="invoiceNumber" placeholder="Ingresa el número de factura" />
+            </div>
+            <button class="btn-search" id="btn-search">Consultar Factura</button>
+            <button type="button" onclick="location.href='/Home/Index'" class="btn-register">Regresar al Inicio</button>
+        </div>
+        <div class="invoice-result" id="invoice-result">
+            <h3>Factura #<span id="result-number"></span></h3>
+            <p id="result-details"></p>
+        </div>
+    </div>
+
+    <script>
+        // Animación de entrada para la vista
+        gsap.from(".container", { duration: 1.5, y: 50, opacity: 0, ease: "power3.out" });
+
+        // Animación para el hover de ambos botones
+        document.querySelectorAll('.btn-search, .btn-register').forEach(function(btn) {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, { scale: 1.08, duration: 0.3, ease: "power2.out" });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { scale: 1, duration: 0.3, ease: "power2.out" });
+            });
+        });
+
+        // Función para consultar la factura desde la base de datos
+        document.getElementById('btn-search').addEventListener('click', () => {
+            const invoiceNumber = document.getElementById('invoiceNumber').value.trim();
+
+            if (invoiceNumber === "") {
+                alert("Por favor, ingresa el número de factura.");
+                return;
+            }
+
+            gsap.to('#btn-search', { rotation: 360, duration: 1, ease: "power4.inOut" });
+
+            fetch('/Invoice/GetInvoice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ InvoiceNumber: invoiceNumber })
+            })
+            .then(response => {
+                console.log("[ERROR RESPONSE]", response);
+                if (!response.ok) {
+                    throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("[FRONTEND RESPONSE]", data);
+                if (!data || Object.keys(data).length === 0) {
+                    alert("No se recibieron datos de la factura. Verifica el número ingresado.");
+                    return;
+                }
+                if (data.message) {
+                    alert(data.message);
+                    return;
+                }
+                document.getElementById('result-number').textContent = data.orderNumber || "No disponible";
+                document.getElementById('result-details').innerHTML =
+                    `<strong>Fecha:</strong> ${data.orderDate || "No disponible"}<br>
+                     <strong>Monto:</strong> $${data.totalAmount || "No disponible"}<br>
+                     <strong>Estado:</strong> ${data.status || "No disponible"}<br>
+                     <strong>Cliente:</strong> ${data.fullName || "No disponible"}<br>
+                     <strong>Método de Pago:</strong> ${data.method || "No disponible"}`;
+                document.getElementById('invoice-result').style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Hubo un error al procesar la solicitud.");
+            });
+        });
+    </script>
+</body>
+</html>

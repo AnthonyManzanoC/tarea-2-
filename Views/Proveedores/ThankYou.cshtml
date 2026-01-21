@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Gracias por Registrarte";
+}
+
+<!-- Estilos inline para evitar problemas con las secciones en el Layout -->
+<style>
+    :root {
+        --bg-gradient: linear-gradient(135deg, #1e3c72, #2a5298);
+        --primary-color: #fff;
+        --accent-color: #ff7f50;
+        --highlight-color: #ff6347;
+        --shadow-color: rgba(0, 0, 0, 0.4);
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: var(--bg-gradient);
+        color: var(--primary-color);
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 4rem auto;
+        padding: 3rem;
+        background: rgba(0, 0, 0, 0.55);
+        border-radius: 15px;
+        box-shadow: 0 8px 30px var(--shadow-color);
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .lead {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn-home {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 5px 15px var(--shadow-color);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-home:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+</style>
+
+<div class="container">
+    <h1>¡Gracias!</h1>
+    <p class="lead">
+        Tu registro se ha realizado con éxito. Pronto nos pondremos en contacto contigo.
+    </p>
+    <a href="@Url.Action("Index", "Home")" class="btn-home">Volver al Inicio</a>
+</div>
+
+<!-- Animaciones con GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+    gsap.from(".container", { duration: 1.5, y: 50, opacity: 0, ease: "power3.out" });
+</script>

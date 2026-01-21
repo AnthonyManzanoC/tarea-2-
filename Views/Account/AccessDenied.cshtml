@@ -1,0 +1,476 @@
+﻿@{
+    ViewData["Title"] = "Acceso Restringido";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acceso Denegado - DonJulio Súper</title>
+
+    <!-- Fuentes y Estilos -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        /* ================================
+               Variables y Reset
+            ================================= */
+        :root {
+            --color-bg-dark: #001e3c;
+            --color-bg-light: #0a5394;
+            --color-primary: #64b5f6;
+            --color-secondary: #42a5f5;
+            --color-alert: #ff3b30;
+            --font-family: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ================================
+               Body y Fondo
+            ================================= */
+        body {
+            font-family: var(--font-family);
+            color: #fff;
+            overflow: hidden; /* Evita scroll */
+            height: 100vh;
+            background: linear-gradient(135deg, var(--color-bg-dark), var(--color-bg-light));
+            position: relative;
+        }
+
+        /* Escenario de fondo */
+        #stage-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            /* Asegúrate de que /Images/111.webp exista en wwwroot/Images/ */
+            background: url("/Images/111.webp") center center no-repeat;
+            background-size: cover;
+            opacity: 1;
+        }
+
+        /* Luz cenital (spotlight) */
+        #spotlight {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+            background: radial-gradient( circle at 50% -20%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 50% );
+        }
+
+        /* ================================
+               Canvas de partículas
+            ================================= */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: transparent;
+        }
+
+        /* ================================
+               Preloader Avanzado y Corporativo
+            ================================= */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.6);
+            animation: preloaderFadeOut 1.5s ease-out 3s forwards;
+        }
+
+        .preloader-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Spinner doble anillo */
+        .preloader-double-ring {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+            .preloader-double-ring:after {
+                content: " ";
+                display: block;
+                width: 64px;
+                height: 64px;
+                margin: 8px;
+                border-radius: 50%;
+                border: 6px solid #fff;
+                border-color: #fff transparent #fff transparent;
+                animation: doubleRing 1.2s linear infinite;
+            }
+
+        .loading-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ================================
+               Tarjeta de Acceso Denegado
+               (Glassmorphism 3D)
+            ================================= */
+        .access-card {
+            /* Fondo glass + bordes redondeados */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            /* Sombra más elegante */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            /* Espacios */
+            padding: 50px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            margin: 0 auto;
+            top: 50%;
+            transform-style: preserve-3d;
+            /* Animación 3D de aparición */
+            animation: appear3D 1s ease-out forwards;
+            transform: translateY(100px) scale(0.8) rotateX(10deg);
+            opacity: 0;
+        }
+
+            .access-card::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                background: linear-gradient(135deg, transparent, rgba(255,255,255,0.15));
+                pointer-events: none;
+                /* Sutil glow interno */
+                box-shadow: inset 0 0 10px rgba(255,255,255,0.1);
+            }
+
+        /* Ícono flotando con rotación */
+        .access-icon {
+            font-size: 4.5rem;
+            color: var(--color-alert);
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: floatUpDown 3s ease-in-out infinite, rotate360 12s linear infinite;
+        }
+
+        /* Título con degradado en el texto */
+        .access-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            /* Degradado en el texto para un efecto premium */
+            background: linear-gradient(90deg, #fff, var(--color-alert));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* Le sumamos la animación shakeIt */
+            animation: shakeIt 2s infinite;
+        }
+
+        /* Mensaje */
+        .access-message {
+            font-size: 1.15rem;
+            margin-bottom: 35px;
+            line-height: 1.5;
+        }
+
+        /* Botón */
+        .btn-home {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border: none;
+            color: #fff;
+            padding: 14px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-home:hover {
+                animation: hoverPulse 0.8s ease-in-out infinite;
+                box-shadow: 0 0 20px rgba(66, 165, 245, 0.7);
+            }
+
+        /* ================================
+               Animaciones Keyframes
+            ================================= */
+        @@keyframes appear3D {
+            0%
+
+        {
+            transform: translateY(100px) scale(0.8) rotateX(10deg);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateY(-50%) scale(1) rotateX(0deg);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes spin3d {
+            0%
+
+        {
+            transform: rotate3d(0, 1, 0, 0deg);
+        }
+
+        100% {
+            transform: rotate3d(0, 1, 0, 360deg);
+        }
+
+        }
+
+        @@keyframes pulseGlow {
+            0%, 100%
+
+        {
+            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+        }
+
+        50% {
+            box-shadow: 0 0 30px rgba(255,255,255,1);
+        }
+
+        }
+
+        @@keyframes preloaderFadeOut {
+            to
+
+        {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        }
+
+        @@keyframes fadeInScale {
+            from
+
+        {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        }
+
+        @@keyframes floatUpDown {
+            0%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-12px);
+        }
+
+        }
+
+        @@keyframes shakeIt {
+            0%
+
+        {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-6px);
+        }
+
+        50% {
+            transform: translateX(6px);
+        }
+
+        75% {
+            transform: translateX(-6px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+
+        }
+
+        @@keyframes rotate360 {
+            from
+
+        {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        @@keyframes hoverPulse {
+            0%, 100%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        }
+
+        @@keyframes doubleRing {
+            0%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Fondo de escenario -->
+    <div id="stage-bg"></div>
+
+    <!-- Luz cenital (spotlight) -->
+    <div id="spotlight"></div>
+
+    <!-- Canvas de partículas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Preloader Avanzado y Corporativo -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <!-- Doble anillo -->
+            <div class="preloader-double-ring"></div>
+            <!-- Texto de carga -->
+            <p class="loading-text">Cargando...</p>
+        </div>
+    </div>
+
+    <!-- Tarjeta de Acceso Denegado -->
+    <div class="access-card">
+        <i class="access-icon fas fa-lock"></i>
+        <h1 class="access-title">Acceso Denegado</h1>
+        <p class="access-message">
+            Lo sentimos, no tienes permisos para acceder a esta sección.<br>
+            Solo el administrador tiene acceso.
+        </p>
+        <button class="btn-home" onclick="location.href='@Url.Action("Index", "Home")'">
+            <i class="fas fa-home"></i> Volver al Inicio
+        </button>
+    </div>
+
+    <script>
+        // ================================
+        // Efecto de sonido al cargar la página
+        // ================================
+        document.addEventListener("DOMContentLoaded", function() {
+          setTimeout(() => {
+            let audio = new Audio("https://www.soundjay.com/button/beep-07.wav");
+            audio.play();
+          }, 500);
+        });
+
+        // ================================
+        // Canvas animado: luces y partículas
+        // ================================
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+        const numberOfParticles = 60; // Ajusta la cantidad si deseas más o menos
+        let canvasWidth, canvasHeight;
+
+        // Inicializar tamaño del canvas
+        function initCanvas() {
+          canvasWidth = canvas.width = window.innerWidth;
+          canvasHeight = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+
+        // Clase Partícula
+        class Particle {
+          constructor() {
+            this.x = Math.random() * canvasWidth;
+            this.y = Math.random() * canvasHeight;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = (Math.random() * 2 - 1) * 0.5;
+            this.speedY = (Math.random() * 2 - 1) * 0.5;
+            this.alpha = Math.random() * 0.5 + 0.3;
+          }
+          update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            // Rebote en los bordes
+            if (this.x < 0 || this.x > canvasWidth) this.speedX *= -1;
+            if (this.y < 0 || this.y > canvasHeight) this.speedY *= -1;
+          }
+          draw() {
+            ctx.fillStyle = 'rgba(255,255,255,' + this.alpha + ')';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Crear partículas
+        function initParticles() {
+          particlesArray = [];
+          for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+          }
+        }
+        initParticles();
+
+        // Animación
+        function animate() {
+          ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+          particlesArray.forEach(p => {
+            p.update();
+            p.draw();
+          });
+          requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

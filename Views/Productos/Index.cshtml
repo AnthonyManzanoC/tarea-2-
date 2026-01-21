@@ -1,0 +1,368 @@
+﻿<!-- Fuentes e Iconos -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+    /* Fuente, fondo y reset de márgenes */
+    body {
+        background: linear-gradient(135deg, #f5f5f5, #eaeaea);
+        font-family: 'Montserrat', sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    /* Animación de entrada para la tabla con efecto 3D */
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px) rotateX(10deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+
+    }
+
+    /* Animaciones para iconos: pulso, rotación y flotación sutil */
+    @@keyframes iconPulse {
+        0%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+    }
+
+    @@keyframes iconRotate {
+        from
+
+    {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    @@keyframes iconFloat {
+        0%
+
+    {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes tableFloat {
+        0%
+
+    {
+        transform: translateY(0) perspective(800px) rotateX(0deg);
+    }
+
+    50% {
+        transform: translateY(-4px) perspective(800px) rotateX(1deg);
+    }
+
+    100% {
+        transform: translateY(0) perspective(800px) rotateX(0deg);
+    }
+
+    }
+
+    /* Contenedor de la tabla con efecto minimalista y renovado */
+    .card-table {
+        margin: 20px 0;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.8s ease-out, tableFloat 3s ease-in-out infinite;
+        border: 1px solid #ddd;
+    }
+
+    /* Encabezado de la tabla con estilo refinado */
+    .table thead th {
+        background: linear-gradient(135deg, #ffffff, #f2f2f2);
+        color: #333;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        border: none;
+        padding: 16px;
+        letter-spacing: 1px;
+    }
+
+    /* Filas de la tabla con animación hover 3D */
+    .table tbody tr {
+        transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .table tbody tr:hover {
+            background-color: rgba(200, 200, 200, 0.3);
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+    /* Imágenes circulares con borde sutil */
+    .table img {
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+        .table img:hover {
+            transform: scale(1.1);
+        }
+
+    /* Botones con efecto refinado y minimalista */
+    .action-btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        border-radius: 50px;
+        font-weight: bold;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-warning {
+        background: linear-gradient(45deg, #ffcc80, #ffa726);
+        color: #fff;
+        border: none;
+    }
+
+    .btn-info {
+        background: linear-gradient(45deg, #81d4fa, #29b6f6);
+        color: #fff;
+        border: none;
+    }
+
+    .btn-danger {
+        background: linear-gradient(45deg, #ef9a9a, #e57373);
+        color: #fff;
+        border: none;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Botón "Agregar Producto" con efecto refinado */
+    .btn-add-product {
+        background: linear-gradient(45deg, #a5d6a7, #66bb6a);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 50px;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+
+        .btn-add-product:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+        }
+
+    /* Icono en el título con animación avanzada */
+    .title-icon {
+        display: inline-block;
+        margin-right: 10px;
+        animation: iconPulse 2s infinite, iconRotate 5s linear infinite;
+    }
+
+    /* Efectos flotantes 3D para iconos decorativos con tono minimalista */
+    .floating-icon {
+        position: absolute;
+        color: #ccc;
+        font-size: 50px;
+        opacity: 0.2;
+        animation: iconPulse 2s infinite, iconRotate 8s linear infinite, iconFloat 4s ease-in-out infinite;
+        filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+    }
+
+    .icon-1 {
+        top: 5%;
+        left: 5%;
+        font-size: 60px;
+    }
+
+    .icon-2 {
+        bottom: 5%;
+        right: 5%;
+        font-size: 60px;
+    }
+
+    .icon-3 {
+        top: 20%;
+        right: 10%;
+        font-size: 55px;
+        opacity: 0.15;
+    }
+
+    .icon-4 {
+        bottom: 20%;
+        left: 10%;
+        font-size: 45px;
+        opacity: 0.15;
+    }
+
+    .icon-5 {
+        top: 50%;
+        left: 80%;
+        font-size: 55px;
+        opacity: 0.15;
+    }
+
+    /* Diseño adaptable para dispositivos móviles */
+    @@media (max-width: 768px) {
+        .table thead
+
+    {
+        display: none;
+    }
+
+    .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+
+        .table tr {
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .table td {
+            text-align: right;
+            padding-left: 50%;
+            position: relative;
+        }
+
+            .table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                width: 45%;
+                padding-right: 10px;
+                font-weight: bold;
+                text-align: left;
+            }
+
+    }
+</style>
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-dark" style="font-family: 'Montserrat', sans-serif;">
+            <i class="fa-solid fa-boxes-stacked title-icon"></i> Gestor de bodega
+        </h2>
+        <a asp-action="Create" class="btn-add-product">
+            <i class="fa-solid fa-plus"></i> Agregar Producto
+        </a>
+    </div>
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a asp-controller="Categories" asp-action="Index" class="btn btn-light border btn-lg shadow-sm d-flex align-items-center">
+            <i class="fas fa-list text-primary me-2"></i>
+            <span>Categorías</span>
+        </a>
+
+        <a href="@Url.Action("Index", "Stock")" class="btn btn-light border btn-lg shadow-sm d-flex align-items-center">
+            <i class="fas fa-boxes text-success me-2"></i>
+            <span>Stock</span>
+        </a>
+
+        <a href="@Url.Action("Index", "Kardex")" class="btn btn-light border btn-lg shadow-sm d-flex align-items-center">
+            <i class="fas fa-clipboard-list text-warning me-2"></i>
+            <span>Kardex</span>
+        </a>
+     
+            <!-- Botón para recargar o abrir la vista de productos más vendidos -->
+            <a asp-controller="Report" asp-action="BestSelling" class="btn-custom">
+                Ver Productos Más Vendidos
+            </a>
+
+    </div>
+
+
+    <div class="card card-table">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Categoría</th>
+                        <th>Imagen</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td data-label="Nombre">@item.Name</td>
+                            <td data-label="Descripción">@item.Description</td>
+                            <td data-label="Precio">💲 @item.Price.ToString("C")</td>
+                            <td data-label="Stock">📦 @item.Stock</td>
+                            <td data-label="Categoría">@(item.Category != null ? item.Category.Name : "Sin Categoría")</td>
+                            <td data-label="Imagen">
+                                <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/default.jpg" : item.ImageUrl)"
+                                     alt="@item.Name"
+                                     style="width:50px; height:50px; object-fit:cover;" />
+                            </td>
+                            <td data-label="Acciones" class="text-center">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm action-btn">
+                                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm action-btn">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Detalles
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm action-btn">
+                                    <i class="fa-solid fa-trash"></i> Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Espaciado adicional -->
+    <div style="height: 50px;"></div>
+    <!-- Botón para volver al Home -->
+    <a class="btn-back" asp-controller="Home" asp-action="Index">
+        <i class="fa-solid fa-house"></i> Volver al Home
+    </a>
+</div>
+</div>

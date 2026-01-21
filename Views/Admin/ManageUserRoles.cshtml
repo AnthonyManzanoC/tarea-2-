@@ -1,0 +1,474 @@
+﻿@model IEnumerable<CoronelExpress.Models.ManageUserRolesViewModel>
+
+@{
+    ViewData["Title"] = "Gestionar Accesos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Prepara la variable JSON con los roles disponibles para el modal.
+    var availableRolesJson = "[]";
+    if (Model.Any() && Model.First().AvailableRoles != null)
+    {
+        availableRolesJson = Newtonsoft.Json.JsonConvert.SerializeObject(Model.First().AvailableRoles);
+    }
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+<style>
+    body {
+        background: linear-gradient(135deg, #fdfbfb, #ebedee);
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .access-container {
+        padding: 40px;
+        margin: 2rem auto;
+        max-width: 1200px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .close-view-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        border: none;
+        font-size: 1.5em;
+        color: #888;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+        .close-view-btn:hover {
+            color: #333;
+        }
+
+    h2 {
+        font-size: 2.5em;
+        margin-bottom: 0.5rem;
+        position: relative;
+        animation: fadeInDown 1s ease-out;
+    }
+
+    p.sub-text {
+        font-size: 1.1em;
+        margin-bottom: 2rem;
+        animation: fadeIn 1s ease-out;
+    }
+
+    .floating-icon {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0.1;
+        animation: floatIcon 6s infinite alternate ease-in-out, rotateIcon 8s linear infinite;
+    }
+
+    .icon-1 {
+        top: 5%;
+        left: 5%;
+    }
+
+    .icon-2 {
+        bottom: 5%;
+        right: 5%;
+    }
+
+    .icon-3 {
+        top: 10%;
+        right: 10%;
+        font-size: 60px;
+        opacity: 0.08;
+    }
+
+    .icon-4 {
+        bottom: 10%;
+        left: 10%;
+        font-size: 40px;
+        opacity: 0.15;
+    }
+
+    .icon-5 {
+        top: 50%;
+        left: 80%;
+        font-size: 55px;
+        opacity: 0.1;
+    }
+
+    @@keyframes floatIcon {
+        0%
+
+    {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(20px);
+    }
+
+    }
+
+    @@keyframes rotateIcon {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    .table-responsive {
+        animation: fadeInUp 1s ease-out;
+    }
+
+    table.table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        table.table thead th {
+            background: #f1f1f1;
+            font-weight: 500;
+        }
+
+        table.table tbody tr {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            table.table tbody tr:hover {
+                transform: translateY(-5px) rotateX(2deg);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+    .modal-content {
+        border-radius: 15px;
+        animation: fadeInModal 0.5s ease-out;
+    }
+
+    @@keyframes fadeInModal {
+        from
+
+    {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+
+    .modal-footer {
+        padding: 1rem 2rem;
+    }
+
+    @@keyframes fadeInDown {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes fadeInUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes fadeIn {
+        0%
+
+    {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+    }
+
+    .btn-custom {
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-weight: bold;
+        text-transform: uppercase;
+        background: linear-gradient(45deg, #00e5ff, #7a00ff);
+        border: none;
+        color: white;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 1rem;
+    }
+
+        .btn-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,229,255,0.8);
+        }
+
+    /* Estilo para el botón "Eliminar" */
+    .btn-delete {
+        background: linear-gradient(45deg, #ff4b2b, #ff416c);
+        color: white;
+        box-shadow: 0 4px 10px rgba(255, 75, 43, 0.4);
+    }
+
+        .btn-delete:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(255, 75, 43, 0.6);
+        }
+
+</style>
+
+<div class="access-container minimalistic">
+    <!-- Botón de cierre redirigiendo al Dashboard del Admin -->
+    <a href="@Url.Action("Dashboard", "Admin")" class="close-view-btn">
+        <i class="fas fa-times"></i>
+    </a>
+
+    <div class="floating-icons">
+        <i class="floating-icon icon-1 fas fa-user-shield"></i>
+        <i class="floating-icon icon-2 fas fa-lock"></i>
+        <i class="floating-icon icon-3 fas fa-key"></i>
+        <i class="floating-icon icon-4 fas fa-cogs"></i>
+        <i class="floating-icon icon-5 fas fa-sparkles"></i>
+    </div>
+
+    <h2>Gestionar Accesos</h2>
+    <p class="sub-text">Configura los accesos de los usuarios en la plataforma con facilidad y estilo.</p>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <p>No se encontraron usuarios.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre de Usuario</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Estado de Acceso</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>@user.PhoneNumber</td>
+                            <td>
+                                @if (user.LockoutEnabled)
+                                {
+                                    <span class="badge bg-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactivo</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn-custom btn-edit edit-roles-btn"
+                                            data-userid="@user.UserId"
+                                            data-username="@user.UserName"
+                                            data-userroles="@string.Join(",", user.UserRoles)">
+                                        <i class="fas fa-user-edit"></i> Editar Roles
+                                    </button>
+                                    <button type="button" class="btn-custom btn-delete delete-user-btn"
+                                            data-userid="@user.UserId"
+                                            data-username="@user.UserName">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+<div class="modal fade" id="editRolesModal" tabindex="-1" aria-labelledby="editRolesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editRolesModalLabel">Editar Roles para <span id="modalUserName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="rolesForm">
+                    <input type="hidden" id="userId" name="userId" />
+                    <div id="rolesCheckboxes">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-custom" id="saveRolesBtn">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de confirmación para eliminar usuario -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar al usuario <strong id="deleteUserName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteUserBtn">Sí, Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var deleteUserId = null;
+    $(document).ready(function(){
+        var deleteUserModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+
+        // Al hacer clic en el botón de eliminar, se muestra el modal de confirmación
+        $('.delete-user-btn').click(function(){
+            deleteUserId = $(this).data('userid');
+            var username = $(this).data('username');
+            $('#deleteUserName').text(username);
+            deleteUserModal.show();
+        });
+
+        // Confirmación de eliminación
+        $('#confirmDeleteUserBtn').click(function(){
+            if(deleteUserId){
+                $.ajax({
+                    url: '@Url.Action("DeleteUser", "Admin")',
+                    type: 'POST',
+                    data: { userId: deleteUserId },
+                    success: function(response){
+                        if(response.success){
+                            alert(response.message);
+                            location.reload();
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function(){
+                        alert("Ocurrió un error al eliminar el usuario.");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function closeView() {
+        document.querySelector('.access-container').style.display = 'none';
+    }
+
+    var availableRoles = @Html.Raw(availableRolesJson);
+
+    $(document).ready(function(){
+        var editRolesModal = new bootstrap.Modal(document.getElementById('editRolesModal'));
+
+        $('.edit-roles-btn').click(function(){
+            var userId = $(this).data('userid');
+            var userName = $(this).data('username');
+            var userRolesStr = $(this).data('userroles');
+            var userRoles = userRolesStr ? userRolesStr.split(',') : [];
+
+            $('#userId').val(userId);
+            $('#modalUserName').text(userName);
+            $('#rolesCheckboxes').empty();
+
+            availableRoles.forEach(function(role){
+                var isChecked = userRoles.includes(role);
+                var checkbox = '<div class="form-check mb-2">' +
+                               '<input class="form-check-input role-checkbox" type="checkbox" value="'+ role +'" id="role_'+ role +'" ' + (isChecked ? 'checked' : '') + '>' +
+                               '<label class="form-check-label" for="role_'+ role +'">'+ role +'</label>' +
+                               '</div>';
+                $('#rolesCheckboxes').append(checkbox);
+            });
+
+            editRolesModal.show();
+        });
+
+        $('#saveRolesBtn').click(function(){
+            var userId = $('#userId').val();
+            var selectedRoles = [];
+            $('.role-checkbox:checked').each(function(){
+                selectedRoles.push($(this).val());
+            });
+
+            var data = {
+                UserId: userId,
+                Roles: selectedRoles
+            };
+
+            $.ajax({
+                url: '@Url.Action("UpdateUserRoles", "Admin")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response){
+                    if(response.success){
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function(){
+                    alert("Ocurrió un error al actualizar los roles.");
+                }
+            });
+        });
+    });
+</script>

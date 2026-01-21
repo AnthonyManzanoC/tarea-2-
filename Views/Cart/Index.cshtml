@@ -1,0 +1,774 @@
+﻿@model List<CoronelExpress.Models.CartItem>
+@{
+    ViewData["Title"] = "Carrito de Compras";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <!-- Fuentes e Iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        /* Ajuste Global */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        /* Variables, Fondo y Modo Oscuro */
+        :root {
+            /* Colores patrióticos */
+            --primary-color: #ffcc00; /* Amarillo vibrante */
+            --secondary-color: #003399; /* Azul intenso */
+            --tertiary-color: #cc0000; /* Rojo profundo */
+            /* Texto y acentos */
+            --text-color: #B0B0B0; /* Oscuro para contraste */
+            --background-light: linear-gradient(135deg, #ffffff, #f3f9ff);
+            --background-dark: #121212;
+        }
+
+        body {
+            background: var(--background-light);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+            body.dark-mode {
+                background: var(--background-dark);
+                color: #e0e0e0;
+            }
+        /* Preloader Avanzado */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 8px solid rgba(255,255,255,0.3);
+            border-top: 8px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
+        }
+
+        @@keyframes spin {
+            from
+
+        {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        @@keyframes pulse {
+            0%, 100%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.2);
+        }
+
+        }
+        /* Botón Dark Mode Toggle */
+        #darkModeToggle {
+            position: fixed;
+            top: 130px;
+            right: 20px;
+            z-index: 1500;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+            #darkModeToggle:hover {
+                transform: scale(1.05);
+            }
+        /* Animaciones Globales */
+        @@keyframes fadeInUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes float {
+            0%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-8px);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes gentlePulse {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.08);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        @@keyframes rotate360 {
+            from
+
+        {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        @@keyframes headerGlow {
+            0%
+
+        {
+            text-shadow: 0 0 10px rgba(13,71,161,0.8);
+        }
+
+        50% {
+            text-shadow: 0 0 20px rgba(13,71,161,1);
+        }
+
+        100% {
+            text-shadow: 0 0 10px rgba(13,71,161,0.8);
+        }
+
+        }
+
+        @@keyframes shake {
+            0%, 100%
+
+        {
+            transform: translateX(0);
+        }
+
+        25% {
+            transform: translateX(-5px);
+        }
+
+        50% {
+            transform: translateX(5px);
+        }
+
+        75% {
+            transform: translateX(-5px);
+        }
+
+        }
+
+        @@keyframes flip {
+            0%
+
+        {
+            transform: perspective(400px) rotateY(0deg);
+        }
+
+        50% {
+            transform: perspective(400px) rotateY(180deg);
+        }
+
+        100% {
+            transform: perspective(400px) rotateY(360deg);
+        }
+
+        }
+
+        @@keyframes slideInLeft {
+            from
+
+        {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes slideInRight {
+            from
+
+        {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes sparkle {
+            0%
+
+        {
+            text-shadow: 0 0 0 rgba(255,255,255,0);
+        }
+
+        50% {
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        100% {
+            text-shadow: 0 0 0 rgba(255,255,255,0);
+        }
+
+        }
+
+        @@keyframes flash {
+            0%, 100%
+
+        {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.5;
+        }
+
+        }
+        /* Contenedor del Carrito */
+        .cart-container {
+            animation: fadeInUp 0.8s ease-out;
+            margin: 130px auto 30px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+            max-width: 1200px;
+            position: relative;
+            z-index: 1;
+        }
+
+        body.dark-mode .cart-container {
+            background: rgba(30,30,30,0.9);
+            border: 1px solid #333;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+        /* Encabezado del Carrito */
+        .cart-header {
+            background: linear-gradient(135deg, #bbdefb, #e3f2fd) !important;
+            color: #0d47a1 !important;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            animation: headerGlow 3s infinite, slideInLeft 1s ease-out, sparkle 2s infinite;
+        }
+
+            .cart-header:hover {
+                transform: perspective(1000px) rotateX(0deg);
+            }
+        /* Mensajes de Error */
+        .stock-error {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(211,47,47,0.2);
+            margin-bottom: 20px;
+            transition: transform 0.5s ease;
+            animation: shake 1s ease infinite;
+        }
+
+            .stock-error:hover {
+                transform: scale(1.02);
+            }
+
+            .stock-error h4 {
+                font-size: 1.2rem;
+                margin: 0;
+            }
+        /* Tabla del Carrito */
+        .cart-table {
+            margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f9f9f9;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: transform 0.4s ease;
+        }
+
+            .cart-table:hover {
+                transform: translateY(-2px);
+            }
+
+            .cart-table table {
+                /* Mantener layout fijo para columnas parejas */
+                table-layout: fixed;
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+                /* Todas las columnas con ancho igual => 6 columnas => 16.66% aprox */
+                .cart-table table thead th {
+                    width: 16.66%;
+                    background: #bbdefb;
+                    color: #0d47a1;
+                    text-transform: uppercase;
+                    font-size: 0.95rem;
+                    padding: 14px;
+                    border: none;
+                    border-bottom: 2px solid #90caf9;
+                    text-align: center;
+                    white-space: nowrap;
+                }
+
+        .table tbody td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border-bottom: 1px solid #e0e0e0;
+        }
+            /* La columna "Producto" se ajusta para texto largo */
+            .table tbody td[data-label="Producto"] {
+                text-align: left;
+                white-space: normal;
+                overflow: visible;
+            }
+
+        .table tbody tr {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .table tbody tr:hover {
+                background-color: #e3f2fd;
+                transform: scale(1.01);
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+
+        .table img {
+            border-radius: 50%;
+            border: 2px solid #90caf9;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+            .table img:hover {
+                transform: scale(1.1);
+            }
+        /* Totales y Botones */
+        .cart-total {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #0d47a1;
+            margin-bottom: 20px;
+        }
+
+        .btn-neon {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+            .btn-neon:hover {
+                transform: scale(1.05);
+                box-shadow: 0 0 15px rgba(0,0,0,0.15);
+            }
+
+        .btn-success {
+            background: #81c784;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: #64b5f6;
+            color: #fff;
+        }
+
+        .btn-info {
+            background: #4fc3f7;
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: #e57373;
+            color: #fff;
+        }
+        /* Continuar Comprando */
+        .continue-shopping {
+            margin-top: 60px;
+            text-align: center;
+            animation: slideInRight 1s ease-out;
+        }
+        /* Estilos Responsivos */
+        @@media (max-width: 768px) {
+            .table thead
+
+        {
+            display: none;
+        }
+
+        .table, .table tbody, .table tr, .table td {
+            display: block;
+            width: 100%;
+        }
+
+            .table tr {
+                margin-bottom: 15px;
+                border-bottom: 2px solid #e0e0e0;
+            }
+
+            .table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                overflow: visible;
+            }
+
+                .table td::before {
+                    content: attr(data-label);
+                    position: absolute;
+                    left: 15px;
+                    width: 45%;
+                    font-weight: bold;
+                    text-align: left;
+                }
+
+        .continue-shopping {
+            margin-top: 40px;
+        }
+
+        }
+        /* Animaciones en Iconos */
+        .icon-3d {
+            display: inline-block;
+            animation: gentlePulse 2s infinite, float 3s ease-in-out infinite, rotate360 8s linear infinite;
+        }
+
+        .icon-hover:hover {
+            transform: rotate(360deg);
+            transition: transform 0.6s ease;
+        }
+
+        .icon-delay-1 {
+            animation-delay: 0s;
+        }
+
+        .icon-delay-2 {
+            animation-delay: 0.3s;
+        }
+
+        .icon-delay-3 {
+            animation-delay: 0.6s;
+        }
+        /* Formularios */
+        .form-control:focus {
+            border-color: #64b5f6;
+            box-shadow: 0 0 8px rgba(100,181,246,0.7);
+        }
+        /* Botón Volver Arriba */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Botón Dark Mode Toggle -->
+    <button id="darkModeToggle" class="btn-neon">Dark Mode</button>
+
+    <div class="container cart-container">
+        <!-- Mensajes de Error -->
+        @if (TempData["StockError"] != null)
+        {
+            <div class="stock-error">
+                <h4>
+                    <i class="fa-solid fa-exclamation-triangle icon-3d icon-hover icon-delay-1"></i>
+                    @TempData["StockError"]
+                </h4>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="stock-error">
+                <h4>
+                    <i class="fa-solid fa-bolt icon-3d icon-hover icon-delay-2"></i>
+                    @TempData["Error"]
+                </h4>
+            </div>
+        }
+
+        <!-- Encabezado del Carrito -->
+        <div class="cart-header">
+            <i class="fa-solid fa-cart-shopping icon-3d icon-hover icon-delay-3"></i> &nbsp; Carrito de Compras
+        </div>
+        <hr />
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info mt-4 text-center" style="font-size: 1.1rem;">
+                <i class="fa-solid fa-info-circle"></i> No hay productos en el carrito.
+            </div>
+        }
+        else
+        {
+            <div class="card cart-table">
+                <div class="card-body p-0">
+                    <!-- Envolvemos la tabla en un div responsive -->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                    <th class="text-center"><i class="fa-solid fa-gear"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var effectivePrice = item.Product.Price;
+                                    if (item.Product.IsOnOffer)
+                                    {
+                                        effectivePrice *= (1 - (item.Product.DiscountPercentage / 100m));
+                                    }
+                                    <tr>
+                                        <td data-label="Imagen">
+                                            @if (!string.IsNullOrEmpty(item.Product.ImageUrl))
+                                            {
+                                                <img src="@item.Product.ImageUrl" alt="@item.Product.Name" />
+                                            }
+                                            else
+                                            {
+                                                <span><i class="fa-solid fa-image"></i></span>
+                                            }
+                                        </td>
+                                        <td data-label="Producto">
+                                            @item.Product.Name
+                                            @if (item.Product.Stock <= 0)
+                                            {
+                                                <span class="text-danger fw-bold"> [SIN STOCK]</span>
+                                            }
+                                        </td>
+                                        <td data-label="Precio">
+                                            @if (item.Product.IsOnOffer)
+                                            {
+                                                <span style="text-decoration: line-through;">
+                                                    <i class="fa-solid fa-dollar-sign"></i> @item.Product.Price.ToString("C")
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    <i class="fa-solid fa-dollar-sign"></i> @effectivePrice.ToString("C")
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    <i class="fa-solid fa-dollar-sign"></i> @item.Product.Price.ToString("C")
+                                                </span>
+                                            }
+                                        </td>
+                                        <td data-label="Cantidad">
+                                            @if (item.Product.Stock <= 0)
+                                            {
+                                                <span class="text-warning fw-bold">No disponible</span>
+                                            }
+                                            else
+                                            {
+                                                <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="d-inline">
+                                                    <input type="hidden" name="id" value="@item.Product.Id" />
+                                                    <input type="number" name="quantity" value="@item.Quantity" min="1" max="@item.Product.Stock"
+                                                           class="form-control d-inline" style="width: 70px;" />
+                                                    <button type="submit" class="btn btn-info btn-sm btn-neon">
+                                                        <i class="fa-solid fa-sync-alt"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                        </td>
+                                        <td data-label="Subtotal">
+                                            @((item.Quantity * effectivePrice).ToString("C"))
+                                        </td>
+                                        <td data-label="Acciones" class="text-center">
+                                            <a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.Product.Id"
+                                               class="btn btn-danger btn-sm btn-neon">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                @{
+                    var total = Model.Sum(x => x.Quantity * (x.Product.IsOnOffer
+                    ? x.Product.Price * (1 - (x.Product.DiscountPercentage / 100m))
+                    : x.Product.Price));
+                }
+                <p class="cart-total">Total: @total.ToString("C")</p>
+                <a asp-controller="Checkout" asp-action="Index" class="btn btn-success btn-lg btn-neon">
+                    <i class="fa-solid fa-credit-card icon-3d icon-hover icon-delay-1"></i> Proceder al Pago
+                </a>
+            </div>
+        }
+
+        <!-- Botón Continuar Comprando -->
+        <div class="continue-shopping">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg btn-neon">
+                <i class="fa-solid fa-house icon-3d icon-hover icon-delay-2"></i> Continuar Comprando
+            </a>
+        </div>
+    </div>
+
+    <!-- Botón Volver Arriba -->
+    <button id="backToTop"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <!-- Scripts: GSAP y Funcionalidades -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // Preloader: transición de desvanecimiento
+        window.addEventListener('load', () => {
+            gsap.to("#preloader", {
+                duration: 0.8,
+                opacity: 0,
+                onComplete: () => {
+                    document.getElementById("preloader").style.display = "none";
+                }
+            });
+        });
+
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            darkModeToggle.textContent =
+                document.body.classList.contains("dark-mode")
+                    ? "Light Mode"
+                    : "Dark Mode";
+        });
+
+        // Botón Volver Arriba
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 400 ? "flex" : "none";
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Animación de filas de la tabla con GSAP (stagger)
+        const tableRows = document.querySelectorAll(".cart-table tbody tr");
+        gsap.from(tableRows, {
+            opacity: 0,
+            y: 30,
+            duration: 0.6,
+            ease: "power1.out",
+            stagger: 0.2
+        });
+
+        // Animación para mensajes de error
+        gsap.from(".stock-error", {
+            duration: 0.8,
+            x: -30,
+            opacity: 0,
+            ease: "power1.out",
+            stagger: 0.2
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Enlaces Externos";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"] - Comercial Don Julio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- GSAP para animaciones -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        /* Hero Impactante */
+        .hero {
+            position: relative;
+            height: 50vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            overflow: hidden;
+        }
+
+            .hero h1 {
+                font-size: 3.5rem;
+                letter-spacing: 2px;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+                margin-top: 10px;
+            }
+        /* Contenedor Principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .lead {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        /* Grid de Enlaces */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        /* Tarjetas de Enlaces */
+        .link-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .link-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            }
+
+            .link-card h3 {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .link-card p {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+                color: #777;
+            }
+
+            .link-card a {
+                display: inline-block;
+                background: #2ed573;
+                color: #fff;
+                padding: 0.5rem 1rem;
+                border-radius: 25px;
+                transition: background 0.3s ease;
+            }
+
+                .link-card a:hover {
+                    background: #28b463;
+                }
+    </style>
+</head>
+<body>
+    <!-- Sección Hero -->
+    <div class="hero">
+        <div>
+            <h1>Enlaces Externos</h1>
+            <p>Conecta con recursos y sitios recomendados para potenciar tu experiencia</p>
+        </div>
+    </div>
+    <!-- Contenido Principal -->
+    <div class="container">
+        <p class="lead text-center">
+            Comercial Don Julio te conecta con las mejores herramientas para una experiencia de compra completa y superior.
+        </p>
+        <div class="links-grid" id="linksGrid">
+            <!-- Tarjetas generadas dinámicamente -->
+        </div>
+    </div>
+    <script>
+        // Array de enlaces externos (personaliza según lo que necesites)
+        const externalLinks = [
+            {
+                title: "Recursos de Compras",
+                description: "Optimiza tus compras con herramientas especializadas.",
+                url: "https://example.com/compras"
+            },
+            {
+                title: "Noticias del Sector",
+                description: "Mantente informado con las últimas tendencias y noticias.",
+                url: "https://example.com/noticias"
+            },
+            {
+                title: "Foros de Opinión",
+                description: "Comparte experiencias y opiniones con otros usuarios.",
+                url: "https://example.com/foros"
+            },
+            {
+                title: "Guías y Tutoriales",
+                description: "Aprende a aprovechar al máximo nuestras ofertas.",
+                url: "https://example.com/guias"
+            },
+            {
+                title: "Ofertas Especiales",
+                description: "Accede a promociones exclusivas de aliados estratégicos.",
+                url: "https://example.com/ofertas"
+            }
+        ];
+
+        // Función para generar dinámicamente las tarjetas de enlace
+        function generateLinkCards() {
+            const grid = document.getElementById('linksGrid');
+            externalLinks.forEach(link => {
+                const card = document.createElement('div');
+                card.className = 'link-card';
+                card.innerHTML = `
+                    <h3>${link.title}</h3>
+                    <p>${link.description}</p>
+                    <a href="${link.url}" target="_blank">Visitar</a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        generateLinkCards();
+
+        // Animación de entrada para las tarjetas usando GSAP
+        gsap.from(".link-card", {
+            opacity: 0,
+            y: 50,
+            stagger: 0.2,
+            duration: 1,
+            ease: "power3.out"
+        });
+    </script>
+</body>
+</html>

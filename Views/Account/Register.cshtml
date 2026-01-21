@@ -1,0 +1,460 @@
+﻿@model CoronelExpress.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Registro";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+    :root {
+        --primary-color: #00e5ff;
+        --secondary-color: #7a00ff;
+        --background-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        --dark-bg: #0d0d0d;
+        --light-text: #e0e0e0;
+        --input-bg: rgba(255, 255, 255, 0.1);
+        --input-focus-bg: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Fondo de Partículas */
+    #particles-js {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+    }
+
+    body {
+        background: var(--background-gradient);
+        font-family: 'Poppins', sans-serif;
+        color: var(--light-text);
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        transition: background 0.5s ease, color 0.5s ease;
+        padding: 20px;
+        perspective: 1000px;
+    }
+
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: #ccc;
+        }
+
+    /* Preloader Cinematográfico */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--background-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    }
+
+    .preloader-circle {
+        width: 90px;
+        height: 90px;
+        border: 10px solid rgba(255,255,255,0.1);
+        border-top-color: var(--primary-color);
+        border-radius: 50%;
+    }
+
+    /* Contenedor de Registro Deluxe 3D con efecto interactivo */
+    .register-container {
+        background: rgba(0, 0, 0, 0.65);
+        padding: 60px 50px;
+        border-radius: 20px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(15px);
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .register-container:hover {
+            box-shadow: 0 0 50px rgba(0,229,255,0.8);
+        }
+
+        .register-container::before {
+            content: "";
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(0,229,255,0.15), transparent 70%);
+            opacity: 0.5;
+            pointer-events: none;
+            animation: rotateOverlay 12s linear infinite;
+        }
+
+    @@keyframes rotateOverlay {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    /* Título y animación avanzada */
+    h2 {
+        margin-bottom: 35px;
+        font-size: 32px;
+        text-shadow: 0 0 15px rgba(0,229,255,0.7);
+        animation: fadeInDown 1s ease-out;
+        position: relative;
+        display: inline-block;
+    }
+        /* Ícono de registro (fa-user-plus) */
+        h2 .title-icon {
+            position: absolute;
+            top: -20px;
+            right: calc(-50px - 1cm); /* Se mueve 1cm más a la derecha */
+            font-size: 48px;
+            color: var(--primary-color);
+            animation: rotateTitle 3s linear infinite;
+            opacity: 0;
+        }
+
+    @@keyframes rotateTitle {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    @@keyframes fadeInDown {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* Campos del formulario con enfoque premium */
+    .form-group {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .form-control {
+        background: var(--input-bg);
+        border: none;
+        color: #fff;
+        border-radius: 12px;
+        padding-left: 50px;
+        height: 52px;
+        transition: all 0.3s ease;
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+
+        .form-control::placeholder {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .form-control:focus {
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 15px rgba(0,229,255,0.7);
+            background: var(--input-focus-bg);
+        }
+
+    /* Íconos en cada campo con efecto hover inteligente */
+    .icon {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255,255,255,0.8);
+        font-size: 22px;
+        transition: transform 0.5s ease;
+    }
+
+        .icon:hover {
+            transform: translateY(-50%) scale(1.1) rotate(15deg);
+        }
+
+    /* Botón de Registro Deluxe con efecto shimmer */
+    .btn-neon {
+        position: relative;
+        padding: 14px 45px;
+        border-radius: 50px;
+        font-weight: bold;
+        text-transform: uppercase;
+        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        color: white;
+        box-shadow: 0 0 25px rgba(0,229,255,0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        font-size: 18px;
+        overflow: hidden;
+    }
+
+        .btn-neon::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: skewX(-25deg);
+            transition: all 0.5s;
+        }
+
+        .btn-neon:hover {
+            transform: scale(1.07);
+            box-shadow: 0 0 35px rgba(0,229,255,0.9);
+        }
+
+            .btn-neon:hover::before {
+                left: 125%;
+            }
+
+    /* Íconos flotantes Deluxe en el fondo */
+    .floating-icon {
+        position: absolute;
+        font-size: 70px;
+        opacity: 0.15;
+        animation: float 5s ease-in-out infinite, rotate 8s linear infinite;
+    }
+
+    .icon-top-right {
+        top: -30px;
+        right: -30px;
+    }
+
+    .icon-bottom-left {
+        bottom: -30px;
+        left: -30px;
+    }
+
+    @@keyframes float {
+        0%
+
+    {
+        transform: translate(0,0);
+    }
+
+    50% {
+        transform: translate(20px,20px);
+    }
+
+    100% {
+        transform: translate(0,0);
+    }
+
+    }
+
+    @@keyframes rotate {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    /* Ajustes para dispositivos móviles */
+    @@media (max-width: 576px) {
+        .register-container
+
+    {
+        padding: 40px 20px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    .title-icon {
+        font-size: 36px;
+        top: -15px;
+        right: calc(-30px - 1cm);
+    }
+
+    .floating-icon {
+        font-size: 50px;
+    }
+
+    }
+</style>
+
+<!-- Contenedor de partículas (fondo interactivo) -->
+<div id="particles-js"></div>
+
+<!-- Preloader Cinematográfico -->
+<div id="preloader" role="alert" aria-busy="true" aria-label="Cargando">
+    <div class="preloader-circle"></div>
+</div>
+
+<div class="register-container" id="registerContainer">
+    <!-- Íconos flotantes Deluxe -->
+    <i class="fas fa-gem floating-icon icon-top-right" aria-hidden="true"></i>
+    <i class="fas fa-star floating-icon icon-bottom-left" aria-hidden="true"></i>
+
+    <!-- Título con ícono de registro mejorado (fa-user-plus) -->
+    <h2>Registrar Usuario <i class="fas fa-user-plus title-icon registration-icon" aria-hidden="true"></i></h2>
+
+    <form asp-controller="Account" asp-action="Register" method="post" novalidate>
+        <div class="form-group">
+            <i class="fa fa-user icon" aria-hidden="true"></i>
+            <input asp-for="UserName" class="form-control" placeholder="Nombre de Usuario" required aria-label="Nombre de Usuario" />
+        </div>
+        <div class="form-group">
+            <i class="fa fa-envelope icon" aria-hidden="true"></i>
+            <input asp-for="Email" class="form-control" placeholder="Correo Electrónico" required aria-label="Correo Electrónico" />
+        </div>
+        <div class="form-group">
+            <i class="fa fa-phone icon" aria-hidden="true"></i>
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Número de Teléfono" required aria-label="Número de Teléfono" />
+        </div>
+        <div class="form-group">
+            <i class="fa fa-lock icon" aria-hidden="true"></i>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Contraseña" required aria-label="Contraseña" />
+        </div>
+        <div class="form-group">
+            <i class="fa fa-lock icon" aria-hidden="true"></i>
+            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirmar Contraseña" required aria-label="Confirmar Contraseña" />
+        </div>
+        <div class="form-group">
+            <i class="fa fa-question icon" aria-hidden="true"></i>
+            <input asp-for="SecurityQuestion" class="form-control" placeholder="Pregunta de Seguridad" required aria-label="Pregunta de Seguridad" />
+        </div>
+        <div class="form-group">
+            <i class="fa fa-key icon" aria-hidden="true"></i>
+            <input asp-for="SecurityAnswer" class="form-control" placeholder="Respuesta de Seguridad" required aria-label="Respuesta de Seguridad" />
+        </div>
+        <div class="text-danger validation-summary-errors">
+            @Html.ValidationSummary()
+        </div>
+        <button type="submit" class="btn btn-neon">Registrar</button>
+    </form>
+</div>
+
+<!-- GSAP para animaciones avanzadas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<!-- Particles.js para fondo interactivo -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+    // Configuración de Particles.js para un fondo dinámico y futurista
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+        "color": { "value": "#ffffff" },
+        "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+        "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
+        "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
+        "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+        "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": { "enable": true, "mode": "grab" },
+          "onclick": { "enable": true, "mode": "push" },
+          "resize": true
+        },
+        "modes": {
+          "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
+          "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+          "repulse": { "distance": 200, "duration": 0.4 },
+          "push": { "particles_nb": 4 },
+          "remove": { "particles_nb": 2 }
+        }
+      },
+      "retina_detect": true
+    });
+
+    // Preloader con animación cinematográfica y entrada dinámica del contenedor
+    window.addEventListener('load', () => {
+        gsap.to("#preloader", {
+            duration: 1,
+            opacity: 0,
+            scale: 0.8,
+            ease: "power3.out",
+            onComplete: () => {
+                document.getElementById("preloader").style.display = "none";
+                gsap.fromTo("#registerContainer",
+                    { opacity: 0, scale: 0.8, rotationY: -30 },
+                    { opacity: 1, scale: 1, rotationY: 0, duration: 1, ease: "back.out(1.7)" }
+                );
+                // Animación de lanzamiento y rebote para el ícono de registro
+                gsap.fromTo(".registration-icon",
+                    { y: -50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 1, ease: "bounce.out" }
+                );
+                gsap.to(".registration-icon", { y: -10, repeat: -1, yoyo: true, duration: 1, ease: "power1.inOut" });
+            }
+        });
+    });
+
+    // Efecto 3D reactivo al movimiento del mouse en el contenedor
+    document.addEventListener('mousemove', (e) => {
+        const container = document.getElementById('registerContainer');
+        const rect = container.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const deltaX = e.clientX - centerX;
+        const deltaY = e.clientY - centerY;
+        const rotationX = (deltaY / rect.height) * 10;
+        const rotationY = -(deltaX / rect.width) * 10;
+        container.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) scale(1)`;
+    });
+
+    // Restablece la inclinación al salir el mouse del contenedor
+    document.getElementById('registerContainer').addEventListener('mouseleave', () => {
+        gsap.to("#registerContainer", { rotationX: 0, rotationY: 0, duration: 0.5, ease: "power3.out" });
+    });
+
+    // Animación inteligente: Al enfocar un campo, su ícono rota 360° elegantemente
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('focus', () => {
+            const icon = input.parentElement.querySelector('.icon');
+            if (icon) {
+                gsap.to(icon, { rotation: "+=360", duration: 1, ease: "power2.out" });
+            }
+        });
+    });
+</script>

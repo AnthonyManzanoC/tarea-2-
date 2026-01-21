@@ -1,0 +1,196 @@
+﻿@model CoronelExpress.Models.Promotion
+@{
+    ViewData["Title"] = "Administrar Promociones";
+}
+<!-- Estilos avanzados para un diseño lujoso, minimalista y corporativo -->
+<style>
+    :root {
+        --primary-color: #007bff;
+        --secondary-color: #6c757d;
+        --bg-start: #f8f9fa;
+        --bg-end: #e9ecef;
+        --card-bg: #ffffff;
+    }
+
+    body {
+        background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+        background-size: 400% 400%;
+        animation: gradientShift 10s ease infinite;
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Animación de cambio de gradiente de fondo */
+    @@keyframes gradientShift {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    .container {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    /* Efecto de aparición con keyframes */
+    @@keyframes fadeInUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .fadeInUp {
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Tarjetas con efecto 3D y sombra lujosa */
+    .card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0px 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Efecto de rotación para íconos */
+    .rotate-icon {
+        display: inline-block;
+        transition: transform 0.5s ease;
+    }
+
+        .rotate-icon:hover {
+            transform: rotate(360deg);
+        }
+
+    /* Efecto de brillo en botones al pasar el mouse */
+    .btn-animate {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .btn-animate::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+
+        .btn-animate:hover::after {
+            left: 100%;
+        }
+
+        .btn-animate:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+    /* Estilo de los inputs */
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+        transition: box-shadow 0.3s ease;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center fadeInUp">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4 text-uppercase fw-bold text-primary">
+                Buscar Promoción por Token
+            </h2>
+            <div class="card shadow border-0 p-4 mb-4">
+                <form asp-action="SearchPromotion" method="get" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" name="token" class="form-control form-control-lg" placeholder="Ingrese token de promoción" required />
+                        <button type="submit" class="btn btn-primary btn-lg btn-animate">
+                            <i class="fas fa-search rotate-icon me-2"></i>Buscar
+                        </button>
+                    </div>
+                </form>
+
+                @* Mensajes de resultado *@
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger shadow-sm">
+                        @TempData["Error"]
+                    </div>
+                }
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success shadow-sm">
+                        @TempData["Success"]
+                    </div>
+                }
+            </div>
+
+            @* Mostrar detalles de la promoción si se encontró *@
+            @if (Model != null)
+            {
+                <div class="card shadow border-0 p-4 fadeInUp">
+                    <h5 class="card-title text-center fw-bold text-secondary">Detalles de la Promoción</h5>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Token:</strong> @Model.Token</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Generada en:</strong> @Model.GeneratedOn.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Suscripción:</strong> @Model.Subscription?.ToString()</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Premio:</strong> @Model.Prize</p>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        @if (Model.Prize.ToLower() == "pendiente")
+                        {
+                            <form asp-action="ChangeStatus" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <button type="submit" class="btn btn-success btn-lg btn-animate">
+                                    <i class="fas fa-check rotate-icon me-2"></i>Marcar como Otorgado
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success fs-5">Premio Otorgado</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

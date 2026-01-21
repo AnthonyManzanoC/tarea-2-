@@ -1,0 +1,647 @@
+﻿@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    ViewData["Title"] = "Términos y Condiciones";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones - Comercial Don Julio</title>
+    <!-- Fuente Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- GSAP y ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        /* Variables de Estilo Premium – Paleta Exclusiva */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #000000, #2c2c2c);
+            --primary-color: #ffffff;
+            --accent-color: #D4AF37;
+            --highlight-color: #50C878;
+            --modal-bg: rgba(248,248,255,0.85);
+            --shadow-color: rgba(0, 0, 0, 0.8);
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-gradient);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Contenedor de Partículas (fondo animado 3D e interactivo) */
+        #particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent-color);
+            opacity: 0.8;
+            border-radius: 50%;
+            filter: drop-shadow(0 0 5px var(--highlight-color));
+            transform: translateZ(0);
+        }
+
+        /* Sección Hero Premium con Overlay y Entrada Animada */
+        .hero {
+            position: relative;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-gradient);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.45);
+                z-index: -1;
+            }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            animation: fadeInScale 1.5s ease-out forwards;
+        }
+
+            .hero-content h1 {
+                font-size: 3.5rem;
+                text-transform: uppercase;
+                letter-spacing: 4px;
+                margin-bottom: 20px;
+            }
+
+            .hero-content p {
+                font-size: 1.3rem;
+                margin-bottom: 30px;
+            }
+
+        /* Contenedor de Términos: Diseño Limpio con Efecto slideUp */
+        .terms-container {
+            max-width: 900px;
+            margin: -40px auto 60px;
+            padding: 40px;
+            background: #ffffff;
+            color: #333333;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            animation: slideUp 1.2s ease-out forwards;
+            z-index: 2;
+            position: relative;
+        }
+
+            .terms-container h2 {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #eeeeee;
+                padding-bottom: 10px;
+            }
+
+            .terms-container h3 {
+                font-size: 1.8rem;
+                margin: 20px 0 10px;
+            }
+
+            .terms-container p {
+                font-size: 1rem;
+                margin-bottom: 15px;
+                line-height: 1.6;
+            }
+
+        /* Formulario de Aceptación: Minimalista y Redondeado con Glassmorphism */
+        .accept-form {
+            max-width: 600px;
+            margin: 40px auto;
+            z-index: 2;
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+            padding: 20px;
+        }
+
+        .btn-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            font-size: 1rem;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .btn-accept {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border-color: var(--accent-color);
+        }
+
+            .btn-accept:hover {
+                background: var(--highlight-color);
+                border-color: var(--highlight-color);
+            }
+
+        .btn-print {
+            background: #007bff;
+            color: #ffffff;
+            border: none;
+        }
+
+            .btn-print:hover {
+                background: #0069d9;
+            }
+
+        .btn-home {
+            background: #28a745;
+            color: #ffffff;
+            border: 2px solid #28a745;
+        }
+
+            .btn-home:hover {
+                background: #218838;
+                border-color: #1e7e34;
+            }
+
+        /* Glassmorphism en Modales para mantener legibilidad */
+        .modal-content {
+            background: var(--modal-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 30px var(--shadow-color);
+        }
+
+        .modal-header, .modal-body, .modal-footer {
+            color: #333333;
+        }
+
+        /* Keyframes para animaciones */
+        @@keyframes slideUp {
+            0%
+
+        {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes fadeInScale {
+            0%
+
+        {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        }
+
+        /* Keyframes para partículas */
+        @@keyframes moveUp {
+            0%
+
+        {
+            transform: translateY(100vh) translateZ(0) scale(0.5);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-10vh) translateZ(20px) scale(1);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes moveLeft {
+            0%
+
+        {
+            transform: translateX(100vw) translateZ(0) scale(0.6);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateX(-10vw) translateZ(20px) scale(1);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes rotate3D {
+            0%
+
+        {
+            transform: rotateY(0deg) translateZ(0) scale(0.7);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: rotateY(360deg) translateZ(20px) scale(1);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes drift {
+            0%
+
+        {
+            transform: translate(0, 0) translateZ(0);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate(20vw, -20vh) translateZ(30px);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes pulse {
+            0%, 100%
+
+        {
+            transform: scale(0.8);
+            opacity: 0.7;
+        }
+
+        50% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes float {
+            0%
+
+        {
+            transform: translateY(0) translateZ(0);
+        }
+
+        50% {
+            transform: translateY(-20px) translateZ(10px);
+        }
+
+        100% {
+            transform: translateY(0) translateZ(0);
+        }
+
+        }
+
+        @@keyframes slideRight {
+            0%
+
+        {
+            transform: translateX(-100vw) translateZ(0) scale(0.5);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateX(10vw) translateZ(20px) scale(1);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes spin {
+            0%
+
+        {
+            transform: rotate(0deg) translateZ(0);
+        }
+
+        100% {
+            transform: rotate(360deg) translateZ(20px);
+        }
+
+        }
+
+        @@keyframes zoomIn {
+            0%
+
+        {
+            transform: scale(0.3) translateZ(0);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1) translateZ(30px);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes skew {
+            0%
+
+        {
+            transform: skew(0deg, 0deg) translateZ(0);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: skew(20deg, 20deg) translateZ(20px);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes bounce {
+            0%
+
+        {
+            transform: translateY(0) translateZ(0);
+            opacity: 0;
+        }
+
+        50% {
+            transform: translateY(-15px) translateZ(10px);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(0) translateZ(0);
+            opacity: 0;
+        }
+
+        }
+
+        @@keyframes oscillate {
+            0%
+
+        {
+            transform: translateX(0) translateZ(0);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateX(20px) translateZ(20px);
+            opacity: 0;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor de Partículas (fondo 3D interactivo) -->
+    <div id="particle-container"></div>
+
+    <!-- Sección Hero -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Términos y Condiciones</h1>
+            <p>Una experiencia segura, justa y transparente en Don Julio Súper.</p>
+        </div>
+    </div>
+
+    <!-- Contenedor de Términos (sin rotación) -->
+    <section class="terms-container" aria-labelledby="termsHeading">
+        <h2 id="termsHeading">Bienvenido a nuestros Términos y Condiciones</h2>
+        <article>
+            <h3>1. Introducción</h3>
+            <p>Estos términos y condiciones regulan el uso de los servicios de Don Julio Súper. Al utilizar nuestro sitio, aceptas cumplir con todas las disposiciones aquí descritas.</p>
+        </article>
+        <article>
+            <h3>2. Uso del Servicio</h3>
+            <p>El usuario se compromete a utilizar nuestros servicios de forma ética, legal y de acuerdo con las políticas de la empresa. El incumplimiento podrá resultar en la suspensión o cancelación del acceso.</p>
+        </article>
+        <article>
+            <h3>3. Propiedad Intelectual</h3>
+            <p>Todos los contenidos, marcas y logotipos presentes en nuestro sitio son propiedad exclusiva de Don Julio Súper o de terceros autorizados. Queda prohibida su reproducción sin autorización previa.</p>
+        </article>
+        <article>
+            <h3>4. Limitación de Responsabilidad</h3>
+            <p>Don Julio Súper no se hace responsable por daños o perjuicios derivados del uso inadecuado o malintencionado de la información contenida en este sitio.</p>
+        </article>
+        <article>
+            <h3>5. Modificaciones</h3>
+            <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Se recomienda a los usuarios revisar periódicamente esta sección para estar informados de cualquier cambio.</p>
+        </article>
+        <article>
+            <h3>6. Aceptación</h3>
+            <p>Al hacer clic en "Acepto", confirmas que has leído, comprendido y aceptado estos términos y condiciones en su totalidad.</p>
+        </article>
+    </section>
+
+    <!-- Formulario de Aceptación -->
+    <div class="container my-5 accept-form">
+        <div class="card p-4">
+            <form id="formAcceptance" aria-label="Formulario de aceptación de términos">
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Nombre Completo</label>
+                    <input type="text" class="form-control" id="fullName" required aria-required="true">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" required aria-required="true">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" id="phone">
+                </div>
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="acceptTerms" required aria-required="true">
+                    <label class="form-check-label" for="acceptTerms">
+                        Acepto los <a href="#" data-bs-toggle="modal" data-bs-target="#modalTerms">Términos y Condiciones Completos</a>.
+                    </label>
+                </div>
+                <div class="btn-actions">
+                    <button type="submit" class="btn btn-accept w-100">Aceptar y Enviar</button>
+                    <button type="button" class="btn btn-print w-100 mt-2" id="btn-print">Imprimir</button>
+                    <!-- Botón deshabilitado inicialmente -->
+                    <button type="button" class="btn btn-home w-100 mt-2" id="btn-home" disabled>Continuar</button>
+                </div>
+            </form>
+        </div>
+        <div id="resultMessage" class="mt-3"></div>
+        <div class="alert alert-info mt-4 text-center">
+            🎉 ¡Beneficios Exclusivos! Desde tu primera compra.
+        </div>
+    </div>
+
+    <!-- Modal de Términos Completos -->
+    <div class="modal fade" id="modalTerms" tabindex="-1" aria-labelledby="modalTermsLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <h5 class="modal-title" id="modalTermsLabel">Términos y Condiciones Completos</h5>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </header>
+                <div class="modal-body">
+                    <p><strong>1. Introducción:</strong> Este documento establece los términos y condiciones para el uso de los servicios de Don Julio Súper. Al utilizar este sitio, el usuario acepta todas las normativas aquí expuestas.</p>
+                    <p><strong>2. Uso del Servicio:</strong> El usuario se compromete a hacer un uso ético y legal de nuestros servicios. El incumplimiento de estas políticas podrá resultar en la suspensión o terminación del acceso.</p>
+                    <p><strong>3. Propiedad Intelectual:</strong> Todos los contenidos, marcas, logotipos y demás elementos del sitio son propiedad de Comercial Don Julio o de terceros autorizados. Queda prohibida su reproducción sin el consentimiento expreso y por escrito.</p>
+                    <p><strong>4. Limitación de Responsabilidad:</strong> Don Julio Súper no se hace responsable de daños directos o indirectos que puedan derivarse del uso inadecuado del sitio o de los servicios, ni de interrupciones o fallos en el servicio.</p>
+                    <p><strong>5. Modificaciones:</strong> Nos reservamos el derecho de modificar estos términos en cualquier momento, sin aviso previo. Es responsabilidad del usuario revisar esta sección periódicamente.</p>
+                    <p><strong>6. Legislación Aplicable:</strong> Estos términos se rigen por la legislación vigente en la jurisdicción correspondiente, y cualquier controversia se someterá a los tribunales competentes.</p>
+                    <p><strong>7. Aceptación:</strong> Al hacer clic en "Acepto", el usuario declara haber leído, comprendido y aceptado en su totalidad estos términos y condiciones.</p>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-accept" data-bs-dismiss="modal">Cerrar</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts: jQuery, Bootstrap JS y Lógica -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navegación: Volver a Inicio (solo funcionará cuando se habilite)
+        document.getElementById('btn-home').addEventListener('click', function () {
+          window.location.href = '/Home/Index';
+        });
+
+        // GSAP: Animación de entrada para el contenedor de términos
+        gsap.from(".terms-container", { duration: 1.2, opacity: 0, y: 50, ease: "power3.out" });
+
+        // Función de Impresión
+        document.getElementById('btn-print').addEventListener('click', function () {
+          window.print();
+        });
+
+        // Envío del Formulario vía AJAX
+        $("#formAcceptance").submit(function(e) {
+          e.preventDefault();
+          var data = {
+            FullName: $("#fullName").val(),
+            Email: $("#email").val(),
+            Phone: $("#phone").val(),
+            AcceptTerms: $("#acceptTerms").is(":checked")
+          };
+          $.ajax({
+            url: "/api/terms/accept",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(response) {
+              $("#resultMessage").html('<div class="alert alert-success">' + response.message + '</div>');
+              // Habilitar el botón "Volver a Inicio" después de una respuesta exitosa
+              document.getElementById('btn-home').disabled = false;
+            },
+            error: function(xhr) {
+              var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : "Error al procesar la solicitud.";
+              $("#resultMessage").html('<div class="alert alert-danger">Error: ' + msg + '</div>');
+            }
+          });
+        });
+
+        /* Generación dinámica de partículas de fondo avanzadas e interactivas */
+        (function() {
+          const container = document.getElementById('particle-container');
+          const numParticles = 50;
+          const animations = [
+            'moveUp', 'moveLeft', 'rotate3D', 'drift',
+            'pulse', 'float', 'slideRight', 'spin',
+            'zoomIn', 'skew', 'bounce', 'oscillate'
+          ];
+          for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 8 + 4;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.background = (Math.random() > 0.5) ? 'var(--accent-color)' : 'var(--highlight-color)';
+            const anim = animations[Math.floor(Math.random() * animations.length)];
+            particle.style.animation = `${anim} ${Math.random() * 10 + 5}s linear infinite`;
+            particle.style.transform = `translateZ(${Math.random() * 30}px)`;
+            container.appendChild(particle);
+          }
+        })();
+
+        // Interactividad: Movimiento de partículas en respuesta al mouse
+        document.addEventListener('mousemove', (event) => {
+          const mouseX = event.clientX;
+          const mouseY = event.clientY;
+          // Efecto parallax sutil sobre el contenedor de partículas
+          gsap.to("#particle-container", {
+            duration: 0.5,
+            x: (mouseX - window.innerWidth / 2) * 0.03,
+            y: (mouseY - window.innerHeight / 2) * 0.03,
+            ease: "power3.out"
+          });
+        });
+    </script>
+</body>
+</html>

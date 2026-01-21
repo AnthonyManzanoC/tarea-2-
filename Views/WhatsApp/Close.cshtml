@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Cerrar WhatsApp";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    :root {
+        --primary-color: #D4AF37; /* tono dorado lujoso */
+        --background-color: #141414;
+        --container-bg: rgba(255, 255, 255, 0.05);
+        --shadow-color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Fondo refinado y minimalista con sutil gradiente animado */
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #141414, #1f1f1f);
+        background-size: 200% 200%;
+        margin: 0;
+        padding: 0;
+        color: #fff;
+        overflow-x: hidden;
+        animation: backgroundFade 20s ease infinite;
+    }
+
+    @@keyframes backgroundFade {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* Contenedor translúcido, minimalista y lujoso */
+    .dashboard-container {
+        background: var(--container-bg);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 40px;
+        max-width: 500px;
+        margin: 80px auto;
+        text-align: center;
+        box-shadow: 0 10px 20px var(--shadow-color);
+        animation: containerEntrance 1.5s ease-out forwards;
+    }
+
+    @@keyframes containerEntrance {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Título con efecto de gradiente y glow sutil */
+    h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        background: linear-gradient(90deg, var(--primary-color), #fff);
+        background-size: 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textGlow 3s ease-in-out infinite;
+    }
+
+    @@keyframes textGlow {
+        0%, 100% {
+            filter: drop-shadow(0 0 4px var(--primary-color));
+        }
+
+        50% {
+            filter: drop-shadow(0 0 8px var(--primary-color));
+        }
+    }
+
+    /* Párrafo elegante y minimalista */
+    p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+    }
+
+    /* Botón lujoso, minimalista y avanzado con animaciones sutiles */
+    .btn-animated {
+        display: inline-block;
+        padding: 12px 30px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        border-radius: 50px;
+        background: transparent;
+        color: var(--primary-color);
+        border: 2px solid var(--primary-color);
+        transition: all 0.3s ease;
+        animation: buttonEntrance 1s ease-out forwards;
+    }
+
+    @@keyframes buttonEntrance {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .btn-animated:hover {
+        background: var(--primary-color);
+        color: var(--background-color);
+        transform: scale(1.05);
+    }
+
+    .btn-animated i {
+        margin-right: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .btn-animated:hover i {
+        transform: rotate(360deg);
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="dashboard-container p-4 text-center">
+        <h2 class="mb-4">Proceso de WhatsApp Finalizado</h2>
+        <p>La comunicación vía WhatsApp se ha facilitado correctamente.</p>
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-primary btn-animated">
+            <i class="fas fa-sign-out-alt"></i> Salir a Admin Dashboard
+        </a>
+    </div>
+</div>

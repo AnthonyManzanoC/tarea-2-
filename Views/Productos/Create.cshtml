@@ -1,0 +1,192 @@
+﻿@model CoronelExpress.Models.Product
+
+@{
+    ViewData["Title"] = "Crear Producto";
+}
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+    body {
+        font-family: 'Orbitron', sans-serif;
+        background: radial-gradient(circle, #020024, #090979, #00d4ff);
+        margin: 0;
+        padding: 0;
+        color: #e0e0e0;
+    }
+
+    .create-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 40px;
+        background: rgba(10, 10, 25, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 255, 255, 0.6);
+        animation: slideIn 1s ease-in-out;
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: #00ffe1;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+        .form-group label {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0 8px;
+            font-size: 0.9rem;
+            color: #00ffe1;
+            z-index: 10;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 12px 45px;
+            width: 100%;
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus,
+            .form-group textarea:focus,
+            .form-group select:focus {
+                border-color: #00ffe1;
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+                background: rgba(255, 255, 255, 0.2);
+                outline: none;
+            }
+
+        .form-group .icon {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #00ffe1;
+        }
+
+    .btn-primary {
+        display: block;
+        width: 100%;
+        background: linear-gradient(45deg, #00ffe1, #7a00ff);
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 1.2rem;
+        color: #fff;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.8);
+        }
+</style>
+
+<div class="create-container">
+    <h2>Crear Producto</h2>
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Name">Nombre</label>
+            <i class="icon">&#128221;</i>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description">Descripción</label>
+            <i class="icon">&#128196;</i>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Price">Precio</label>
+            <i class="icon">&#128176;</i>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Stock">Stock</label>
+            <i class="icon">&#128230;</i>
+            <input asp-for="Stock" class="form-control" />
+            <span asp-validation-for="Stock" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CategoryId">Categoría</label>
+            <i class="icon">&#128214;</i>
+            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control"></select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ImageUrl">Imagen</label>
+            <i class="icon">&#128247;</i>
+            <input asp-for="ImageUrl" class="form-control" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <!-- Campo para Producto de Canasta Básica -->
+        <div class="form-group">
+            <label asp-for="IsBasicBasket">Producto de Canasta Básica</label>
+            <i class="icon">&#10004;</i>
+            <input asp-for="IsBasicBasket" type="checkbox" style="width: auto; padding: 0;" />
+            <span asp-validation-for="IsBasicBasket" class="text-danger"></span>
+        </div>
+
+        <!-- Nuevo campo: Producto en Oferta -->
+        <div class="form-group">
+            <label asp-for="IsOnOffer">Producto en Oferta</label>
+            <i class="icon">&#128722;</i>
+            <input asp-for="IsOnOffer" type="checkbox" style="width: auto; padding: 0;" />
+            <span asp-validation-for="IsOnOffer" class="text-danger"></span>
+        </div>
+
+        <!-- Nuevo campo: Porcentaje de Descuento -->
+        <div class="form-group">
+            <label asp-for="DiscountPercentage">Porcentaje de Descuento (%)</label>
+            <i class="icon">&#128200;</i>
+            <input asp-for="DiscountPercentage" class="form-control" type="number" min="0" max="100" step="0.01" />
+            <span asp-validation-for="DiscountPercentage" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Crear</button>
+    </form>
+</div>
+
+@section Scripts {
+        @@await Html.RenderPartialAsync("_ValidationScriptsPartial")
+}

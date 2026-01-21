@@ -1,0 +1,428 @@
+﻿@using Microsoft.AspNetCore.Hosting
+@{
+    ViewData["Title"] = "Perfil";
+}
+@model ProfileViewModel
+
+<!-- Preloader Corporativo -->
+<div id="preloader" class="preloader">
+    <div class="loader"></div>
+</div>
+
+<!-- Contenedor Principal del Perfil (se muestra al finalizar la carga) -->
+<div class="profile-wrapper" style="display:none;">
+    <header class="profile-header">
+        <h2><i class="fas fa-user-circle"></i> Perfil de @Model.UserName</h2>
+        <p>@Model.Email</p><p>@Model.PhoneNumber</p><p>@Model.EmailConfirmed</p>
+    </header>
+
+    <div id="profileContainer" class="profile-image-container">
+        <img id="profileImage" src="@ViewBag.ProfileImagePath" alt="Foto de perfil" />
+    </div>
+
+
+
+        <div class="profile-details">
+            <h3>Bienvenido a tu espacio</h3>
+            <p>
+                Personaliza tu cuenta, comparte tus logros y disfruta de promociones exclusivas.
+                Experimenta la elegancia y sofisticación que solo Don Julio Super puede ofrecer.
+            </p>
+            <!-- Widgets o información adicional pueden agregarse aquí -->
+        </div>
+    </section>
+
+    <footer class="profile-actions">
+        <!-- Formulario para subir imagen vía AJAX -->
+        <input type="file" id="imageFile" accept="image/*" />
+        <button id="uploadBtn" class="btn btn-primary">
+            <i class="fas fa-upload"></i> Subir Imagen
+        </button>
+        <hr />
+        <!-- Botón para eliminar cuenta -->
+        <button class="btn btn-custom" onclick="confirmDelete()">
+            <i class="fas fa-user-times"></i> Eliminar Cuenta
+        </button>
+    </footer>
+</div>
+<!-- Sección para búsqueda de órdenes por número de cédula -->
+<!-- Sección para búsqueda de órdenes por RUC -->
+<section class="order-search-section" style="padding: 20px; background: #f9f9f9; margin-top: 20px;">
+    <h3><i class="fas fa-search"></i> Buscar Órdenes por Número de RUC</h3>
+    <div class="search-form" style="margin-bottom: 20px;">
+        <input type="text" id="rucInput" placeholder="Ingrese número de RUC" style="padding: 8px; width: 250px;" />
+        <button id="searchOrdersBtn" class="btn btn-primary" style="margin-left: 10px;">
+            <i class="fas fa-search"></i> Buscar
+        </button>
+    </div>
+    <div id="ordersResult">
+        <!-- Aquí se cargarán las órdenes tras la búsqueda -->
+    </div>
+</section>
+
+
+
+<!-- Modal de Confirmación Refinado (Encapsulado) -->
+<div id="deleteModal" class="modal-custom">
+    <div class="modal-custom-content">
+        <h2><i class="fas fa-exclamation-triangle"></i> Confirmación</h2>
+        <p>
+            ¿Estás seguro de eliminar tu cuenta? Esta acción es irreversible y perderás todos tus datos.
+        </p>
+        <div class="modal-custom-buttons">
+            <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+            <form id="deleteForm" method="post" action="@Url.Action("DeleteAccount", "Home")">
+                <button type="submit" class="btn-confirm">
+                    <i class="fas fa-check"></i> Sí, eliminar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* Importa Google Fonts y FontAwesome para un look refinado */
+        @@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        @@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+        /* Reset y tipografía */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Preloader refinado */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader {
+            border: 8px solid #e0e0e0;
+            border-top: 8px solid #b0883b; /* Acabado en dorado */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            0%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        /* Contenedor Principal */
+        .profile-wrapper {
+            max-width: 900px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .profile-header {
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            border-bottom: 2px solid #b0883b;
+        }
+
+            .profile-header h2 {
+                margin: 0;
+                font-size: 2rem;
+                font-weight: 500;
+            }
+
+            .profile-header p {
+                margin: 5px 0 0;
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+
+        .profile-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+
+        .profile-image-container {
+            flex: 1 1 250px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        #profileImage {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid #b0883b;
+            animation: fadeInScale 0.8s ease-in-out;
+        }
+
+        @@keyframes fadeInScale {
+            0%
+
+        {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        }
+
+        .profile-details {
+            flex: 2 1 400px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+            .profile-details h3 {
+                margin-top: 0;
+                font-weight: 700;
+                color: #1a1a1a;
+            }
+
+            .profile-details p {
+                font-size: 1rem;
+                margin: 10px 0;
+                color: #555;
+            }
+
+        .profile-actions {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: #b0883b;
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background: #8f6a2b;
+            }
+
+        .btn-custom {
+            background: #ff4b5c;
+            color: #fff;
+        }
+
+            .btn-custom:hover {
+                background: #e03e50;
+            }
+
+        /* Modal Encapsulado: Usamos clases únicas para aislar el estilo */
+        .modal-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-custom-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            animation: modalFadeIn 0.5s ease;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        @@keyframes modalFadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .modal-custom-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .modal-custom .btn-cancel,
+        .modal-custom .btn-confirm {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .modal-custom .btn-cancel {
+            background: #bbb;
+            color: #fff;
+        }
+
+        .modal-custom .btn-confirm {
+            background: #ff4b5c;
+            color: #fff;
+        }
+
+        /* Responsividad */
+        @@media (max-width: 768px) {
+            .profile-content
+
+        {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-details {
+            padding: 10px;
+            text-align: center;
+        }
+
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Oculta el preloader y muestra el perfil al cargar la página
+        window.addEventListener('load', function () {
+            document.getElementById('preloader').style.display = 'none';
+            document.querySelector('.profile-wrapper').style.display = 'block';
+        });
+
+               $(document).ready(function () {
+            $('#uploadBtn').click(function () {
+                var fileInput = $('#imageFile')[0];
+                if (fileInput.files.length === 0) {
+                    alert('Seleccione un archivo.');
+                    return;
+                }
+
+                var formData = new FormData();
+                formData.append('imageFile', fileInput.files[0]);
+
+                $.ajax({
+                    url: '/Profile/UploadImageAjax',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            // Actualiza la imagen de perfil sin recargar la página
+                            $('#profileImage').attr('src', response.imageUrl + "?t=" + new Date().getTime());
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error al subir la imagen.');
+                    }
+                });
+            });
+        });
+
+        // Funciones para mostrar y ocultar el modal encapsulado
+        function confirmDelete() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('#searchOrdersBtn').click(function(){
+                var ruc = $('#rucInput').val().trim();
+                if(ruc === ""){
+                    alert("Ingrese un número de RUC válido.");
+                    return;
+                }
+                $.ajax({
+                    url: '@Url.Action("SearchOrders", "Profile")',
+                    type: 'GET',
+                    data: { ruc: ruc },
+                    success: function(response){
+                        if(response.success){
+                            var ordersHtml = '<table class="table table-striped"><thead><tr><th>Número de Orden</th><th>Fecha</th><th>Total</th><th>Estatus</th></tr></thead><tbody>';
+                            $.each(response.orders, function(index, order){
+                                ordersHtml += '<tr>';
+                                ordersHtml += '<td>' + order.orderNumber + '</td>';
+                                ordersHtml += '<td>' + order.orderDate + '</td>';
+                                ordersHtml += '<td>' + order.totalAmount + '</td>';
+                                ordersHtml += '<td>' + order.status + '</td>';
+                                ordersHtml += '</tr>';
+                            });
+                            ordersHtml += '</tbody></table>';
+                            $('#ordersResult').html(ordersHtml);
+                        } else {
+                            $('#ordersResult').html('<p>' + response.message + '</p>');
+                        }
+                    },
+                    error: function(){
+                        alert("Error al buscar órdenes.");
+                    }
+                });
+            });
+        });
+    </script>
+}

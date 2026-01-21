@@ -1,0 +1,199 @@
+﻿@model CoronelExpress.Models.Category
+@{
+    ViewData["Title"] = "Eliminar Categoría";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    :root {
+        --primary-color: #ff4b5c;
+        --secondary-color: #ffffff;
+        --bg-color: #0d0d0d;
+        --container-bg: rgba(255, 255, 255, 0.08);
+        --border-color: rgba(255, 255, 255, 0.2);
+        --shadow-color: rgba(0, 0, 0, 0.7);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        animation: bgShift 20s ease infinite;
+    }
+
+    @@keyframes bgShift {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    .delete-container {
+        background: var(--container-bg);
+        backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 40px;
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 15px 30px var(--shadow-color);
+        animation: fadeInUp 1.5s ease-out forwards;
+    }
+
+    @@keyframes fadeInUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+        animation: textPulse 3s infinite;
+    }
+
+    @@keyframes textPulse {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    }
+
+    .delete-message {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        color: var(--secondary-color);
+    }
+
+    .category-name {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        animation: glowText 2s infinite alternate;
+    }
+
+    @@keyframes glowText {
+        0%
+
+    {
+        text-shadow: 0 0 5px var(--primary-color);
+    }
+
+    100% {
+        text-shadow: 0 0 15px var(--primary-color);
+    }
+
+    }
+
+    .btn-danger {
+        background: var(--primary-color);
+        border: none;
+        padding: 14px;
+        width: 100%;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+        .btn-danger:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+
+    .btn-secondary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: #111;
+        }
+
+    .warning-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        animation: rotateWarning 2s linear infinite alternate;
+    }
+
+    @@keyframes rotateWarning {
+        0%
+
+    {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(10deg);
+    }
+
+    }
+</style>
+
+<div class="delete-container">
+    <h2><i class="fas fa-exclamation-triangle warning-icon"></i> Eliminar Categoría</h2>
+
+    <p class="delete-message">¿Estás seguro de que deseas eliminar esta categoría?</p>
+    <p class="category-name">@Model.Name</p>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Eliminar Definitivamente
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary mt-3">
+            <i class="fas fa-arrow-left"></i> Cancelar
+        </a>
+    </form>
+</div>

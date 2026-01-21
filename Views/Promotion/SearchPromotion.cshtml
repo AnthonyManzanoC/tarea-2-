@@ -1,0 +1,339 @@
+﻿@model CoronelExpress.Models.Promotion
+
+@{
+    ViewData["Title"] = "Detalles de la Promoción";
+}
+<!-- Preloader -->
+<div id="preloader">
+    <div class="spinner"></div>
+</div>
+
+<!-- Estilos avanzados para un diseño lujoso, minimalista y corporativo -->
+<style>
+    :root {
+        --primary-color: #007bff;
+        --secondary-color: #6c757d;
+        --bg-start: #f8f9fa;
+        --bg-end: #e9ecef;
+        --card-bg: #ffffff;
+        --text-dark: #343a40;
+        --glow-color: rgba(0, 123, 255, 0.6);
+    }
+
+    body {
+        background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+        background-size: 400% 400%;
+        animation: gradientShift 10s ease infinite;
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        padding: 0;
+        color: var(--text-dark);
+    }
+
+    /* Preloader Styles */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid var(--primary-color);
+        border-top: 5px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
+    }
+
+    @@keyframes spin {
+        from
+
+    {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    @@keyframes pulse {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    }
+
+    /* Gradiente animado de fondo */
+    @@keyframes gradientShift {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    .container {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    /* Efecto de aparición */
+    @@keyframes fadeInUp {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .fadeInUp {
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Efecto glow en títulos */
+    @@keyframes headerGlow {
+        0%, 100%
+
+    {
+        text-shadow: 0 0 10px var(--glow-color);
+    }
+
+    50% {
+        text-shadow: 0 0 20px var(--glow-color);
+    }
+
+    }
+
+    .header-glow {
+        animation: headerGlow 3s infinite;
+    }
+
+    /* Tarjetas 3D lujosas */
+    .card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0px 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Tabla sin bordes con animación de fila */
+    .table-borderless th,
+    .table-borderless td {
+        vertical-align: middle;
+        padding: 0.75rem;
+    }
+
+    .table-borderless th {
+        font-weight: 600;
+        color: var(--secondary-color);
+    }
+
+    @@keyframes rowFade {
+        from
+
+    {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    }
+
+    .row-animate {
+        animation: rowFade 0.6s ease-out;
+    }
+
+    /* Mensajes de feedback */
+    .alert {
+        border-radius: 10px;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Botones con efecto de brillo, escalado y pulse */
+    .btn-animate {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-animate::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+
+        .btn-animate:hover::after {
+            left: 100%;
+        }
+
+        .btn-animate:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(0, 123, 255, 0.3);
+            animation: pulseBtn 1.5s infinite;
+        }
+
+    @@keyframes pulseBtn {
+        0%, 100%
+
+    {
+        transform: scale(1.05);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    }
+
+    /* Iconos con efecto de rotación */
+    .rotate-icon {
+        display: inline-block;
+        transition: transform 0.5s ease;
+    }
+
+        .rotate-icon:hover {
+            transform: rotate(360deg);
+        }
+
+    /* Estilo de inputs */
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+        transition: box-shadow 0.3s ease;
+    }
+</style>
+
+<!-- JavaScript para el preloader -->
+<script>
+    window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+        preloader.style.opacity = '0';
+        setTimeout(() => { preloader.style.display = 'none'; }, 500);
+    });
+</script>
+
+<div class="container">
+    <div class="text-center mb-4 fadeInUp">
+        <h2 class="header-glow">
+            <i class="fas fa-info-circle rotate-icon me-2"></i>Detalles de la Promoción
+        </h2>
+    </div>
+
+    @* Mensajes de feedback *@
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success fadeInUp">
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger fadeInUp">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (Model != null)
+    {
+        <div class="card shadow-sm fadeInUp">
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr class="row-animate">
+                        <th style="width:30%;"><i class="fas fa-key rotate-icon me-2"></i>Token:</th>
+                        <td>@Model.Token</td>
+                    </tr>
+                    <tr class="row-animate">
+                        <th><i class="fas fa-calendar-alt rotate-icon me-2"></i>Generada en:</th>
+                        <td>@Model.GeneratedOn.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    <tr class="row-animate">
+                        <th><i class="fas fa-user-check rotate-icon me-2"></i>Suscripción:</th>
+                        <td>@Model.Subscription</td>
+                    </tr>
+                    <tr class="row-animate">
+                        <th><i class="fas fa-gift rotate-icon me-2"></i>Premio:</th>
+                        <td>@Model.Prize</td>
+                    </tr>
+                </table>
+
+                @* Si el premio está pendiente, mostramos el botón para actualizar el estado *@
+                @if (Model.Prize.ToLower() == "pendiente")
+                {
+                    <form asp-action="ChangeStatus" method="post" class="mt-3 fadeInUp">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-success btn-lg btn-animate">
+                            <i class="fas fa-check rotate-icon me-2"></i> Marcar como Otorgado
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <div class="mt-3 fadeInUp">
+                        <span class="badge bg-success fs-5">Premio Otorgado</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning fadeInUp">
+            No se encontró ninguna promoción con este token.
+        </div>
+    }
+
+    <div class="mt-4 text-center fadeInUp">
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary btn-animate">
+            <i class="fas fa-home rotate-icon me-2"></i> Volver al Dashboard
+        </a>
+    </div>
+</div>

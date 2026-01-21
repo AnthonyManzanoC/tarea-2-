@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Preguntas Frecuentes";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"] - Comercial Don Julio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- GSAP para animaciones avanzadas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Sección Hero */
+        .hero {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+            .hero h1 {
+                font-size: 3.5rem;
+                margin-bottom: 20px;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+
+        /* Contenedor FAQ */
+        .faq-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .faq-item {
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+            .faq-item:hover {
+                transform: translateY(-5px);
+            }
+
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 500;
+            background: #e0e0e0;
+            position: relative;
+        }
+
+            .faq-question::after {
+                content: "+";
+                position: absolute;
+                right: 20px;
+                font-size: 1.5rem;
+                transition: transform 0.3s ease;
+            }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            padding: 20px;
+            font-size: 1rem;
+            display: none;
+            border-top: 1px solid #ccc;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sección Hero -->
+    <div class="hero">
+        <h1>Preguntas Frecuentes</h1>
+        <p>Encuentra respuestas a las preguntas más comunes sobre nuestros productos, servicios y procesos.</p>
+        <p>Nuestro compromiso es brindarte claridad y un servicio excepcional, dejando atrás a la competencia imitadora.</p>
+    </div>
+
+    <!-- Contenedor de FAQ -->
+    <div class="faq-container">
+        <!-- FAQ Item 1 -->
+        <div class="faq-item">
+            <div class="faq-question">¿Qué garantía ofrecen sus productos?</div>
+            <div class="faq-answer">Todos nuestros productos cuentan con una garantía de 2 años, además de soporte técnico 24/7 para resolver cualquier inconveniente.</div>
+        </div>
+        <!-- FAQ Item 2 -->
+        <div class="faq-item">
+            <div class="faq-question">¿Cómo hago el seguimiento de mi pedido?</div>
+            <div class="faq-answer">Recibirás un número de seguimiento en el correo de confirmación. También puedes verificar el estado de tu pedido ingresando a tu cuenta en nuestro sitio.</div>
+        </div>
+        <!-- FAQ Item 3 -->
+        <div class="faq-item">
+            <div class="faq-question">¿Realizan envíos internacionales?</div>
+            <div class="faq-answer">Sí, realizamos envíos a varios países. Los tiempos y costos de envío varían según la ubicación.</div>
+        </div>
+        <!-- FAQ Item 4 -->
+        <div class="faq-item">
+            <div class="faq-question">¿Qué métodos de pago aceptan?</div>
+            <div class="faq-answer">Aceptamos tarjetas de crédito, débito y diversas plataformas de pago online, además de opciones en efectivo en puntos autorizados.</div>
+        </div>
+        <!-- FAQ Item 5 -->
+        <div class="faq-item">
+            <div class="faq-question">¿Cómo puedo contactar con atención al cliente?</div>
+            <div class="faq-answer">Nuestro equipo de atención al cliente está disponible 24/7 a través de teléfono, correo electrónico o chat en línea.</div>
+        </div>
+    </div>
+
+    <script>
+        // Seleccionar todos los elementos FAQ
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+
+            question.addEventListener('click', () => {
+                if (item.classList.contains('active')) {
+                    // Cerrar el FAQ
+                    gsap.to(answer, { duration: 0.5, height: 0, opacity: 0, onComplete: () => {
+                        answer.style.display = 'none';
+                    }});
+                    item.classList.remove('active');
+                } else {
+                    // Abrir el FAQ
+                    answer.style.display = 'block';
+                    gsap.fromTo(answer, { height: 0, opacity: 0 }, { duration: 0.5, height: "auto", opacity: 1 });
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

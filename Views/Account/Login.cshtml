@@ -1,0 +1,367 @@
+﻿@{
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Fondo Cinematográfico Minimalista */
+    body {
+        background: linear-gradient(135deg, #141e30, #243b55);
+        font-family: 'Poppins', sans-serif;
+        color: #e0e0e0;
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: background 0.5s ease, color 0.5s ease;
+        padding: 20px;
+        perspective: 1000px;
+    }
+
+        body.dark-mode {
+            background: #0d0d0d;
+            color: #ccc;
+        }
+
+    /* Contenedor para las partículas de fondo */
+    #particles-js {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+    }
+
+    /* Preloader Cinematográfico */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #141e30;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    }
+
+    .preloader-circle {
+        width: 90px;
+        height: 90px;
+        border: 10px solid rgba(255,255,255,0.1);
+        border-top-color: #00e5ff;
+        border-radius: 50%;
+    }
+
+    /* Contenedor de Login Premium Deluxe 3D */
+    .login-container {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 60px 45px;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+        .login-container:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.7);
+        }
+        /* Efecto Parallax en el contenedor (opcional) */
+        .login-container .parallax {
+            will-change: transform;
+        }
+
+    /* Íconos flotantes elegantes */
+    .floating-icon {
+        position: absolute;
+        font-size: 45px;
+        color: rgba(0, 229, 255, 0.2);
+        animation: floatIcon 6s infinite alternate, rotateIcon 10s linear infinite;
+    }
+
+    .icon-top-left {
+        top: -15px;
+        left: -15px;
+    }
+
+    .icon-bottom-right {
+        bottom: -15px;
+        right: -15px;
+    }
+
+    @@keyframes floatIcon {
+        0%, 100%
+
+    {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(8px, 8px);
+    }
+
+    }
+
+    @@keyframes rotateIcon {
+        0%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    /* Ícono principal elegante */
+    .login-icon {
+        font-size: 60px;
+        color: #00e5ff;
+        margin-bottom: 25px;
+        animation: rotatePulse 4s ease-in-out infinite;
+    }
+
+    @@keyframes rotatePulse {
+        0%
+
+    {
+        transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1.1);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+
+    }
+
+    /* Título con entrada suave y efecto Glow */
+    h2 {
+        margin-bottom: 30px;
+        text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+        animation: fadeInDown 1s ease-out;
+        font-size: 2.5rem;
+    }
+
+    @@keyframes fadeInDown {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    /* Inputs con mayor legibilidad */
+    .input-wrapper {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #fff;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        padding: 12px 50px;
+        height: 50px;
+        font-size: 16px;
+        letter-spacing: 0.5px;
+    }
+
+        .form-control::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .form-control:focus {
+            border-color: #00e5ff;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+    .input-icon {
+        position: absolute;
+        font-size: 22px;
+        color: #00e5ff;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.8;
+        animation: iconRotate 3s infinite alternate;
+    }
+
+    @@keyframes iconRotate {
+        0%
+
+    {
+        transform: translateY(-50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(-50%) rotate(360deg);
+    }
+
+    }
+
+    /* Botón Neón Premium */
+    .btn-neon {
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: bold;
+        text-transform: uppercase;
+        background: linear-gradient(45deg, #00e5ff, #7a00ff);
+        border: none;
+        color: #fff;
+        box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-neon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.8);
+        }
+</style>
+
+<!-- Contenedor de Partículas de Fondo -->
+<div id="particles-js"></div>
+
+<!-- Preloader Cinematográfico -->
+<div id="preloader">
+    <div class="preloader-circle"></div>
+</div>
+
+<div class="login-container parallax" id="loginContainer">
+    <!-- Íconos flotantes -->
+    <i class="fas fa-cogs floating-icon icon-top-left"></i>
+    <i class="fas fa-cogs floating-icon icon-bottom-right"></i>
+
+    <!-- Ícono principal animado -->
+    <div class="login-icon">
+        <i class="fas fa-user-lock"></i>
+    </div>
+
+    <h2>Iniciar Sesión</h2>
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <div class="input-wrapper">
+            <label for="email" class="form-label">Correo</label>
+            <input type="text" name="email" id="email" class="form-control" placeholder="Ingrese su correo">
+            <i class="fas fa-envelope input-icon"></i>
+        </div>
+        <div class="input-wrapper">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Ingrese su contraseña">
+            <i class="fas fa-lock input-icon"></i>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="rememberMe" id="rememberMe" class="form-check-input">
+            <label class="form-check-label" for="rememberMe">Recordarme</label>
+        </div>
+        <div class="text-danger validation-summary-errors">
+            @Html.ValidationSummary()
+        </div>
+        <button type="submit" class="btn btn-neon">Iniciar Sesión</button>
+    </form>
+
+    <div class="mt-3">
+        <p>¿No tienes cuenta?</p>
+        <button type="button" class="btn btn-outline-light" onclick="location.href='@Url.Action("Register", "Account")'">
+            Regístrate aquí
+        </button>
+    </div>
+    <div class="mt-2">
+        <p><a asp-action="ForgotPassword" class="text-white text-decoration-underline">¿Olvidaste tu contraseña?</a></p>
+    </div>
+</div>
+
+<!-- (Opcional) Footer en Login -->
+<footer>
+    <p>© 2025 Don Julio Super | 
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+    // Configuración de Particles.js para un fondo dinámico y futurista
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+        "color": { "value": "#ffffff" },
+        "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+        "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
+        "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
+        "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+        "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": { "enable": true, "mode": "grab" },
+          "onclick": { "enable": true, "mode": "push" },
+          "resize": true
+        },
+        "modes": {
+          "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
+          "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+          "repulse": { "distance": 200, "duration": 0.4 },
+          "push": { "particles_nb": 4 },
+          "remove": { "particles_nb": 2 }
+        }
+      },
+      "retina_detect": true
+    });
+
+    // Preloader con animación cinematográfica
+    window.addEventListener('load', () => {
+        gsap.to("#preloader", {
+            duration: 1,
+            opacity: 0,
+            scale: 0.8,
+            ease: "power3.out",
+            onComplete: () => {
+                document.getElementById("preloader").style.display = "none";
+                // Animación de entrada para el contenedor de login
+                gsap.fromTo("#loginContainer", { opacity: 0, scale: 0.8, rotationY: -30 }, { opacity: 1, scale: 1, rotationY: 0, duration: 1, ease: "back.out(1.7)" });
+            }
+        });
+    });
+
+    // Efecto Parallax interactivo
+    const loginContainer = document.getElementById("loginContainer");
+    loginContainer.addEventListener("mousemove", (e) => {
+        const rect = loginContainer.getBoundingClientRect();
+        const posX = (e.clientX - rect.left - rect.width / 2) / 20;
+        const posY = (e.clientY - rect.top - rect.height / 2) / 20;
+        gsap.to(loginContainer, { duration: 0.3, rotationY: posX, rotationX: -posY, ease: "power3.out" });
+    });
+    loginContainer.addEventListener("mouseleave", () => {
+        gsap.to(loginContainer, { duration: 0.5, rotationY: 0, rotationX: 0, ease: "power3.out" });
+    });
+</script>

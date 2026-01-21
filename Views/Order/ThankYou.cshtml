@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "¡Gracias!";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    int orderId = ViewData["OrderId"] != null ? (int)ViewData["OrderId"] : 0;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <!-- Fuente Google para un look refinado -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset y estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #bbdefb, #e3f2fd);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 400px;
+            animation: fadeIn 1s ease-out;
+            position: relative;
+        }
+
+        .icon {
+            font-size: 4em;
+            color: #64b5f6;
+            margin-bottom: 20px;
+            animation: rotateIcon 3s infinite linear;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #1565c0;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1565c0;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            border-radius: 50px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+            a:hover {
+                background: #1e88e5;
+                transform: scale(1.05);
+            }
+
+            a i {
+                margin-right: 8px;
+                animation: bounceIcon 2s infinite ease-in-out;
+            }
+
+        /* Animaciones */
+        @@keyframes fadeIn {
+            0%
+
+        {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes rotateIcon {
+            0%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        @@keyframes bounceIcon {
+            0%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>¡Gracias por confirmar la entrega!</h1>
+        <p>Tu pedido con ID <strong>@orderId</strong> ha sido actualizado a <strong>completado</strong>.</p>
+        <p>Agradecemos tu preferencia y esperamos atenderte nuevamente.</p>
+        <a href="@Url.Action("Index", "Home")">
+            <i class="fas fa-check-circle"></i> Cerrar Operación
+        </a>
+    </div>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success animated fadeInUp">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger animated fadeInUp">@TempData["Error"]</div>
+    }
+</body>
+</html>

@@ -1,0 +1,158 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Políticas de Privacidad";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"] - Comercial Don Julio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- GSAP para animaciones -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f4f4f4;
+            color: #333;
+        }
+
+        /* Sección Hero */
+        .hero {
+            position: relative;
+            height: 50vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+        }
+
+            .hero h1 {
+                font-size: 3.5rem;
+                margin-bottom: 20px;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+        /* Contenedor Principal */
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Tabs de Política */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            background: #2a5298;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .tab:hover, .tab.active {
+                background: #1e3c72;
+            }
+
+        .tab-content {
+            display: none;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+            .tab-content.active {
+                display: block;
+                opacity: 1;
+                transform: translateY(0);
+            }
+    </style>
+</head>
+<body>
+    <!-- Sección Hero -->
+    <div class="hero">
+        <div>
+            <h1>Políticas de Privacidad</h1>
+            <p>Tu privacidad es fundamental. Protegemos tus datos con responsabilidad y seguridad.</p>
+        </div>
+    </div>
+
+    <!-- Contenedor de Políticas -->
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="uso">Uso de Datos</div>
+            <div class="tab" data-tab="seguridad">Seguridad</div>
+            <div class="tab" data-tab="cookies">Cookies</div>
+            <div class="tab" data-tab="derechos">Tus Derechos</div>
+        </div>
+
+        <!-- Contenido de cada tab -->
+        <div id="uso" class="tab-content active">
+            <h2>Uso de Datos</h2>
+            <p>Recopilamos datos personales únicamente para mejorar tu experiencia. No compartimos información sin tu consentimiento expreso.</p>
+        </div>
+
+        <div id="seguridad" class="tab-content">
+            <h2>Seguridad</h2>
+            <p>Implementamos medidas avanzadas de cifrado y protección para evitar accesos no autorizados a tu información.</p>
+        </div>
+
+        <div id="cookies" class="tab-content">
+            <h2>Cookies</h2>
+            <p>Utilizamos cookies para mejorar la funcionalidad del sitio y personalizar tu experiencia de navegación.</p>
+        </div>
+
+        <div id="derechos" class="tab-content">
+            <h2>Tus Derechos</h2>
+            <p>Puedes acceder, rectificar o eliminar tus datos en cualquier momento. Contacta con nosotros para ejercer tus derechos.</p>
+        </div>
+    </div>
+
+    <script>
+        // Animar entrada inicial
+        gsap.from(".tab-content.active", { opacity: 0, y: 20, duration: 0.5, ease: "power2.out" });
+
+        // Tabs Interactivas
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remover la clase activa de todas las tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Ocultar todo el contenido y mostrar el seleccionado con animación
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                let content = document.getElementById(this.getAttribute('data-tab'));
+                content.classList.add('active');
+
+                gsap.fromTo(content, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
+            });
+        });
+    </script>
+</body>
+</html>

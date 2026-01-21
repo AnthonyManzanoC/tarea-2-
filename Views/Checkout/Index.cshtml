@@ -1,0 +1,698 @@
+﻿@model CoronelExpress.Models.CheckoutViewModel
+@{
+    ViewData["Title"] = "Checkout";
+
+    // Calcular subtotal e IVA en el carrito (antes de confirmar el pedido)
+    decimal subtotal = 0;
+    decimal totalIva = 0;
+    foreach (var item in Model.CartItems)
+    {
+        // Cálculo del Precio Efectivo:
+        // Se asigna el precio original y se ajusta si el producto está en oferta.
+        decimal effectivePrice = item.Product.Price;
+        if (item.Product.IsOnOffer)
+        {
+            effectivePrice = effectivePrice * (1 - (item.Product.DiscountPercentage / 100m));
+        }
+
+        // Se utiliza effectivePrice para el cálculo de la línea.
+        decimal lineTotal = effectivePrice * item.Quantity;
+        subtotal += lineTotal;
+
+        // Si el producto NO es de canasta básica, se aplica IVA del 15%
+        if (!item.Product.IsBasicBasket)
+        {
+            totalIva += lineTotal * 0.15m;
+        }
+    }
+    decimal finalTotal = subtotal + totalIva;
+}
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+    /* ==================== PRELOADER ELEGANTE ==================== */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0f0c29;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        transition: opacity 0.5s ease, visibility 0.5s;
+    }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+    /* Círculo pulsante refinado */
+    .loader-circle {
+        width: 80px;
+        height: 80px;
+        border: 6px solid rgba(255,255,255,0.2);
+        border-top: 6px solid #00f0ff;
+        border-radius: 50%;
+        animation: spin 1.2s linear infinite, pulseCircle 2s infinite alternate;
+        margin-bottom: 20px;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @@keyframes pulseCircle {
+        0% {
+            box-shadow: 0 0 10px #00f0ff;
+        }
+
+        100% {
+            box-shadow: 0 0 25px #00f0ff;
+        }
+    }
+
+    .loader-text {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        color: #00f0ff;
+        text-shadow: 0 0 10px #00f0ff;
+        animation: neonFlicker 2s infinite alternate;
+    }
+
+    @@keyframes neonFlicker {
+        0% {
+            text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff;
+        }
+
+        100% {
+            text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff;
+        }
+    }
+
+    /* Animaciones básicas */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.05);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @@keyframes gradientShift {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    @@keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+    }
+    /* Glitch digital */
+    @@keyframes glitch {
+        0% {
+            clip: rect(42px, 9999px, 44px, 0);
+            transform: translate(0);
+        }
+
+        20% {
+            clip: rect(12px, 9999px, 80px, 0);
+            transform: translate(-5px, 5px);
+        }
+
+        40% {
+            clip: rect(52px, 9999px, 14px, 0);
+            transform: translate(5px, -5px);
+        }
+
+        60% {
+            clip: rect(22px, 9999px, 60px, 0);
+            transform: translate(-5px, 0);
+        }
+
+        80% {
+            clip: rect(32px, 9999px, 34px, 0);
+            transform: translate(5px, 5px);
+        }
+
+        100% {
+            clip: rect(42px, 9999px, 44px, 0);
+            transform: translate(0);
+        }
+    }
+    /* Giro y entrada */
+    @@keyframes rotateIn {
+        from {
+            opacity: 0;
+            transform: rotate(-360deg);
+        }
+
+        to {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+    }
+
+    @@keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    /* Cambio cíclico de colores */
+    @@keyframes colorCycle {
+        0% {
+            color: #00e5ff;
+        }
+
+        25% {
+            color: #7a00ff;
+        }
+
+        50% {
+            color: #ff0066;
+        }
+
+        75% {
+            color: #00ff99;
+        }
+
+        100% {
+            color: #00e5ff;
+        }
+    }
+    /* Zoom inicial */
+    @@keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    /* Glow pulsante para inputs */
+    @@keyframes glowPulse {
+        0% {
+            box-shadow: 0 0 5px rgba(0, 229, 255, 0.5);
+        }
+
+        50% {
+            box-shadow: 0 0 15px rgba(0, 229, 255, 1);
+        }
+
+        100% {
+            box-shadow: 0 0 5px rgba(0, 229, 255, 0.5);
+        }
+    }
+    /* Animación inteligente para iconos */
+    @@keyframes iconIntelli {
+        0% {
+            transform: scale(1) rotate(0deg);
+        }
+
+        50% {
+            transform: scale(1.2) rotate(180deg);
+        }
+
+        100% {
+            transform: scale(1) rotate(360deg);
+        }
+    }
+    /* Shake para interacciones */
+    @@keyframes shake {
+        0% {
+            transform: translate(1px, 1px) rotate(0deg);
+        }
+
+        10% {
+            transform: translate(-1px, -2px) rotate(-1deg);
+        }
+
+        20% {
+            transform: translate(-3px, 0px) rotate(1deg);
+        }
+
+        30% {
+            transform: translate(3px, 2px) rotate(0deg);
+        }
+
+        40% {
+            transform: translate(1px, -1px) rotate(1deg);
+        }
+
+        50% {
+            transform: translate(-1px, 2px) rotate(-1deg);
+        }
+
+        60% {
+            transform: translate(-3px, 1px) rotate(0deg);
+        }
+
+        70% {
+            transform: translate(3px, 1px) rotate(-1deg);
+        }
+
+        80% {
+            transform: translate(-1px, -1px) rotate(1deg);
+        }
+
+        90% {
+            transform: translate(1px, 2px) rotate(0deg);
+        }
+
+        100% {
+            transform: translate(1px, -2px) rotate(-1deg);
+        }
+    }
+    /* Wobble para mayor dinamismo */
+    @@keyframes wobble {
+        0% {
+            transform: translateX(0%);
+        }
+
+        15% {
+            transform: translateX(-25%) rotate(-5deg);
+        }
+
+        30% {
+            transform: translateX(20%) rotate(3deg);
+        }
+
+        45% {
+            transform: translateX(-15%) rotate(-3deg);
+        }
+
+        60% {
+            transform: translateX(10%) rotate(2deg);
+        }
+
+        75% {
+            transform: translateX(-5%) rotate(-1deg);
+        }
+
+        100% {
+            transform: translateX(0%);
+        }
+    }
+    /* Spin cycle para botones */
+    @@keyframes spinCycle {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    /* Neon flicker para textos */
+    @@keyframes neonFlicker {
+        0% {
+            text-shadow: 0 0 5px #fff, 0 0 10px #00e5ff;
+        }
+
+        50% {
+            text-shadow: 0 0 20px #fff, 0 0 30px #00e5ff;
+        }
+
+        100% {
+            text-shadow: 0 0 5px #fff, 0 0 10px #00e5ff;
+        }
+    }
+    /* Bounce para formularios */
+    @@keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+
+        40% {
+            transform: translateY(-30px);
+        }
+
+        60% {
+            transform: translateY(-15px);
+        }
+    }
+    /* Card hover para destacar tarjetas */
+    @@keyframes cardHover {
+        from {
+            transform: scale(1);
+        }
+
+        to {
+            transform: scale(1.03);
+        }
+    }
+
+    .checkout-container {
+        animation: fadeIn 0.8s ease-out, gradientShift 15s ease infinite;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        background-size: 400% 400%;
+        min-height: 100vh;
+        padding: 40px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .summary-card, .form-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+        width: 90%;
+        max-width: 800px;
+        animation: pulse 1.5s infinite ease-in-out, float 4s ease-in-out infinite, zoomIn 0.8s ease-out;
+        transition: transform 0.3s ease;
+    }
+
+        .summary-card:hover, .form-card:hover {
+            animation: cardHover 0.5s ease-out forwards;
+        }
+
+    .summary-header {
+        background: linear-gradient(135deg, #00e5ff, #7a00ff);
+        color: #fff;
+        padding: 15px;
+        border-radius: 15px 15px 0 0;
+        text-align: center;
+        font-size: 1.6rem;
+        font-weight: bold;
+        text-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+        animation: rotateIn 1s ease-out, colorCycle 5s infinite, neonFlicker 2s infinite;
+    }
+
+    .table {
+        margin-bottom: 0;
+        color: #fff;
+        animation: slideInLeft 1s ease-out;
+    }
+
+        .table thead th {
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .table tbody td {
+            text-align: center;
+            padding: 12px;
+        }
+
+        .table tbody tr:hover {
+            animation: shake 0.5s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    /* Formularios futuristas */
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+        animation: slideInLeft 1s ease-out;
+    }
+
+        .form-group label {
+            color: #00ffe1;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            padding-left: 45px;
+        }
+
+        /* Iconos con efecto inteligente y wobble */
+        .form-group .icon,
+        .summary-header .icon {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #00ffe1;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+            .form-group .icon:hover,
+            .summary-header .icon:hover {
+                animation: iconIntelli 1.5s ease-in-out, wobble 1.5s ease-in-out;
+                color: #ff00c1;
+            }
+
+    .form-control {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        padding: 12px 15px 12px 45px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #00e5ff;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+            outline: none;
+            animation: glowPulse 1.5s infinite;
+        }
+
+    .btn-futuristic {
+        background: linear-gradient(135deg, #00e5ff, #7a00ff);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-shadow: 0 0 5px rgba(0, 229, 255, 0.8);
+        position: relative;
+        overflow: hidden;
+        animation: pulse 1.5s infinite ease-in-out;
+    }
+
+        .btn-futuristic:hover {
+            transform: scale(1.1);
+            animation: spinCycle 1s linear;
+            box-shadow: 0 6px 15px rgba(0, 229, 255, 0.8), neonGlow 1s linear;
+        }
+
+        .btn-futuristic::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: skewX(-20deg);
+            transition: left 0.5s ease;
+        }
+
+        .btn-futuristic:hover::after {
+            left: 100%;
+        }
+    /* Efecto glitch en textos clave */
+    .glitch {
+        position: relative;
+        color: #fff;
+    }
+
+        .glitch:before, .glitch:after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0.8;
+        }
+
+        .glitch:before {
+            animation: glitch 2s infinite;
+            color: #ff00c1;
+        }
+
+        .glitch:after {
+            animation: glitch 3s infinite;
+            color: #00fff9;
+        }
+</style>
+<div id="preloader">
+    <div class="loader-circle"></div>
+    <div class="loader-text">CARGANDO PEDIDO...</div>
+</div>
+
+<div class="checkout-container">
+    <h2 class="text-center mb-4 glitch" data-text="Checkout">Checkout</h2>
+
+    @if (Model.CartItems != null && Model.CartItems.Any())
+    {
+        <div class="summary-card">
+            <div class="summary-header">
+                Resumen del Pedido <i class="icon fas fa-receipt" style="margin-left: 10px;"></i>
+            </div>
+            <div class="summary-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>V.Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CartItems)
+                        {
+                            // Cálculo del Precio Efectivo para cada producto
+                            decimal effectivePrice = item.Product.Price;
+                            if (item.Product.IsOnOffer)
+                            {
+                                effectivePrice = effectivePrice * (1 - (item.Product.DiscountPercentage / 100m));
+                            }
+                            <tr>
+                                <td data-label="Producto">@item.Product.Name</td>
+                                <td data-label="Precio">
+                                    @if (item.Product.IsOnOffer)
+                                    {
+                                        <span style="text-decoration: line-through;">@item.Product.Price.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</span>
+                                        <br />
+                                        <span>@effectivePrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</span>
+                                    }
+                                    else
+                                    {
+                                        @item.Product.Price.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"))
+                                    }
+                                </td>
+                                <td data-label="Cantidad">@item.Quantity</td>
+                                <td data-label="Subtotal">@((effectivePrice * item.Quantity).ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US")))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="mt-3 text-end">
+                    <p>Subtotal: @subtotal.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</p>
+                    <p>IVA (15%): @totalIva.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</p>
+                    <h4>Total: @finalTotal.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</h4>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No hay productos en el carrito.</div>
+    }
+
+    <div class="form-card">
+        <form asp-action="Index" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <i class="icon fas fa-user"></i>
+                <label for="FullName">Nombre Completo</label>
+                <input id="FullName" name="FullName" class="form-control" placeholder="Ingrese sus Nombres Y Apellidos" required />
+            </div>
+            <div class="form-group mb-3">
+                <i class="icon fas fa-envelope"></i>
+                <label for="Email">Correo Electrónico</label>
+                <input id="Email" name="Email" class="form-control" type="email" placeholder="Ingrese su Correo Electronico" required />
+            </div>
+            <div class="form-group mb-3">
+                <i class="icon fas fa-phone"></i>
+                <label for="Phone">Teléfono</label>
+                <input id="Phone" name="Phone" class="form-control" placeholder="Ingrese su Numero Telefonico" required />
+            </div>
+            <div class="form-group mb-3">
+                <i class="icon fas fa-map-marker-alt"></i>
+                <label for="Address">Dirección</label>
+                <input id="Address" name="Address" class="form-control" placeholder="Ingrese su Direccion Domiciliaria" required />
+            </div>
+            <!-- Nuevo campo para ingresar RUC/CI -->
+            <div class="form-group mb-3">
+                <i class="icon fas fa-id-card"></i>
+                <label for="RUC">RUC/CI</label>
+                <input id="RUC" name="RUC" class="form-control" placeholder="Ingrese su RUC/CI" required />
+            </div>
+            <div class="form-group mb-3">
+                <i class="icon fas fa-credit-card"></i>
+                <label for="PaymentMethodId">Método de Pago</label>
+                <select id="PaymentMethodId" name="PaymentMethodId" class="form-control">
+                    <option value="0">Seleccione un método de pago</option>
+                    @foreach (var method in Model.PaymentMethods)
+                    {
+                        <option value="@method.Id">@method.Method</option>
+                    }
+                </select>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn-futuristic">Realizar Pedido</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+<script>
+    // Preloader Elegante
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+        }, 600); // Espera un instante para disfrutar la animación
+    });
+</script>

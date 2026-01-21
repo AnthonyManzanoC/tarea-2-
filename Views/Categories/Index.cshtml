@@ -1,0 +1,163 @@
+﻿@model IEnumerable<CoronelExpress.Models.Category>
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<!-- Encabezado -->
+<div class="header-container">
+    <h2 class="title">📂 Categorías</h2>
+</div>
+
+<!-- Botones de acción -->
+<div class="button-group">
+    <a asp-action="Create" class="btn btn-primary animated-button">
+        ➕ Nueva Categoría
+    </a>
+    <a asp-controller="Productos" asp-action="Index" class="btn btn-outline-dark animated-button">
+        🛍️ Ir a Bodega
+    </a>
+</div>
+
+<!-- Tabla de Categorías -->
+<div class="table-container">
+    <table class="table custom-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr class="table-row">
+                    <td>@category.Id</td>
+                    <td>@category.Name</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@category.Id" class="btn btn-warning btn-sm animated-button">
+                            ✏️ Editar
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger btn-sm animated-button">
+                            ❌ Eliminar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Estilos CSS con fondo claro y diseño refinado -->
+<style>
+    /* Fondo de la página */
+    body {
+        background: linear-gradient(180deg, #f8f9fa, #ffffff);
+        color: #333;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Contenedor de encabezado */
+    .header-container {
+        text-align: center;
+        margin-bottom: 30px;
+        animation: fadeInDown 1s ease-in-out;
+    }
+
+    .title {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #2C3E50;
+        text-transform: uppercase;
+        text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Botones animados */
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .animated-button {
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+    }
+
+        .animated-button:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Estilos avanzados para la tabla */
+    .table-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .custom-table {
+        width: 90%;
+        max-width: 1000px;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #FFFFFF;
+        box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 1s ease-in-out;
+    }
+
+        .custom-table th {
+            background: #3498DB;
+            color: white;
+            text-transform: uppercase;
+            padding: 12px;
+        }
+
+        .custom-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+    .table-row:hover {
+        background: #E9ECEF;
+        transition: background 0.3s ease-in-out;
+    }
+
+    /* Animaciones avanzadas */
+    @@keyframes fadeInDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+</style>

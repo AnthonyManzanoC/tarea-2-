@@ -1,0 +1,181 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Derechos sobre Datos Personales";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"] - Comercial Don Julio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- GSAP para animaciones -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f2f2f2;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Sección Hero */
+        .hero {
+            position: relative;
+            height: 50vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+            .hero h1 {
+                font-size: 3.5rem;
+                margin-bottom: 20px;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+
+        /* Contenedor Principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Grid de Cards de Derechos */
+        .rights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .right-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+            .right-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .right-card-header {
+            background: #2a5298;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .right-card-body {
+            padding: 20px;
+            font-size: 1rem;
+            line-height: 1.6;
+            background: #f9f9f9;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sección Hero -->
+    <div class="hero">
+        <div>
+            <h1>Derechos sobre Datos Personales</h1>
+            <p>Conoce tus derechos y cómo protegemos tu información de forma ética y segura.</p>
+        </div>
+    </div>
+
+    <!-- Contenedor de Cards -->
+    <div class="container">
+        <div class="rights-grid">
+            <!-- Card 1: Derecho de Acceso -->
+            <div class="right-card">
+                <div class="right-card-header">Acceso</div>
+                <div class="right-card-body">
+                    <p>Tienes derecho a conocer qué datos personales tenemos sobre ti y cómo se usan.</p>
+                </div>
+            </div>
+            <!-- Card 2: Derecho de Rectificación -->
+            <div class="right-card">
+                <div class="right-card-header">Rectificación</div>
+                <div class="right-card-body">
+                    <p>Si tus datos son inexactos, puedes solicitar su corrección.</p>
+                </div>
+            </div>
+            <!-- Card 3: Derecho de Cancelación -->
+            <div class="right-card">
+                <div class="right-card-header">Cancelación</div>
+                <div class="right-card-body">
+                    <p>Tienes derecho a solicitar la eliminación de tus datos personales, salvo excepciones legales.</p>
+                </div>
+            </div>
+            <!-- Card 4: Derecho de Oposición -->
+            <div class="right-card">
+                <div class="right-card-header">Oposición</div>
+                <div class="right-card-body">
+                    <p>Puedes oponerte al tratamiento de tus datos cuando existan motivos legítimos.</p>
+                </div>
+            </div>
+            <!-- Card 5: Derecho de Portabilidad -->
+            <div class="right-card">
+                <div class="right-card-header">Portabilidad</div>
+                <div class="right-card-body">
+                    <p>Tienes derecho a recibir tus datos en un formato estructurado y reutilizable.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animar la entrada de las cards
+        gsap.from(".right-card", {
+            opacity: 0,
+            y: 50,
+            stagger: 0.2,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        // Función para alternar el despliegue de cada card con animación
+        document.querySelectorAll('.right-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const body = this.querySelector('.right-card-body');
+                if (body.style.display === 'block') {
+                    gsap.to(body, { duration: 0.5, height: 0, opacity: 0, onComplete: () => {
+                        body.style.display = 'none';
+                        body.style.height = 'auto';
+                    }});
+                } else {
+                    body.style.display = 'block';
+                    gsap.fromTo(body, { height: 0, opacity: 0 }, { duration: 0.5, height: "auto", opacity: 1 });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+﻿@{
+    Layout = "_Layout"; // o el layout que uses en el área de admin
+    var totalSales = (decimal)ViewBag.TotalSales;
+    var totalCollected = (decimal)ViewBag.TotalCollected;
+    var uniqueCustomers = (int)ViewBag.UniqueCustomers;
+    var profitOrLoss = (decimal)ViewBag.ProfitOrLoss;
+    var productsSold = ViewBag.ProductsSold as IEnumerable<dynamic>;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Reportes Inteligentes</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        :root {
+            --primary-color: #5dade2;
+            --primary-hover: #3498db;
+            --bg-white: #ffffff;
+            --bg-light: #f7f9fc;
+            --accent: #f1f1f1;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-light);
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+            .header h1 {
+                font-size: 3em;
+                margin-bottom: 10px;
+            }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            padding: 20px;
+            border-radius: 10px;
+            width: 22%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            margin: 10px 0;
+        }
+
+            .stat-card h2 {
+                font-size: 2em;
+                margin-bottom: 10px;
+            }
+
+        .btn-advanced {
+            display: block;
+            width: 250px;
+            margin: 0 auto 40px;
+            padding: 15px;
+            text-align: center;
+            background: var(--primary-color);
+            color: var(--bg-white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+            .btn-advanced:hover {
+                background: var(--primary-hover);
+                transform: translateY(-2px);
+            }
+
+        .loss-control {
+            background: var(--bg-white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+            .loss-control h3 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .loss-control ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            .loss-control li {
+                padding: 8px 0;
+                border-bottom: 1px dashed var(--accent);
+            }
+
+                .loss-control li:last-child {
+                    border-bottom: none;
+                }
+        /* Buscador en tiempo real: estilos básicos para la sección de reportes avanzados */
+        .search-box {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+            .search-box input[type="date"],
+            .search-box select {
+                padding: 10px;
+                margin: 5px;
+                border: 2px solid var(--accent);
+                border-radius: 5px;
+                font-size: 1em;
+            }
+
+            .search-box button {
+                padding: 10px 20px;
+                border: none;
+                background: var(--primary-color);
+                color: var(--bg-white);
+                border-radius: 5px;
+                font-size: 1em;
+                cursor: pointer;
+                transition: background 0.3s ease;
+                margin: 5px;
+            }
+
+                .search-box button:hover {
+                    background: var(--primary-hover);
+                }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .result-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--accent);
+        }
+
+            .result-item:last-child {
+                border-bottom: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Reportes Inteligentes</h1>
+            <!-- Opcionalmente, un botón para acceder a otra vista avanzada -->
+           
+        </div>
+        <div class="stats">
+            <div class="stat-card">
+                <h2>@totalSales.ToString("C")</h2>
+                <p>Total Ventas Hoy</p>
+            </div>
+            <div class="stat-card">
+                <h2>@totalCollected.ToString("C")</h2>
+                <p>Cobranza Hoy</p>
+            </div>
+            <div class="stat-card">
+                <h2>@uniqueCustomers</h2>
+                <p>Clientes Únicos</p>
+            </div>
+            <div class="stat-card">
+                <h2>@(profitOrLoss >= 0 ? profitOrLoss.ToString("C") : "(" + Math.Abs(profitOrLoss).ToString("C") + ")")</h2>
+                <p>@(profitOrLoss >= 0 ? "Ganancia" : "Pérdida")</p>
+            </div>
+        </div>
+        <div class="loss-control">
+            <h3>Detalle de Productos Vendidos Hoy</h3>
+            <ul>
+                @if (productsSold != null)
+                {
+                    foreach (var item in productsSold)
+                    {
+                        <li><strong>@item.ProductName</strong>: @item.TotalQuantity unidades</li>
+                    }
+                }
+            </ul>
+        </div>
+
+        <!-- Sección adicional: Buscador en tiempo real para reportes avanzados -->
+        <div class="search-box">
+            <input type="date" id="reportDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+            <select id="transactionType">
+                <option value="Ventas">Ventas</option>
+                <option value="Cobranza">Cobranza</option>
+            </select>
+            <button id="btnSearch"><i class="fas fa-search"></i> Buscar</button>
+        </div>
+        <div class="results" id="resultsContainer">
+            <!-- Resultados cargados vía AJAX -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('btnSearch').addEventListener('click', function () {
+            let date = document.getElementById('reportDate').value;
+            let transactionType = document.getElementById('transactionType').value;
+            let url = `/Reports/GetDailyReportData?date=${date}&transactionType=${transactionType}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let container = document.getElementById('resultsContainer');
+                    container.innerHTML = "";
+                    if (data.success && data.data.length > 0) {
+                        data.data.forEach(item => {
+                            let div = document.createElement('div');
+                            div.classList.add('result-item');
+                            if (transactionType === "Ventas") {
+                                div.innerHTML = `<strong>Pedido:</strong> ${item.orderNumber} | <strong>Cliente:</strong> ${item.customer} | <strong>Total:</strong> ${parseFloat(item.totalAmount).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })} | <strong>Estado:</strong> ${item.status}`;
+                            } else if (transactionType === "Cobranza") {
+                                div.innerHTML = `<strong>Orden:</strong> ${item.orderId} | <strong>Monto:</strong> ${parseFloat(item.amount).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })} | <strong>Método:</strong> ${item.paymentMethod}`;
+                            }
+                            container.appendChild(div);
+                        });
+                    } else {
+                        container.innerHTML = "<p>No se encontraron registros para la fecha indicada.</p>";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>

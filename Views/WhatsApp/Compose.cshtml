@@ -1,0 +1,274 @@
+﻿@{
+    ViewData["Title"] = "Enviar WhatsApp";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    :root {
+        --primary-color: #25d366;
+        --shadow-color: rgba(0, 0, 0, 0.5);
+        --bg-overlay: rgba(255, 255, 255, 0.1);
+        --text-gradient: linear-gradient(90deg, #25d366, #17a673, #25d366);
+    }
+
+    /* Fondo ultra avanzado: gradiente animado con overlay de ruido sutil */
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(45deg, #000000, #e1e9f0, #000000);
+        background-size: 600% 600%;
+        color: #333;
+        overflow-x: hidden;
+        animation: bgUltraPulse 20s ease infinite;
+        position: relative;
+    }
+
+    @@keyframes bgUltraPulse {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23noise)"/></svg>') repeat;
+        opacity: 0.05;
+        pointer-events: none;
+        animation: noiseFlow 10s steps(10) infinite;
+    }
+
+    @@keyframes noiseFlow {
+        0%
+
+    {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-10%, 10%);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+
+    }
+
+    /* Contenedor ultra elegante: 3D, translúcido, con blur y glow */
+    .dashboard-container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px var(--shadow-color);
+        border: 1px solid rgba(255,255,255,0.3);
+        max-width: 600px;
+        margin: auto;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        animation: containerUltra 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        position: relative;
+        z-index: 2;
+    }
+
+    @@keyframes containerUltra {
+        0%
+
+    {
+        opacity: 0;
+        transform: perspective(1000px) translateY(50px) rotateX(10deg) scale(0.95);
+    }
+
+    60% {
+        opacity: 0.8;
+        transform: perspective(1000px) translateY(-10px) rotateX(-2deg) scale(1.02);
+    }
+
+    100% {
+        opacity: 1;
+        transform: perspective(1000px) translateY(0) rotateX(0deg) scale(1);
+    }
+
+    }
+
+    /* Título ultra avanzado con gradiente y efecto shimmer */
+    h2 {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 40px;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        background: var(--text-gradient);
+        background-size: 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: titleUltraShimmer 3s ease-in-out infinite;
+    }
+
+    @@keyframes titleUltraShimmer {
+        0%
+
+    {
+        background-position: 0%;
+    }
+
+    50% {
+        background-position: 100%;
+    }
+
+    100% {
+        background-position: 0%;
+    }
+
+    }
+
+    /* Controles de formulario refinados */
+    .form-label {
+        font-weight: 500;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid rgba(0,0,0,0.1);
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+        }
+
+    /* Botón ultra avanzado con animaciones y efecto glitch en el icono */
+    .btn-animated {
+        background-color: var(--primary-color);
+        border: none;
+        border-radius: 50px;
+        padding: 14px 28px;
+        font-size: 1rem;
+        color: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        animation: btnUltraPulse 3s ease-in-out infinite;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @@keyframes btnUltraPulse {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    }
+
+    .btn-animated:hover {
+        transform: scale(1.1) rotate(-3deg);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-animated i {
+        display: inline-block;
+        animation: rotateUltra 2s linear infinite, iconGlitch 2.5s infinite;
+    }
+
+    @@keyframes rotateUltra {
+        0%
+
+    {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(90deg) scale(1.1);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(0.9);
+    }
+
+    75% {
+        transform: rotate(270deg) scale(1.05);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+
+    }
+
+    @@keyframes iconGlitch {
+        0%
+
+    {
+        text-shadow: 2px 2px 0 var(--primary-color), -2px -2px 0 var(--primary-color);
+    }
+
+    20% {
+        text-shadow: -2px 2px 0 var(--primary-color), 2px -2px 0 var(--primary-color);
+    }
+
+    40% {
+        text-shadow: 2px -2px 0 var(--primary-color), -2px 2px 0 var(--primary-color);
+    }
+
+    60% {
+        text-shadow: -2px -2px 0 var(--primary-color), 2px 2px 0 var(--primary-color);
+    }
+
+    80% {
+        text-shadow: 2px 2px 0 var(--primary-color), -2px -2px 0 var(--primary-color);
+    }
+
+    100% {
+        text-shadow: -2px 2px 0 var(--primary-color), 2px -2px 0 var(--primary-color);
+    }
+
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="dashboard-container">
+        <h2>Enviar WhatsApp</h2>
+        <form asp-action="Send" method="post">
+            <div class="mb-3">
+                <label for="Telefono" class="form-label">Teléfono (Opcional)</label>
+                <input type="text" class="form-control" id="Telefono" name="Telefono" placeholder="+1234567890" />
+                <small class="text-muted">Si dejas el campo vacío se abrirá WhatsApp Web general.</small>
+            </div>
+            <div class="mb-3">
+                <label for="Mensaje" class="form-label">Mensaje (Opcional)</label>
+                <textarea class="form-control" id="Mensaje" name="Mensaje" rows="4" placeholder="Escribe el mensaje aquí..."></textarea>
+                <small class="text-muted">El mensaje es opcional.</small>
+            </div>
+            <button type="submit" class="btn btn-success btn-animated">
+                <i class="fab fa-whatsapp"></i> Abrir WhatsApp
+            </button>
+        </form>
+    </div>
+</div>

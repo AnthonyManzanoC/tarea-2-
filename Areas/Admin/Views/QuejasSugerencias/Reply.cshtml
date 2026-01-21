@@ -1,0 +1,158 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model CoronelExpress.Controllers.Admin.QuejasSugerenciasController.ReplyViewModel
+
+@{
+    ViewData["Title"] = "Responder Mensaje";
+}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #1e1e2f, #282c3f);
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 600px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 1s ease-out;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 2em;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: slideIn 0.8s ease-out;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        font-weight: 600;
+    }
+
+    input[type='text'], textarea {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+    }
+
+    input[readonly] {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    button.btn-submit {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        background: #17a2b8;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        button.btn-submit:hover {
+            background: #138496;
+            transform: scale(1.05);
+        }
+
+    .btn-exit {
+        display: block;
+        width: 100px;
+        margin: 20px auto 0;
+        text-align: center;
+        background: #6c757d;
+        color: white;
+        padding: 10px 0;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+        .btn-exit:hover {
+            background: #5a6268;
+            transform: scale(1.1);
+        }
+
+    .icon {
+        font-size: 16px;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .btn-submit:hover .icon, .btn-exit:hover .icon {
+        transform: rotate(360deg);
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
+
+<div class="container">
+    <h2>Responder Mensaje</h2>
+    <form asp-action="Reply" asp-controller="QuejasSugerencias" method="post">
+        <input type="hidden" asp-for="ContactId" />
+        <div>
+            <label>Email:</label>
+            <input type="text" asp-for="Email" readonly />
+        </div>
+        <div>
+            <label>Mensaje:</label>
+            <textarea asp-for="Message" rows="6"></textarea>
+            <span asp-validation-for="Message" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn-submit">
+            <i class="icon fas fa-paper-plane"></i> Enviar
+        </button>
+    </form>
+    <a asp-action="Index" asp-controller="QuejasSugerencias" asp-area="Admin" class="btn-exit">
+        <i class="icon fas fa-arrow-left"></i> Regresar
+    </a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

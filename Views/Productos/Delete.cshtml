@@ -1,0 +1,105 @@
+﻿@model CoronelExpress.Models.Product
+
+@{
+    ViewData["Title"] = "Eliminar Producto";
+}
+
+<div class="delete-container">
+    <h2 class="title-glow">⚠️ Eliminar Producto</h2>
+
+    <h3 class="warning-text">¿Estás seguro de que quieres eliminar este producto?</h3>
+
+    <div class="product-card">
+        <h4>Detalles del Producto</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">📌 Nombre</dt>
+            <dd class="col-sm-8">@Model.Name</dd>
+
+            <dt class="col-sm-4">📖 Descripción</dt>
+            <dd class="col-sm-8">@Model.Description</dd>
+
+            <dt class="col-sm-4">💰 Precio</dt>
+            <dd class="col-sm-8">@Model.Price.ToString("C")</dd>
+
+            <dt class="col-sm-4">📦 Stock</dt>
+            <dd class="col-sm-8">@Model.Stock</dd>
+        </dl>
+    </div>
+
+    <form asp-action="Delete" method="post" class="form-buttons">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn neon-btn-red">🔥 Eliminar</button>
+        <a asp-action="Index" class="btn neon-btn-blue">⬅️ Cancelar</a>
+    </form>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        color: #ffffff;
+        font-family: 'Orbitron', sans-serif;
+    }
+
+    .delete-container {
+        max-width: 600px;
+        margin: auto;
+        text-align: center;
+        padding: 20px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+
+    .title-glow {
+        text-shadow: 0 0 10px #00fff7, 0 0 20px #00fff7;
+    }
+
+    .warning-text {
+        color: #ff4040;
+        font-weight: bold;
+    }
+
+    .product-card {
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .form-buttons {
+        margin-top: 20px;
+    }
+
+    .neon-btn-red {
+        background: #ff073a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-shadow: 0 0 10px #ff073a;
+        box-shadow: 0 0 10px #ff073a;
+        transition: 0.3s;
+    }
+
+        .neon-btn-red:hover {
+            box-shadow: 0 0 20px #ff073a;
+        }
+
+    .neon-btn-blue {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-shadow: 0 0 10px #007bff;
+        box-shadow: 0 0 10px #007bff;
+        transition: 0.3s;
+    }
+
+        .neon-btn-blue:hover {
+            box-shadow: 0 0 20px #007bff;
+        }
+</style>
+

@@ -1,0 +1,77 @@
+﻿@model CoronelExpress.Models.Product
+
+@{
+    ViewData["Title"] = "Detalles del Producto";
+}
+
+<div class="details-container">
+    <h2 class="title-glow">📦 Detalles del Producto</h2>
+
+    <div class="product-card">
+        <dl class="row">
+            <dt class="col-sm-4">📌 Nombre</dt>
+            <dd class="col-sm-8">@Model.Name</dd>
+
+            <dt class="col-sm-4">📖 Descripción</dt>
+            <dd class="col-sm-8">@Model.Description</dd>
+
+            <dt class="col-sm-4">💰 Precio</dt>
+            <dd class="col-sm-8">@Model.Price.ToString("C")</dd>
+
+            <dt class="col-sm-4">📦 Stock</dt>
+            <dd class="col-sm-8">@Model.Stock</dd>
+
+            <dt class="col-sm-4">📂 Categoría</dt>
+            <dd class="col-sm-8">@Model.Category?.Name</dd>
+
+            <dt class="col-sm-4">🖼️ Imagen</dt>
+            <dd class="col-sm-8">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.Name" class="product-image" />
+                }
+            </dd>
+        </dl>
+    </div>
+
+    <div class="form-buttons">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn neon-btn-green">✏️ Editar</a>
+        <a asp-action="Index" class="btn neon-btn-blue">⬅️ Volver al listado</a>
+    </div>
+</div>
+
+<style>
+    .details-container {
+        max-width: 600px;
+        margin: auto;
+        text-align: center;
+        padding: 20px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+
+    .product-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+
+    .neon-btn-green {
+        background: #0f0;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-shadow: 0 0 10px #0f0;
+        box-shadow: 0 0 10px #0f0;
+        transition: 0.3s;
+    }
+
+        .neon-btn-green:hover {
+            box-shadow: 0 0 20px #0f0;
+        }
+</style>
+

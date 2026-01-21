@@ -1,0 +1,392 @@
+﻿@model CoronelExpress.Models.Order
+@{
+    ViewData["Title"] = "Enviar Factura por Email";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.11.3/framer-motion.umd.min.js"></script>
+
+<style>
+    /* ==================== FONDO CORPORATIVO-FUTURISTA ==================== */
+    body {
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        background-size: 300% 300%;
+        animation: bgPulse 20s infinite alternate ease-in-out;
+        font-family: 'Poppins', sans-serif;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden; /* Evita scrollbars innecesarias */
+    }
+
+    @@keyframes bgPulse {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* ==================== PRELOADER ELEGANTE ==================== */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0f0c29;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        transition: opacity 0.5s ease, visibility 0.5s;
+    }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+    /* Círculo pulsante refinado */
+    .loader-circle {
+        width: 80px;
+        height: 80px;
+        border: 6px solid rgba(255,255,255,0.2);
+        border-top: 6px solid #00f0ff;
+        border-radius: 50%;
+        animation: spin 1.2s linear infinite, pulseCircle 2s infinite alternate;
+        margin-bottom: 20px;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @@keyframes pulseCircle {
+        0% {
+            box-shadow: 0 0 10px #00f0ff;
+        }
+
+        100% {
+            box-shadow: 0 0 25px #00f0ff;
+        }
+    }
+
+    .loader-text {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        color: #00f0ff;
+        text-shadow: 0 0 10px #00f0ff;
+        animation: neonFlicker 2s infinite alternate;
+    }
+
+    @@keyframes neonFlicker {
+        0% {
+            text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff;
+        }
+
+        100% {
+            text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff;
+        }
+    }
+
+    /* ==================== TARJETA HOLOGRÁFICA INTELIGENTE ==================== */
+    .glass-card {
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        padding: 30px;
+        transition: all 0.4s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        animation: cardEnter 1s ease forwards;
+    }
+
+    @@keyframes cardEnter {
+        0% {
+            transform: translateY(30px) scale(0.95);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+    }
+
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent);
+        animation: moveGlow 6s infinite linear;
+    }
+
+    @@keyframes moveGlow {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* ==================== BOTONES NEÓN AVANZADOS ==================== */
+    .btn-neon {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 50px;
+        color: white;
+        background: linear-gradient(45deg, #00e5ff, #7a00ff);
+        box-shadow: 0 0 15px #00e5ff;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+        .btn-neon:hover {
+            box-shadow: 0 0 25px #7a00ff;
+            transform: scale(1.05);
+        }
+
+    /* ==================== INPUTS CON EFECTO NEÓN ==================== */
+    .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .form-control:focus {
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            border-color: #00e5ff;
+        }
+
+    /* ==================== MENSAJES DE ALERTA (con animaciones 3D) ==================== */
+    .alert {
+        animation: fadeInUp 0.8s ease forwards;
+        position: relative;
+        overflow: visible;
+    }
+
+    @@keyframes fadeInUp {
+        0% {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* ==================== ÍCONOS 3D que entran desde distintos lados ==================== */
+    .transport-icon {
+        margin-left: 10px;
+        display: inline-block;
+        opacity: 0;
+        transform-style: preserve-3d;
+        position: relative;
+    }
+    /* 1) Cohete: sale del lado izquierdo en 3D */
+    .rocket-icon {
+        animation: rocketFly3D 2s ease-in-out 1s forwards;
+    }
+
+    @@keyframes rocketFly3D {
+        0% {
+            transform: translate3d(-50px, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate3d(300px, -80px, 50px) rotateX(45deg) rotateY(90deg) rotateZ(180deg) scale(0.7);
+            opacity: 0;
+        }
+    }
+    /* 2) Avión: sale del lado derecho */
+    .plane-icon {
+        animation: planeFly3D 2s ease-in-out 2s forwards; /* inicia 2s después */
+    }
+
+    @@keyframes planeFly3D {
+        0% {
+            transform: translate3d(50px, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate3d(-300px, -80px, 80px) rotateX(60deg) rotateY(120deg) rotateZ(180deg) scale(0.7);
+            opacity: 0;
+        }
+    }
+    /* 3) Tráiler: entra por la izquierda */
+    .trailer-icon {
+        animation: trailerDrive3D 2s ease-in-out 3s forwards;
+    }
+
+    @@keyframes trailerDrive3D {
+        0% {
+            transform: translate3d(-80px, 50px, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate3d(250px, -100px, 60px) rotateX(40deg) rotateY(80deg) rotateZ(90deg) scale(0.6);
+            opacity: 0;
+        }
+    }
+    /* 4) Tren: entra también por la izquierda */
+    .train-icon {
+        animation: trainMove3D 2s ease-in-out 4s forwards;
+    }
+
+    @@keyframes trainMove3D {
+        0% {
+            transform: translate3d(-120px, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate3d(300px, -120px, 100px) rotateX(50deg) rotateY(100deg) rotateZ(180deg) scale(0.5);
+            opacity: 0;
+        }
+    }
+    /* 5) Barco: llega por la derecha */
+    .ship-icon {
+        animation: shipSail3D 2s ease-in-out 5s forwards;
+    }
+
+    @@keyframes shipSail3D {
+        0% {
+            transform: translate3d(80px, 20px, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate3d(-300px, -150px, 120px) rotateX(60deg) rotateY(120deg) rotateZ(270deg) scale(0.4);
+            opacity: 0;
+        }
+    }
+</style>
+
+<div id="preloader">
+    <div class="loader-circle"></div>
+    <div class="loader-text">CARGANDO...</div>
+</div>
+
+<div class="container">
+    <div class="glass-card">
+        <h2 class="mb-4">🚀 Enviar Factura por Email</h2>
+
+        <!-- Mensajes de éxito o error -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Success"]
+                <!-- Secuencia de 5 íconos con distintas animaciones 3D -->
+                <i class="fa-solid fa-rocket transport-icon rocket-icon"></i>
+                <i class="fa-solid fa-plane transport-icon plane-icon"></i>
+                <i class="fa-solid fa-truck transport-icon trailer-icon"></i>
+                <i class="fa-solid fa-train transport-icon train-icon"></i>
+                <i class="fa-solid fa-ship transport-icon ship-icon"></i>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+
+        <!-- Formulario para enviar la factura -->
+        <form asp-controller="Order" asp-action="SendInvoiceEmail" method="post" class="mt-4">
+            <input type="hidden" name="orderId" value="@Model.Id" />
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" name="email" id="email" required placeholder=" Para Completar el Pedido Ingrese su Correo" />
+                <label for="email">Correo Electrónico</label>
+            </div>
+
+            <button type="submit" class="btn btn-neon">
+                Enviar Factura
+            </button>
+        </form>
+
+        <!-- Botón para ir a la vista de factura finalizada -->
+        @if (TempData["Success"] != null)
+        {
+            <!-- Si se envió la factura con éxito, mostramos el enlace habilitado -->
+            <a href="@Url.Action("FinalizedInvoice", "Order", new { id = Model.Id })"
+               class="btn btn-neon mt-3">
+                Finalizar Transaccion
+            </a>
+        }
+        else
+        {
+            <!-- Si no hay "Success", mostramos el botón deshabilitado -->
+            <a href="javascript:void(0)"
+               class="btn btn-neon mt-3 disabled-link"
+               onclick="return false;">
+                Ver Factura Finalizada
+            </a>
+        }
+
+</div>
+
+<script>
+    // Preloader Elegante
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+        }, 600); // Espera un instante para disfrutar la animación
+    });
+</script>

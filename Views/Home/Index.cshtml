@@ -1,0 +1,1792 @@
+﻿@model IEnumerable<CoronelExpress.Models.Product>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Inicio";
+    // Función para generar una clase de CSS a partir del nombre de la categoría
+    Func<string, string> categoryClass = cat => "cat-" + cat.ToLower().Replace(" ", "-");
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Swiper CSS para el Hero Carousel -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <!-- GSAP y ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #3bb2b8;
+            --accent-color: #42e695;
+            --text-color: #121212;
+            --overlay-color: rgba(255, 255, 255, 0.55);
+            --glow-color: rgba(66, 230, 149, 0.8);
+        }
+        /* REGLAS GENERALES */
+        body {
+            background-color: #fff;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            scroll-behavior: smooth;
+        }
+
+            body.dark-mode {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+        /* PRELOADER */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 8px solid rgba(255,255,255,0.3);
+            border-top: 8px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        /* BOTÓN DARK MODE */
+        #darkModeToggle {
+            position: fixed;
+            top: 130px;
+            right: 20px;
+            z-index: 1500;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+            #darkModeToggle:hover {
+                transform: scale(1.05);
+            }
+        /* HERO CAROUSEL CON SWIPER 3D */
+        .swiper {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .swiper-slide {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            animation: slideEntrance 1s ease-out forwards;
+        }
+
+        @@keyframes slideEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(50px) rotateX(10deg);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-color);
+            backdrop-filter: blur(3px);
+            z-index: 1;
+            animation: overlayPulse 4s ease-in-out infinite alternate;
+        }
+
+        @@keyframes overlayPulse {
+            from {
+                opacity: 0.55;
+            }
+
+            to {
+                opacity: 0.65;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            animation: textTilt 2s ease-in-out infinite alternate;
+        }
+
+        @@keyframes textTilt {
+            from {
+                transform: perspective(600px) rotateX(0deg);
+            }
+
+            to {
+                transform: perspective(600px) rotateX(4deg);
+            }
+        }
+
+        .glow-text {
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @@keyframes textGlow {
+            from {
+                text-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
+            }
+
+            to {
+                text-shadow: 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
+            }
+        }
+        /* ICONOS Y EMOJIS FLOTANTES */
+        .floating-icon, .floating-emoji {
+            position: absolute;
+            animation: floatAdvanced 6s ease-in-out infinite, pulse 2.5s infinite;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+        }
+
+        .floating-icon {
+            color: var(--accent-color);
+            font-size: 3rem;
+            opacity: 0.85;
+        }
+
+        .floating-emoji {
+            font-size: 2.5rem;
+            opacity: 0.9;
+        }
+
+        .icon-pos-1 {
+            top: 10%;
+            left: 5%;
+            animation-duration: 7s;
+        }
+
+        .icon-pos-2 {
+            top: 20%;
+            right: 10%;
+            animation-duration: 6s;
+        }
+
+        .icon-pos-3 {
+            bottom: 15%;
+            left: 20%;
+            animation-duration: 8s;
+        }
+
+        .icon-pos-4 {
+            top: 50%;
+            right: 20%;
+            animation-duration: 7s;
+        }
+
+        .emoji-pos-1 {
+            top: 75%;
+            left: 50%;
+        }
+
+        .emoji-pos-2 {
+            top: 65%;
+            right: 40%;
+        }
+
+        .emoji-pos-3 {
+            bottom: 20%;
+            left: 40%;
+        }
+
+        @@keyframes floatAdvanced {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(8deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        @@keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+        /* BOTONES NEÓN Y RIPPLES */
+        .btn-neon {
+            font-size: 1.2rem;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: #fff;
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+            box-shadow: 0 0 20px rgba(66,230,149,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-neon::before {
+                content: '';
+                position: absolute;
+                top: -10px;
+                left: -10px;
+                right: -10px;
+                bottom: -10px;
+                border-radius: 50px;
+                background: rgba(255,255,255,0.2);
+                z-index: -1;
+                opacity: 0;
+                transition: opacity 0.4s ease;
+            }
+
+            .btn-neon:hover {
+                transform: scale(1.08) rotateY(3deg);
+                box-shadow: 0 0 30px var(--glow-color);
+            }
+
+                .btn-neon:hover::before {
+                    opacity: 1;
+                }
+            /* Efecto Ripple en botones al clic */
+            .btn-neon.ripple {
+                position: relative;
+                overflow: hidden;
+            }
+
+                .btn-neon.ripple span.ripple-effect {
+                    position: absolute;
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: rippleAnim 0.6s linear;
+                    background: rgba(255,255,255,0.7);
+                }
+
+        @@keyframes rippleAnim {
+            to
+
+        {
+            transform: scale(4);
+            opacity: 0;
+        }
+
+        }
+        /* TARJETAS DE PRODUCTO ULTRA con efecto 3D avanzado */
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            color: var(--text-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: cardEntrance 0.8s ease-out;
+        }
+
+        @@keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .card:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(2deg) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .card-img-top {
+            height: 220px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stock {
+            font-size: 1rem;
+            color: #f2545b;
+        }
+        /* Estilos para diferenciar según condición */
+        /* Productos sin IVA (Canasta Básica) */
+        .iva-free {
+            border: 2px solid var(--accent-color);
+            position: relative;
+            animation: pulseBorder 3s infinite;
+        }
+
+        @@keyframes pulseBorder {
+            0% {
+                border-color: var(--accent-color);
+            }
+
+            50% {
+                border-color: var(--primary-color);
+            }
+
+            100% {
+                border-color: var(--accent-color);
+            }
+        }
+
+        .iva-free::after {
+            content: "Sin IVA";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        /* Productos en Oferta */
+        .on-offer {
+            border: 2px solid #ff6b81;
+            position: relative;
+            animation: shake 1.5s infinite;
+        }
+
+        @@keyframes shake {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(1deg);
+            }
+
+            50% {
+                transform: rotate(0deg);
+            }
+
+            75% {
+                transform: rotate(-1deg);
+            }
+        }
+
+        .on-offer::before {
+            content: attr(data-discount) " OFF";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff6b81;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        /* Diferenciación por categoría (fondo sutil en la tarjeta) */
+        .cat-electrónica .card-body {
+            background-color: rgba(255, 235, 238, 0.5);
+        }
+
+        .cat-hogar .card-body {
+            background-color: rgba(232, 245, 233, 0.5);
+        }
+
+        .cat-ropa .card-body {
+            background-color: rgba(232, 234, 246, 0.5);
+        }
+        /* SEPARADOR FUTURISTA */
+        .divider {
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
+            margin: 20px auto;
+            width: 50%;
+        }
+        /* BOTÓN VOLVER ARRIBA */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+        /* Animaciones para carrusel por categoría */
+        .carousel-item {
+            transform: perspective(1200px) rotateY(30deg);
+            transition: transform 0.8s ease, opacity 0.8s ease;
+            opacity: 0;
+            backface-visibility: hidden;
+        }
+
+            .carousel-item.active {
+                transform: perspective(1200px) rotateY(0deg);
+                opacity: 1;
+                animation: categorySlide 0.8s ease-out forwards;
+            }
+
+        @@keyframes categorySlide {
+            from {
+                transform: perspective(1200px) rotateY(30deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: perspective(1200px) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            transition: transform 0.3s ease;
+        }
+
+            .carousel-control-prev-icon:hover,
+            .carousel-control-next-icon:hover {
+                transform: scale(1.1) rotate(5deg);
+            }
+
+        /* ========================
+                   NUEVOS KEYFRAMES ADICIONALES
+                   ======================== */
+        @@keyframes flash {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-30px);
+            }
+
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @@keyframes swing {
+            20% {
+                transform: rotate3d(0, 0, 1, 15deg);
+            }
+
+            40% {
+                transform: rotate3d(0, 0, 1, -10deg);
+            }
+
+            60% {
+                transform: rotate3d(0, 0, 1, 5deg);
+            }
+
+            80% {
+                transform: rotate3d(0, 0, 1, -5deg);
+            }
+
+            100% {
+                transform: rotate3d(0, 0, 1, 0deg);
+            }
+        }
+
+        @@keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes flipInX {
+            from {
+                transform: perspective(400px) rotateX(90deg);
+                opacity: 0;
+            }
+
+            40% {
+                transform: perspective(400px) rotateX(-10deg);
+                opacity: 1;
+            }
+
+            70% {
+                transform: perspective(400px) rotateX(10deg);
+            }
+
+            100% {
+                transform: perspective(400px) rotateX(0deg);
+            }
+        }
+
+        @@keyframes flipInY {
+            from {
+                transform: perspective(400px) rotateY(90deg);
+                opacity: 0;
+            }
+
+            40% {
+                transform: perspective(400px) rotateY(-10deg);
+                opacity: 1;
+            }
+
+            70% {
+                transform: perspective(400px) rotateY(10deg);
+            }
+
+            100% {
+                transform: perspective(400px) rotateY(0deg);
+            }
+        }
+
+        @@keyframes rotateIn {
+            from {
+                transform: rotate(-200deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: rotate(0);
+                opacity: 1;
+            }
+        }
+        /* Clases para aplicar las nuevas animaciones */
+        .animate-flash {
+            animation: flash 2s ease-in-out infinite;
+        }
+
+        .animate-bounce {
+            animation: bounce 1s ease;
+        }
+
+        .animate-swing {
+            animation: swing 1.5s ease-in-out;
+        }
+
+        .animate-zoom {
+            animation: zoomIn 0.5s ease-out;
+        }
+
+        .animate-flip-x {
+            animation: flipInX 0.7s ease-out;
+        }
+
+        .animate-flip-y {
+            animation: flipInY 0.7s ease-out;
+        }
+
+        .animate-rotate {
+            animation: rotateIn 0.7s ease-out;
+        }
+      
+
+    </style>
+</head>
+<body>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+    <!-- BOTÓN DARK MODE -->
+    <button id="darkModeToggle" class="btn-neon">Dark Mode</button>
+    <!-- HERO CAROUSEL CON SWIPER -->
+    <div class="swiper myHeroSwiper">
+        <div class="swiper-wrapper">
+            <!-- Slide 1: Bienvenida -->
+            <div class="swiper-slide" style="background-image: url('/Images/nuevo002.webp');">
+                <div class="hero-overlay"></div>
+                <i class="floating-icon icon-pos-1 fas fa-star animate-rotate"></i>
+                <i class="floating-icon icon-pos-2 fas fa-heart animate-flash"></i>
+                <i class="floating-emoji emoji-pos-1 animate-swing">🚀</i>
+                <div class="hero-content container">
+                    <h1 class="display-3 fw-bold glow-text animate-flip-x">
+                        Bienvenido a Don Julio Súper <i class="fas fa-shopping-cart"></i>
+                    </h1>
+                    <p class="lead fs-4">Descubre el futuro de las compras online, donde cada detalle cuenta.</p>
+                    <div class="mt-5">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Productos" asp-action="Index" class="btn btn-neon me-2">Bodega</a>
+                        }
+                        <a asp-controller="Cart" asp-action="Index" class="btn btn-neon me-2">Mi Carrito</a>
+                        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-neon me-2">Control Admin</a>
+                        <form asp-controller="Productos" asp-action="Search" method="get" class="d-inline-block">
+                            <input type="text" name="searchTerm" placeholder="Buscar producto..." class="form-control d-inline-block" style="width: 200px;" />
+                            <button type="submit" class="btn btn-neon">🔎 Buscar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 2: Ofertas Exclusivas -->
+            <div class="swiper-slide" style="background-image: url('/Images/saude-da-economia-local-por-que-valorizar-o-comercio-do-seu-bairro.jpg');">
+                <div class="hero-overlay"></div>
+                <i class="floating-icon icon-pos-2 fas fa-tags animate-bounce"></i>
+                <i class="floating-emoji emoji-pos-2 animate-flip-y">✨</i>
+                <div class="hero-content container">
+                    <h1 class="display-3 fw-bold glow-text animate-zoom">
+                        Ofertas Exclusivas <i class="fas fa-percentage"></i>
+                    </h1>
+                    <p class="lead fs-4">Descuentos únicos en productos seleccionados. ¡Aprovecha ya!</p>
+                </div>
+            </div>
+            <!-- Slide 3: Confianza y Calidad -->
+            <div class="swiper-slide" style="background-image: url('/Images/nueva.webp');">
+                <div class="hero-overlay"></div>
+                <i class="floating-icon icon-pos-3 fas fa-thumbs-up animate-swing"></i>
+                <i class="floating-emoji emoji-pos-3 animate-flash">🌟</i>
+                <div class="hero-content container">
+                    <h1 class="display-3 fw-bold glow-text animate-flip-x">Confianza y Calidad</h1>
+                    <p class="lead fs-4">Precios inigualables y garantía en cada producto.</p>
+                </div>
+            </div>
+            <!-- Slide 4: Exclusividad -->
+            <div class="swiper-slide" style="background-image: url('/Images/01210124555.PNG');">
+                <div class="hero-overlay"></div>
+                <i class="floating-icon icon-pos-4 fas fa-gem animate-rotate"></i>
+                <i class="floating-emoji emoji-pos-2 animate-bounce">💎</i>
+                <div class="hero-content container">
+                    <h1 class="display-3 fw-bold glow-text animate-flip-y">
+                        Exclusividad Garantizada <i class="fas fa-crown"></i>
+                    </h1>
+                    <p class="lead fs-4">Una experiencia que redefine el lujo en compras online.</p>
+                </div>
+            </div>
+            <!-- Slide 5: Envíos Rápidos -->
+            <div class="swiper-slide" style="background-image: url('/Images/95595.JPG');">
+                <div class="hero-overlay"></div>
+                <i class="floating-icon icon-pos-1 fas fa-truck animate-flash"></i>
+                <i class="floating-emoji emoji-pos-1 animate-swing">🚚</i>
+                <div class="hero-content container">
+                    <h1 class="display-3 fw-bold glow-text animate-zoom">
+                        Envíos Rápidos y Seguros <i class="fas fa-shipping-fast"></i>
+                    </h1>
+                    <p class="lead fs-4">Recibe tus compras en tiempo récord y con la seguridad que mereces.</p>
+                </div>
+            </div>
+            <!-- Slide 6: Revolución Digital -->
+            <div class="swiper-slide" style="background-image: url('/Images/01210.jpg');">
+                <div class="hero-overlay"></div>
+                <i class="floating-icon icon-pos-2 fas fa-users animate-rotate"></i>
+                <i class="floating-emoji emoji-pos-3 animate-bounce">🌙</i>
+                <div class="hero-content container">
+                    <h1 class="display-3 fw-bold glow-text animate-flip-x">
+                        Únete a la Revolución <i class="fas fa-user-friends"></i>
+                    </h1>
+                    <p class="lead fs-4">Sé parte de la nueva era del comercio electrónico.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Swiper Pagination & Navigation -->
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+    <!-- SECCIÓN DE PRODUCTOS Y CATEGORÍAS -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">🛒 Productos y Categorías</h2>
+        <div class="divider"></div>
+        <div class="text-center mb-4">
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-controller="Productos" asp-action="Index" class="btn btn-neon me-2">Bodega</a>
+            }
+            <a asp-controller="Productos" asp-action="Disponibles" class="btn btn-neon">Ver Productos Disponibles</a>
+            <a asp-controller="Ofertas" asp-action="Reales" class="btn btn-neon">
+                <i class="fa-solid fa-tags"></i> Ver Ofertas
+            </a>
+            <!-- Views/Home/Index.cshtml -->
+            <a href="@Url.Action("Index", "Profile")" class="btn btn-neon">
+                <i class="fa-solid fa-user"></i> Mi Perfil
+            </a>
+
+
+
+            <!-- Modal de Confirmación -->
+            <div id="deleteModal" class="modal">
+                <div class="modal-content">
+                    <h2>¿Seguro que deseas eliminar tu cuenta?</h2>
+                    <p>Esta acción es irreversible. Perderás todos tus datos.</p>
+                    <div class="modal-buttons">
+                        <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+                        <form id="deleteForm" method="post" action="@Url.Action("DeleteAccount", "Home")">
+                            <button type="submit" class="btn-confirm">Sí, eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+
+
+        </div>
+        @if (Model != null && Model.Any())
+        {
+            <div class="row">
+                @foreach (var product in Model)
+                {
+                    var isCanastaBasica = product.IsBasicBasket;
+                    var isOnOffer = product.IsOnOffer;
+                    var effectivePrice = product.Price * (isOnOffer ? (1 - product.DiscountPercentage / 100m) : 1);
+                    var cardClasses = (isCanastaBasica ? "iva-free " : "") + (isOnOffer ? "on-offer " : "");
+                    var catClass = categoryClass(product.Category.Name);
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm @catClass @cardClasses.Trim()" @(isOnOffer ? "data-discount='" + product.DiscountPercentage + "%'" : "")>
+                            <img src="@product.ImageUrl" class="card-img-top animate-zoom" alt="@product.Name" loading="lazy" />
+                            <div class="card-body">
+                                <h5 class="card-title animate-flip-x">@product.Name</h5>
+                                <p class="card-text">@product.Description</p>
+                                <p class="price">💲 @effectivePrice.ToString("C")</p>
+                                <p class="stock">📦 Stock: @product.Stock</p>
+                                <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" class="btn btn-neon ripple mt-3">
+                                    <i class="fa-solid fa-cart-plus"></i> Agregar al Carrito
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-center">No hay productos disponibles.</p>
+        }
+    </div>
+    <!-- CARRUSEL POR CATEGORÍA -->
+    @if (Model != null)
+    {
+        var groupedProducts = Model.GroupBy(p => p.Category).ToList();
+        foreach (var group in groupedProducts)
+        {
+            var productList = group.ToList();
+            var itemsPerSlide = 3;
+            var slideCount = (int)Math.Ceiling((double)productList.Count / itemsPerSlide);
+            var carouselId = "carouselCategory_" + group.Key.Name.Replace(" ", "");
+            <div class="container my-5">
+                <h2 class="text-center mb-4">Categoría: @group.Key.Name</h2>
+                <div id="@carouselId" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @for (int slideIndex = 0; slideIndex < slideCount; slideIndex++)
+                        {
+                            var slideProducts = productList.Skip(slideIndex * itemsPerSlide).Take(itemsPerSlide).ToList();
+                            <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                                <div class="row">
+                                    @foreach (var product in slideProducts)
+                                    {
+                                        var isCanastaBasica = product.IsBasicBasket;
+                                        var isOnOffer = product.IsOnOffer;
+                                        var effectivePrice = product.Price * (isOnOffer ? (1 - product.DiscountPercentage / 100m) : 1);
+                                        var cardClasses = (isCanastaBasica ? "iva-free " : "") + (isOnOffer ? "on-offer " : "");
+                                        <div class="col-md-4 mb-4">
+                                            <div class="card h-100 shadow-sm @cardClasses.Trim()" @(isOnOffer ? "data-discount='" + product.DiscountPercentage + "%'" : "")>
+                                                <img src="@product.ImageUrl" class="card-img-top animate-zoom" alt="@product.Name" loading="lazy" />
+                                                <div class="card-body">
+                                                    <h5 class="card-title animate-flip-x">@product.Name</h5>
+                                                    <p class="card-text">@product.Description</p>
+                                                    <p class="price">💲 @effectivePrice.ToString("C")</p>
+                                                    <p class="stock">📦 Stock: @product.Stock</p>
+                                                    <a asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" class="btn btn-neon ripple mt-3">
+                                                        <i class="fa-solid fa-cart-plus"></i> Agregar al Carrito
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#@carouselId" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#@carouselId" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+                </div>
+            </div>
+        }
+    }
+    <!-- MODAL DE BÚSQUEDA -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Buscar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form asp-controller="Productos" asp-action="Search" method="get">
+                        <div class="mb-3">
+                            <label for="searchTerm" class="form-label">Ingrese el nombre o referencia</label>
+                            <input type="text" class="form-control" id="searchTerm" name="searchTerm" placeholder="Buscar..." />
+                        </div>
+                        <button type="submit" class="btn btn-neon">Buscar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <section class="product-recommendations">
+            <h2 class="section-title">✨ Recomendaciones Exclusivas</h2>
+            <p class="section-description">
+                Descubre los productos más destacados y seleccionados especialmente para ti.
+                Accede a nuestro servicio VIP con un solo clic.
+            </p>
+            <a class="vip-button" href="/ProductRecommendation/Recommend">🎯 Recomendaciones VIP</a>
+        </section>
+    </div>
+
+    <style>
+        /* Variables para personalizar colores en light y dark mode */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #00aaff;
+            --text-color-light: #333;
+            --text-color-dark: #fff;
+            --background-light: rgba(255, 255, 255, 0.1);
+            --background-dark: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Animaciones clave */
+        @@keyframes fadeInScale {
+            0%
+
+        {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        50% {
+            opacity: 0.5;
+            transform: scale(0.9);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        }
+
+        @@keyframes backgroundPulse {
+            0%
+
+        {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        50% {
+            box-shadow: 0 10px 40px rgba(0, 123, 255, 0.3);
+        }
+
+        100% {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        }
+
+        @@keyframes gradientShift {
+            0%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+
+        }
+
+        @@keyframes textGlow {
+            0%
+
+        {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+        }
+
+        50% {
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        100% {
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+        }
+
+        }
+
+        @@keyframes rotateAnimation {
+            0%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        /* Nueva animación para la descripción */
+        @@keyframes slideUp {
+            0%
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        /* Diseño avanzado y corporativo para la sección */
+        .product-recommendations {
+            background: var(--background-light);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            max-width: 600px;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInScale 1s ease-out forwards;
+            transition: transform 0.3s ease-in-out;
+        }
+
+            .product-recommendations:hover {
+                transform: scale(1.02);
+                animation: backgroundPulse 2s infinite;
+            }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-color-light);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        .section-description {
+            font-size: 1.125rem;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            animation: slideUp 1s ease forwards;
+        }
+
+        /* Botón VIP con animación de gradiente y efecto ripple */
+        .vip-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background-size: 200% 200%;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1.125rem;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            animation: gradientShift 5s ease infinite;
+        }
+
+            .vip-button:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(0, 123, 255, 0.6);
+            }
+
+            .vip-button::after {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 10%, transparent 10.01%);
+                background-repeat: no-repeat;
+                background-position: 50%;
+                transform: scale(0);
+                opacity: 0;
+                transition: transform 0.5s, opacity 0.5s;
+            }
+
+            .vip-button:hover::after {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+        /* Fondo dinámico giratorio detrás de la sección */
+        .product-recommendations::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 123, 255, 0.15), transparent);
+            animation: rotateAnimation 20s linear infinite;
+            z-index: -1;
+        }
+
+        /* Responsividad para que se adapte a cualquier vista */
+        @@media (max-width: 768px) {
+            .product-recommendations
+
+        {
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 90%;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+        }
+
+        .section-description {
+            font-size: 1rem;
+        }
+
+        .vip-button {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+
+        }
+
+        /* Ajustes para modo oscuro */
+        @@media (prefers-color-scheme: dark) {
+            .product-recommendations
+
+        {
+            background: var(--background-dark);
+        }
+
+        .section-title {
+            color: var(--text-color-dark);
+        }
+
+        .section-description {
+            color: #bbb;
+        }
+
+        .vip-button {
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        }
+    </style>
+
+
+    <!-- BOTÓN VOLVER ARRIBA -->
+    <button id="backToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- CHATBOT AVANZADO - ASISTENTE IA -->
+    <div id="chatBotAI" style="position: fixed; bottom: 20px; left: 20px; z-index: 1100; font-family: 'Helvetica Neue', Arial, sans-serif;">
+        <!-- Botón de activación con ícono inteligente -->
+        <button onclick="toggleAdvancedChat()" id="chatButton">
+            <i class="fas fa-robot" style="margin-right: 10px;"></i>
+            <span>Asistente IA</span>
+        </button>
+        <!-- Contenedor del chat avanzado -->
+        <div id="advancedChatBox">
+            <!-- Encabezado con logo corporativo e íconos adicionales -->
+            <div id="chatHeader">
+                <div id="headerLogo" style="display: flex; align-items: center;">
+                    <!-- Logo corporativo -->
+                    <img src="~/Images/logo.png" alt="Logo" style="height:30px; margin-right:10px;">
+                    <!-- Ícono de bienvenida -->
+                    <i class="fas fa-handshake" style="font-size:1.5rem; margin-right:8px; animation: bounce 2s infinite;"></i>
+                </div>
+                <div id="headerTitle" style="flex-grow: 1; font-size:1.2rem; display: flex; align-items: center;">
+                    <span>Asistente Don Julio Super</span>
+                    <!-- Ícono informativo adicional -->
+                    <i class="fas fa-info-circle" style="font-size:1.3rem; margin-left: 8px; animation: pulse 2s infinite;"></i>
+                </div>
+                <button onclick="toggleAdvancedChat()" id="closeChat" style="background: none; border: none; cursor: pointer;">
+                    <i class="fas fa-times" style="font-size:1.4rem;"></i>
+                </button>
+            </div>
+            <!-- Área de conversación -->
+            <div id="advancedChatContent">
+                <p><strong>Bot:</strong> ¡Bienvenido a Don Julio Súper! Estoy aquí para asistirte en lo que necesites.</p>
+            </div>
+            <!-- Área de entrada -->
+            <div id="chatInputContainer">
+                <input id="advancedChatInput" type="text" placeholder="Escribe tu consulta..." onkeypress="if(event.key==='Enter') sendAdvancedMessage();" />
+                <button onclick="sendAdvancedMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incluir FontAwesome para iconos inteligentes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Estilos Ultra Mejorados y Corporativos -->
+    <style>
+        :root {
+            --chat-bg: #ffffff;
+            --chat-text: #333333;
+            --chat-header-bg: #003366;
+            --chat-header-text: #ffffff;
+            --chat-button-bg: linear-gradient(45deg, #00509e, #007bff);
+            --chat-button-hover: linear-gradient(45deg, #003f7f, #00509e);
+        }
+
+        @@media (prefers-color-scheme: dark) {
+            : root
+
+        {
+            --chat-bg: #1c1c1c;
+            --chat-text: #e0e0e0;
+            --chat-header-bg: #00509e;
+            --chat-header-text: #ffffff;
+        }
+
+        }
+
+        /* Botón Volver Arriba */
+        #backToTop {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: var(--chat-button-bg);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            padding: 14px;
+            cursor: pointer;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+            transition: transform 0.4s ease, background 0.4s ease;
+            animation: rotateGlow 4s infinite;
+        }
+
+            #backToTop:hover {
+                background: var(--chat-button-hover);
+                transform: translateY(-8px) scale(1.1);
+            }
+
+        /* Botón Chat Avanzado */
+        #chatButton {
+            background: var(--chat-button-bg);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 24px;
+            cursor: pointer;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            transition: transform 0.4s ease, background 0.4s ease;
+            animation: pulse 2.5s infinite, float 3s ease-in-out infinite;
+        }
+
+            #chatButton:hover {
+                background: var(--chat-button-hover);
+                transform: scale(1.15) rotate(2deg);
+            }
+
+        /* Contenedor del Chat Avanzado */
+        #advancedChatBox {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            width: 400px;
+            max-width: 95%;
+            height: 550px;
+            border-radius: 16px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.3);
+            overflow: hidden;
+            background: var(--chat-bg);
+            animation: slideUp 0.6s ease-out forwards, shimmer 3s linear infinite;
+        }
+
+        /* Encabezado del Chat con logo corporativo e íconos adicionales */
+        #chatHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--chat-header-bg);
+            color: var(--chat-header-text);
+            padding: 16px;
+            font-weight: bold;
+            animation: fadeIn 0.6s ease-out forwards, swing 2s ease-in-out infinite;
+        }
+
+        /* Área de Mensajes */
+        #advancedChatContent {
+            padding: 16px;
+            height: 380px;
+            overflow-y: auto;
+            color: var(--chat-text);
+            animation: fadeIn 0.8s ease-out forwards, zoomIn 1s ease-out forwards;
+        }
+
+        /* Área de Entrada */
+        #chatInputContainer {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-top: 1px solid #ddd;
+            background: rgba(0,0,0,0.03);
+            animation: slideInX 0.6s ease-out forwards;
+        }
+
+        #advancedChatInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            transition: border 0.4s ease, box-shadow 0.4s ease;
+        }
+
+            #advancedChatInput:focus {
+                border-color: var(--chat-header-bg);
+                box-shadow: 0 0 8px var(--chat-header-bg);
+            }
+
+        #chatInputContainer button {
+            margin-left: 10px;
+            background: var(--chat-header-bg);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background 0.4s ease, transform 0.4s ease;
+        }
+
+            #chatInputContainer button:hover {
+                background: #0056b3;
+                transform: scale(1.05);
+            }
+
+        /* Animaciones Avanzadas */
+        @@keyframes slideUp {
+            0%
+
+        {
+            transform: translateY(40px);
+            opacity: 0;
+        }
+
+        25% {
+            transform: translateY(20px);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: translateY(10px);
+            opacity: 0.7;
+        }
+
+        75% {
+            transform: translateY(5px);
+            opacity: 0.9;
+        }
+
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes pulse {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        25% {
+            transform: scale(1.08);
+        }
+
+        50% {
+            transform: scale(1);
+        }
+
+        75% {
+            transform: scale(1.08);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        @@keyframes float {
+            0%
+
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+
+        }
+
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes slideInX {
+            from
+
+        {
+            transform: translateX(-40px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes zoomIn {
+            from
+
+        {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes rotateGlow {
+            0%
+
+        {
+            transform: rotate(0deg);
+            box-shadow: 0 0 10px rgba(0,80,158,0.7);
+        }
+
+        50% {
+            transform: rotate(360deg);
+            box-shadow: 0 0 20px rgba(0,80,158,1);
+        }
+
+        100% {
+            transform: rotate(720deg);
+            box-shadow: 0 0 10px rgba(0,80,158,0.7);
+        }
+
+        }
+
+        @@keyframes swing {
+            0%
+
+        {
+            transform: rotate(0deg);
+        }
+
+        25% {
+            transform: rotate(5deg);
+        }
+
+        50% {
+            transform: rotate(0deg);
+        }
+
+        75% {
+            transform: rotate(-5deg);
+        }
+
+        100% {
+            transform: rotate(0deg);
+        }
+
+        }
+
+        @@keyframes shimmer {
+            0%
+
+        {
+            background-position: -400px 0;
+        }
+
+        100% {
+            background-position: 400px 0;
+        }
+
+        }
+
+        @@keyframes bounce {
+            0%, 20%, 50%, 80%, 100%
+
+        {
+            transform: translateY(0);
+        }
+
+        40% {
+            transform: translateY(-8px);
+        }
+
+        60% {
+            transform: translateY(-4px);
+        }
+
+        }
+    </style>
+
+    
+    <!-- SCRIPTS -->
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <!-- Inicialización de Swiper para Hero Carousel -->
+    <script>
+        const heroSwiper = new Swiper(".myHeroSwiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            loop: true,
+            coverflowEffect: {
+                rotate: 30,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            autoplay: { delay: 5000 },
+            pagination: { el: ".swiper-pagination", clickable: true },
+            navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }
+        });
+    </script>
+    <!-- Animación de tarjetas con IntersectionObserver y GSAP -->
+    <script>
+        const cardObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    gsap.fromTo(entry.target, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power1.out" });
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        document.querySelectorAll('.card').forEach(card => cardObserver.observe(card));
+    </script>
+    <!-- Ripple effect en botones -->
+    <script>
+        document.querySelectorAll('.btn-neon.ripple').forEach(button => {
+            button.addEventListener('click', function (e) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple-effect');
+                this.appendChild(ripple);
+                const maxDim = Math.max(this.clientWidth, this.clientHeight);
+                ripple.style.width = ripple.style.height = maxDim + 'px';
+                const rect = this.getBoundingClientRect();
+                ripple.style.left = e.clientX - rect.left - maxDim / 2 + 'px';
+                ripple.style.top = e.clientY - rect.top - maxDim / 2 + 'px';
+                ripple.addEventListener('animationend', () => { ripple.remove(); });
+            });
+        });
+    </script>
+    <!-- Botón Volver Arriba -->
+    <script>
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => { backToTop.style.display = window.scrollY > 400 ? "flex" : "none"; });
+        backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    </script>
+    <!-- GSAP Animaciones Globales, Carrusel y Dark Mode con Persistencia -->
+    <script>
+        window.addEventListener('load', () => {
+            gsap.to("#preloader", { duration: 0.8, opacity: 0, onComplete: () => { document.getElementById("preloader").style.display = "none"; }});
+            gsap.from(".hero-content h1", { duration: 1.2, y: -50, opacity: 0, ease: "bounce.out", stagger: 0.3 });
+        });
+        // Parallax en hero
+        window.addEventListener("scroll", () => {
+            const scrollPos = window.pageYOffset;
+            document.querySelectorAll(".swiper-slide").forEach(slide => { slide.style.backgroundPositionY = (scrollPos * 0.5) + "px"; });
+        });
+        // Dark Mode con persistencia
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        if(localStorage.getItem("theme") === "dark"){
+            document.body.classList.add("dark-mode");
+            darkModeToggle.textContent = "Light Mode";
+        }
+        darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            if(document.body.classList.contains("dark-mode")){
+                darkModeToggle.textContent = "Light Mode";
+                localStorage.setItem("theme", "dark");
+            } else {
+                darkModeToggle.textContent = "Dark Mode";
+                localStorage.setItem("theme", "light");
+            }
+        });
+        // Animación para carrusel de categorías con GSAP
+        document.querySelectorAll('.carousel').forEach(carousel => {
+            carousel.addEventListener('slide.bs.carousel', function(event) {
+                gsap.fromTo(event.relatedTarget, { opacity: 0, scale: 0.9, rotateY: 30 }, { opacity: 1, scale: 1, rotateY: 0, duration: 0.8, ease: "power1.out" });
+            });
+        });
+    </script>
+
+    <!-- SCRIPT DEL CHATBOT AVANZADO -->
+    <!-- SCRIPT DEL CHATBOT AVANZADO -->
+    <script>
+        // Función para obtener la respuesta desde el endpoint /api/chat
+        async function getAIResponse(message) {
+          try {
+            const payload = {
+              model: "mistralai/Mistral-7B-Instruct-v0.1",
+              messages: [
+                { role: "user", content: message }
+              ],
+              brandInfo: "Don Julio Súper, comercio electrónico de alta gama que innova constantemente."
+            };
+
+            const response = await fetch('/api/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              return data.response;
+            } else {
+              return "Lo siento, en este momento no puedo procesar tu solicitud.";
+            }
+          } catch (error) {
+            console.error("Error al conectar con el servicio de IA:", error);
+            return "Error al conectar con el servicio de IA.";
+          }
+        }
+
+        // Función para enviar el mensaje y mostrar la respuesta del bot
+        async function sendAdvancedMessage() {
+          var input = document.getElementById("advancedChatInput");
+          var message = input.value.trim();
+          if (message !== "") {
+            appendAdvancedMessage("Usuario", message);
+            input.value = "";
+            appendAdvancedTypingIndicator();
+            let aiResponse = await getAIResponse(message);
+            removeAdvancedTypingIndicator();
+            appendAdvancedMessage("Bot", aiResponse);
+          }
+        }
+
+        // Funciones para actualizar el área del chat
+        function appendAdvancedMessage(sender, message) {
+          var chatContent = document.getElementById("advancedChatContent");
+          var p = document.createElement("p");
+          p.style.margin = "0 0 10px 0";
+          p.innerHTML = "<strong>" + sender + ":</strong> " + message.replace(/\n/g, "<br/>");
+          p.style.animation = "fadeIn 0.6s ease-out";
+          chatContent.appendChild(p);
+          chatContent.scrollTop = chatContent.scrollHeight;
+        }
+
+        function appendAdvancedTypingIndicator() {
+          var chatContent = document.getElementById("advancedChatContent");
+          var indicator = document.createElement("p");
+          indicator.id = "advancedTypingIndicator";
+          indicator.style.fontStyle = "italic";
+          indicator.style.color = "#888";
+          indicator.textContent = "El bot está procesando...";
+          indicator.style.animation = "fadeIn 0.4s ease-out";
+          chatContent.appendChild(indicator);
+          chatContent.scrollTop = chatContent.scrollHeight;
+        }
+
+        function removeAdvancedTypingIndicator() {
+          var indicator = document.getElementById("advancedTypingIndicator");
+          if (indicator) { indicator.remove(); }
+        }
+
+        // Función para mostrar/ocultar el chat avanzado
+        function toggleAdvancedChat() {
+          var chatBox = document.getElementById("advancedChatBox");
+          if (chatBox.style.display === "none" || chatBox.style.display === "") {
+            chatBox.style.display = "block";
+            chatBox.style.animation = "fadeIn 0.4s";
+          } else {
+            chatBox.style.animation = "fadeOut 0.4s";
+            setTimeout(() => { chatBox.style.display = "none"; }, 400);
+          }
+        }
+                function confirmDelete() {
+            document.getElementById("deleteModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("deleteModal").style.display = "none";
+        }
+
+
+        // Animaciones CSS para transiciones (keyframes)
+        const style = document.createElement('style');
+        style.textContent = `
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        @@keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(10px); }
+          }
+        @@keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+          }
+          #chatBotAI > button {
+            animation: pulse 2s infinite;
+          }
+        `;
+    </script>
+
+
+</body>
+</html>
+
